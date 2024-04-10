@@ -1,5 +1,6 @@
+import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '@/pages/HomePage.vue';
+import MainPage from '@/pages/profile/view.vue';
 
 const router = createRouter({
   history: createWebHistory('/'),
@@ -7,7 +8,66 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomePage,
+      component: MainPage,
+      meta: {
+        layout: 'main',
+      },
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => defineAsyncComponent(() => import('@/pages/register/view.vue')),
+      meta: {
+        layout: 'auth',
+      },
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => defineAsyncComponent(() => import('@/pages/login/view.vue')),
+      meta: {
+        layout: 'auth',
+      },
+    },
+    {
+      path: '/payments',
+      name: 'payments',
+      component: () => defineAsyncComponent(() => import('@/pages/payments/view.vue')),
+      meta: {
+        layout: 'main',
+      },
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => defineAsyncComponent(() => import('@/pages/settings/view.vue')),
+      meta: {
+        layout: 'main',
+      },
+    },
+    {
+      path: '/new-post',
+      name: 'new-post',
+      component: () => defineAsyncComponent(() => import('@/pages/new-post/view.vue')),
+      meta: {
+        layout: 'main',
+      },
+    },
+    {
+      path: '/edit-post/:id',
+      name: 'edit-post',
+      component: () => defineAsyncComponent(() => import('@/pages/edit-post/view.vue')),
+      meta: {
+        layout: 'main',
+      },
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'not-found',
+      component: () => defineAsyncComponent(() => import('@/pages/404/view.vue')),
+      meta: {
+        layout: 'empty',
+      },
     },
   ],
 });
