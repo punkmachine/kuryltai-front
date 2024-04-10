@@ -37,6 +37,7 @@ module.exports = {
       max: 24,
       properties: 'never',
     }], // минимальные и максимальные длины переменных и функций
+    'vue/multi-word-component-names': 'warn'
   },
   // globals: {},
 }
