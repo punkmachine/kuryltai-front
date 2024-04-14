@@ -9,12 +9,10 @@ import type {
   IPayloadForgetEmail,
   IPayloadChangePassword,
 } from '@/types/backend/user/user.payload';
-import type {
-  IResponseLogin,
-  IResponseSignUp
-} from '@/types/backend/user/user.response';
+import type { IResponseLogin, IResponseSignUp } from '@/types/backend/user/user.response';
 import type { IResponseStandard } from '@/types/backend/responses';
 
+// eslint-disable-next-line max-lines-per-function
 export const auth = (client: AxiosInstance) => {
   return {
     login: (payload: IPayloadLogin): Promise<IResponseLogin> => {
