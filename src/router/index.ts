@@ -14,17 +14,9 @@ const router = createRouter({
       },
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => defineAsyncComponent(() => import('@/pages/register/view.vue')),
-      meta: {
-        layout: 'auth',
-      },
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => defineAsyncComponent(() => import('@/pages/login/view.vue')),
+      path: '/auth',
+      name: 'auth',
+      component: () => defineAsyncComponent(() => import('@/pages/auth/view.vue')),
       meta: {
         layout: 'auth',
       },
