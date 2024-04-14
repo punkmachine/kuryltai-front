@@ -32,3 +32,9 @@ export interface IPayloadLogout {
 export interface IPayloadForgetEmail {
   email: string;
 }
+
+export interface IPayloadChangePassword {
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
+}
