@@ -28,11 +28,11 @@ const currentYear = ref<number>(new Date().getFullYear());
 
 <style scoped>
 .auth-layout {
-  @apply flex justify-center items-center h-screen max-h-screen;
+  @apply flex h-screen max-h-screen items-center justify-center;
 }
 
 .auth-layout__wrapper {
-  @apply flex flex-col h-full max-w-7xl w-full;
+  @apply flex h-full w-full max-w-7xl flex-col;
 }
 
 main {
@@ -40,7 +40,7 @@ main {
 }
 
 .auth-footer {
-  @apply flex justify-between items-center h-16 w-full text-sm text-blue-gray-500;
+  @apply flex h-16 w-full items-center justify-between text-sm text-blue-gray-500;
 }
 
 .auth-footer a {
