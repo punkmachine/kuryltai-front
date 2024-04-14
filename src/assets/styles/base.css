@@ -1,0 +1,5 @@
+@layer base {
+  h1 {
+    @apply text-center text-xl font-semibold text-gray-900;
+  }
+}

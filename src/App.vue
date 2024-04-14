@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, computed } from 'vue'
+import { defineAsyncComponent, computed } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 
 const AuthLayout = defineAsyncComponent(() => import('@/layouts/AuthLayout.vue'));
