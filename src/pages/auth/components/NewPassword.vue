@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="w-full sm:w-auto">
     <h1 class="mb-7">Восстановление пароля</h1>
 
     <form
-      class="flex w-96 flex-col gap-3.5"
+      class="flex sm:w-96 w-full flex-col gap-3.5"
       @submit.prevent="submitForm"
     >
       <UIInput

@@ -108,6 +108,6 @@ onMounted(() => {
 
 <style scoped>
 .auth-page {
-  @apply flex h-full w-full flex-col items-center justify-center;
+  @apply flex h-full w-full flex-col items-center justify-center px-8;
 }
 </style>
