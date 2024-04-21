@@ -1,6 +1,10 @@
 <template>
   <label class="flex w-full flex-col">
-    <span class="mb-2 text-sm font-medium text-blue-gray-900">{{ label }}</span>
+    <span
+      v-if="label"
+      class="mb-2 text-sm font-medium text-blue-gray-900"
+      >{{ label }}</span
+    >
     <div class="relative">
       <input
         type="text"
@@ -22,7 +26,7 @@
 import { defineEmits, defineProps } from 'vue';
 
 interface IProps {
-  label: string;
+  label?: string;
   modelValue: string;
   invalid?: boolean;
 }
