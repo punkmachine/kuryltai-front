@@ -5,4 +5,5 @@ export enum AuthStepEnum {
   resetPasswordAfterSendEmail = 'reset-password-after-send-email',
   newPassword = 'new-password',
   signUp = 'sign-up',
+  googleRedirect = 'google-redirect',
 }

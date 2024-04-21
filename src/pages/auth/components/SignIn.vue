@@ -5,6 +5,7 @@
     <button
       v-if="currentStep === AuthStepEnum.signInEmail"
       class="btn btn--with-icon"
+      @click="googleAuthClick"
     >
       <svg>
         <use xlink:href="@/assets/icons/sprites/social.svg#google"></use>
@@ -83,6 +84,7 @@ interface IEmits {
   (e: 'updateCurrentStep', email: string): void;
   (e: 'goToApp', data: IPayloadLogin): void;
   (e: 'goToResetPassword', email: string): void;
+  (e: 'googleAuthClick'): void;
 }
 
 const props = defineProps<IProps>();
@@ -134,6 +136,10 @@ function goToInApp() {
 
 function resetPassword() {
   emit('goToResetPassword', email.value);
+}
+
+function googleAuthClick() {
+  emit('googleAuthClick');
 }
 
 function submitForm() {

@@ -39,5 +39,8 @@ export const auth = (client: AxiosInstance) => {
     changePassword: (payload: IPayloadChangePassword): Promise<IResponseStandard> => {
       return client.post('/profiles/change-password/', payload);
     },
+    googleAuth: (queryUrl: string): Promise<IResponseLogin> => {
+      return client.get(`/users/auth/login/google/${queryUrl}`);
+    },
   };
 };

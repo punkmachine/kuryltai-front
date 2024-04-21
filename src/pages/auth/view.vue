@@ -13,6 +13,7 @@
       @updateCurrentStep="nextStep"
       @goToApp="authorizeUser"
       @goToResetPassword="resetPasswordClick"
+      @googleAuthClick="googleAuthClick"
     />
 
     <ResetPassword
@@ -49,6 +50,8 @@ import SignIn from './components/SignIn.vue';
 import ResetPassword from './components/ResetPassword.vue';
 import NewPassword from './components/NewPassword.vue';
 import SignUp from './components/SignUp.vue';
+
+import { googleAuthUrl, scopeGoogle } from '@/constants/googleAuth';
 
 import type { IPayloadLogin, IPayloadResetPass, IPayloadSignUp } from '@/types/backend/user/user.payload';
 import type { IResponseLogin } from '@/types/backend/user/user.response';
@@ -136,6 +139,32 @@ function signUpUser(data: IPayloadSignUp) {
   });
 }
 
+function googleAuthClick() {
+  const params = new URLSearchParams({
+    response_type: 'code',
+    client_id: import.meta.env.VITE_APP_GOOGLE_CLIENT_ID,
+    redirect_uri: import.meta.env.VITE_APP_GOOGLE_REDIRECT_URL,
+    prompt: 'select_account',
+    access_type: 'offline',
+    scope: scopeGoogle,
+  });
+
+  window.location.href = `${googleAuthUrl}?${params}`;
+}
+
+function setNewPasswordQuery() {
+  // @ts-ignore
+  resetPassData.securityToken = route.query.sec || '';
+  // @ts-ignore
+  resetPassData.uuid = route.query.p || '';
+}
+
+function googleAuthByRedirectUrl() {
+  const query = route.fullPath.replace('step=google-redirect&', '').split('?');
+
+  api.auth.googleAuth(`?${query[1]}`).then(successAuthUser);
+}
+
 onMounted(() => {
   const stepParam = route.query.step as AuthStepEnum | undefined;
 
@@ -143,10 +172,11 @@ onMounted(() => {
     currentStep.value = stepParam;
 
     if (currentStep.value === AuthStepEnum.newPassword) {
-      // @ts-ignore
-      resetPassData.securityToken = route.query.sec || '';
-      // @ts-ignore
-      resetPassData.uuid = route.query.p || '';
+      setNewPasswordQuery();
+    }
+
+    if (currentStep.value === AuthStepEnum.googleRedirect) {
+      googleAuthByRedirectUrl();
     }
   }
 });
