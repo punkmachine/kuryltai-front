@@ -3,7 +3,7 @@
     <h1 class="mb-7">Восстановление пароля</h1>
 
     <form
-      class="flex sm:w-96 w-full flex-col gap-3.5"
+      class="flex w-full flex-col gap-3.5 sm:w-96"
       @submit.prevent="submitForm"
     >
       <UIInput

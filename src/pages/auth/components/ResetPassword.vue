@@ -1,7 +1,7 @@
 <template>
   <div class="w-full sm:w-auto">
     <h1 class="mb-3">Восстановление пароля</h1>
-    <p class="mb-6 lg:max-w-96 text-center text-sm text-gray-900">
+    <p class="mb-6 text-center text-sm text-gray-900 lg:max-w-96">
       {{ descriptionText }}
     </p>
 
@@ -17,7 +17,7 @@
 
     <form
       v-if="currentStep === AuthStepEnum.resetPassword"
-      class="flex sm:w-96 w-full flex-col gap-3.5"
+      class="flex w-full flex-col gap-3.5 sm:w-96"
       @submit.prevent="submitForm"
     >
       <UIInput

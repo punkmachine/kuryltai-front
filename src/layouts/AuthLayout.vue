@@ -40,7 +40,7 @@ main {
 }
 
 .auth-footer {
-  @apply lg:flex h-16 w-full items-center justify-between text-sm text-blue-gray-500 hidden;
+  @apply hidden h-16 w-full items-center justify-between text-sm text-blue-gray-500 lg:flex;
 }
 
 .auth-footer a {
