@@ -19,7 +19,7 @@
       v-if="currentStep === AuthStepEnum.resetPassword || currentStep === AuthStepEnum.resetPasswordAfterSendEmail"
       :initial-email="emailForResetPass"
       :current-step="currentStep"
-      @sendEmailResetPass="sendEmailResetPass"
+      @sendEmailResetPass="sendEmailForgetPass"
       @goSignIn="goSignIn"
     />
 
@@ -37,35 +37,61 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { toast } from 'vue3-toastify';
+import Cookies from 'js-cookie';
+
+import { api } from '@/api';
+import { useAuthStore } from '@/store';
 
 import SignIn from './components/SignIn.vue';
 import ResetPassword from './components/ResetPassword.vue';
 import NewPassword from './components/NewPassword.vue';
 import SignUp from './components/SignUp.vue';
 
-import type { IPayloadLogin, IPayloadSignUp } from '@/types/backend/user/user.payload';
+import type { IPayloadLogin, IPayloadResetPass, IPayloadSignUp } from '@/types/backend/user/user.payload';
+import type { IResponseLogin } from '@/types/backend/user/user.response';
 import { AuthStepEnum } from './types';
 
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
 
 const currentStep = ref<AuthStepEnum>(AuthStepEnum.signInEmail);
 const emailForResetPass = ref<string>('');
 const emailForSignUp = ref<string>('');
+const resetPassData = reactive({
+  securityToken: '',
+  uuid: '',
+});
 
 function nextStep(email: string) {
-  // отправить email на бэк для проверки нахождения его в бд;
-  // если его нет в бд, задать step с регистрацией
+  api.auth
+    .checkEmail({ email })
+    .then(() => {
+      currentStep.value = AuthStepEnum.signInPassword;
+    })
+    .catch(error => setSignUpStep(error.response.status));
 
-  currentStep.value = AuthStepEnum.signInPassword;
-  // currentStep.value = AuthStepEnum.signUp;
   emailForSignUp.value = email;
 }
 
+function setSignUpStep(status: number) {
+  if (status === 400) {
+    currentStep.value = AuthStepEnum.signUp;
+  }
+}
+
 function authorizeUser(data: IPayloadLogin) {
-  // отправить запрос на бэк для авторизации
+  api.auth.login(data).then(successAuthUser);
+}
+
+function successAuthUser(data: IResponseLogin) {
+  Cookies.set('access', data.access);
+  Cookies.set('refresh', data.refresh);
+
+  authStore.setAuth(true);
 
   router.push('/');
 }
@@ -75,26 +101,36 @@ function resetPasswordClick(email: string) {
   currentStep.value = AuthStepEnum.resetPassword;
 }
 
-function sendEmailResetPass(email: string) {
-  currentStep.value = AuthStepEnum.resetPasswordAfterSendEmail;
-
-  // отправить email на бэк, чтобы восстановить пароль
+function sendEmailForgetPass(email: string) {
+  api.auth.forgetPassword({ email }).then(data => {
+    toast.info(data.message);
+    currentStep.value = AuthStepEnum.resetPasswordAfterSendEmail;
+  });
 }
 
 function goSignIn() {
   currentStep.value = AuthStepEnum.signInEmail;
 }
 
-function sendNewPassword() {
-  // запрос на бэк
-  currentStep.value = AuthStepEnum.signInEmail;
-  router.push('/auth');
+function sendNewPassword(data: IPayloadResetPass) {
+  api.auth
+    .resetPassword({
+      ...data,
+      security_token: resetPassData.securityToken,
+      profile_uuid: resetPassData.uuid,
+    })
+    .then(data => {
+      toast.info(data.message);
+
+      currentStep.value = AuthStepEnum.signInEmail;
+      router.push('/auth');
+    });
 }
 
 function signUpUser(data: IPayloadSignUp) {
-  // регистрация пользователя
-
-  router.push('/');
+  api.auth.signUp(data).then(() => {
+    currentStep.value = AuthStepEnum.signInPassword;
+  });
 }
 
 onMounted(() => {
@@ -102,6 +138,13 @@ onMounted(() => {
 
   if (stepParam && Object.values(AuthStepEnum).includes(stepParam)) {
     currentStep.value = stepParam;
+
+    if (currentStep.value === AuthStepEnum.newPassword) {
+      // @ts-ignore
+      resetPassData.securityToken = route.query.sec || '';
+      // @ts-ignore
+      resetPassData.uuid = route.query.p || '';
+    }
   }
 });
 </script>

@@ -16,7 +16,7 @@ import type { IResponseStandard } from '@/types/backend/responses';
 export const auth = (client: AxiosInstance) => {
   return {
     login: (payload: IPayloadLogin): Promise<IResponseLogin> => {
-      return client.post('/users/login', payload);
+      return client.post('/users/login/', payload);
     },
     signUp: (payload: IPayloadSignUp): Promise<IResponseSignUp> => {
       return client.post('/users/signup/', payload);
