@@ -53,6 +53,7 @@ import SignUp from './components/SignUp.vue';
 import type { IPayloadLogin, IPayloadResetPass, IPayloadSignUp } from '@/types/backend/user/user.payload';
 import type { IResponseLogin } from '@/types/backend/user/user.response';
 import { AuthStepEnum } from './types';
+import type { IResponseStandard } from '@/types/backend/responses';
 
 const router = useRouter();
 const route = useRoute();
@@ -119,12 +120,14 @@ function sendNewPassword(data: IPayloadResetPass) {
       security_token: resetPassData.securityToken,
       profile_uuid: resetPassData.uuid,
     })
-    .then(data => {
-      toast.info(data.message);
+    .then(sendNewPasswordSuccess);
+}
 
-      currentStep.value = AuthStepEnum.signInEmail;
-      router.push('/auth');
-    });
+function sendNewPasswordSuccess(data: IResponseStandard) {
+  toast.info(data.message);
+
+  currentStep.value = AuthStepEnum.signInEmail;
+  router.push('/auth');
 }
 
 function signUpUser(data: IPayloadSignUp) {
