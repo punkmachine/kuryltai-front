@@ -14,11 +14,13 @@ export default {
       ...colors,
       gray: {
         ...colors.gray,
+        700: '#616161',
         900: '#212121'
       },
       purple: {
         ...colors.purple,
-        900: '#9600ff',
+        800: '#9600ff',
+        900: '#5F00A1',
       },
       red: {
         100: '#ffcdd2',
