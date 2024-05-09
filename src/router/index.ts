@@ -11,6 +11,7 @@ const router = createRouter({
       component: MainPage,
       meta: {
         layout: 'main',
+        requiresAuth: true,
       },
     },
     {
@@ -27,6 +28,7 @@ const router = createRouter({
       component: () => defineAsyncComponent(() => import('@/pages/payments/view.vue')),
       meta: {
         layout: 'main',
+        requiresAuth: true,
       },
     },
     {
@@ -35,6 +37,7 @@ const router = createRouter({
       component: () => defineAsyncComponent(() => import('@/pages/settings/view.vue')),
       meta: {
         layout: 'main',
+        requiresAuth: true,
       },
     },
     {
@@ -43,6 +46,7 @@ const router = createRouter({
       component: () => defineAsyncComponent(() => import('@/pages/new-post/view.vue')),
       meta: {
         layout: 'main',
+        requiresAuth: true,
       },
     },
     {
@@ -51,6 +55,7 @@ const router = createRouter({
       component: () => defineAsyncComponent(() => import('@/pages/edit-post/view.vue')),
       meta: {
         layout: 'main',
+        requiresAuth: true,
       },
     },
     {
