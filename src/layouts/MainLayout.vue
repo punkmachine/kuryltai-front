@@ -25,14 +25,14 @@ import MainSidebar from '@/components/layout/main/MainSidebar.vue';
 }
 
 .main-layout {
-  @apply bg-gray-200 flex justify-center;
+  @apply flex justify-center bg-gray-200;
 
   margin-top: var(--header-height);
   min-height: calc(100vh - var(--header-height));
 }
 
 .main-layout__wrapper {
-  @apply grid mt-6 gap-x-5;
+  @apply mt-6 grid gap-x-5;
   grid-template-columns: 292px 912px;
 }
 
