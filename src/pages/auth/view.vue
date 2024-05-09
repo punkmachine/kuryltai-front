@@ -44,7 +44,6 @@ import { toast } from 'vue3-toastify';
 import Cookies from 'js-cookie';
 
 import { api } from '@/api';
-import { useAuthStore } from '@/store';
 
 import SignIn from './components/SignIn.vue';
 import ResetPassword from './components/ResetPassword.vue';
@@ -60,7 +59,6 @@ import type { IResponseStandard } from '@/types/backend/responses';
 
 const router = useRouter();
 const route = useRoute();
-const authStore = useAuthStore();
 
 const currentStep = ref<AuthStepEnum>(AuthStepEnum.signInEmail);
 const emailForResetPass = ref<string>('');
@@ -94,8 +92,6 @@ function authorizeUser(data: IPayloadLogin) {
 function successAuthUser(data: IResponseLogin) {
   Cookies.set('access', data.access);
   Cookies.set('refresh', data.refresh);
-
-  authStore.setAuth(true);
 
   router.push('/');
 }

@@ -1,11 +1,9 @@
 import router from '@/router';
-import { useAuthStore } from '@/store';
+import Cookies from 'js-cookie';
 
 router.beforeEach((to, from, next) => {
-  const store = useAuthStore();
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.isAuth) {
+    if (!Cookies.get('access')) {
       next({ name: 'auth' });
     } else {
       next();
