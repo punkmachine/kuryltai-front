@@ -1,16 +1,27 @@
 <template>
   <img
     :src="src"
-    class="h-9 w-9 rounded-full object-cover"
+    :class="['rounded-full object-cover', size]"
   />
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 
 interface IProps {
   src: string;
+  size: 'small' | 'medium' | 'big';
 }
 
-defineProps<IProps>();
+const props = defineProps<IProps>();
+
+const size = computed(() => {
+  const dict = {
+    small: 'h-6 w-6',
+    medium: 'h-9 w-9',
+    big: 'h-44 w-44',
+  };
+
+  return dict[props.size];
+});
 </script>

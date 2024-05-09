@@ -18,7 +18,10 @@
 
       <div class="cursor-pointer">
         <div class="flex items-center gap-1.5">
-          <UIAvatar src="https://avatars.githubusercontent.com/u/76869388?v=4" />
+          <UIAvatar
+            size="medium"
+            src="https://avatars.githubusercontent.com/u/76869388?v=4"
+          />
 
           <span class="text-sm font-medium text-gray-600">Алекс</span>
 
