@@ -46,7 +46,7 @@ const search = ref<string>('');
 
 <style scoped>
 .header {
-  @apply fixed top-0 flex w-full justify-center bg-white;
+  @apply fixed top-0 z-10 flex w-full justify-center bg-white;
 
   height: var(--header-height);
 }
