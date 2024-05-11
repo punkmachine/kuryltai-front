@@ -3,13 +3,26 @@
     <span
       v-if="label"
       class="mb-2 text-sm font-medium text-blue-gray-900"
-      >{{ label }}</span
     >
+      {{ label }}
+    </span>
     <div class="relative">
       <input
+        v-if="!isTextarea"
         type="text"
         v-bind="$attrs"
         class="input"
+        :class="{
+          'input--invalid': invalid,
+        }"
+        :value="modelValue"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      />
+
+      <textarea
+        v-else
+        v-bind="$attrs"
+        class="input input--textarea"
         :class="{
           'input--invalid': invalid,
         }"
@@ -29,6 +42,7 @@ interface IProps {
   label?: string;
   modelValue: string;
   invalid?: boolean;
+  isTextarea?: boolean;
 }
 
 interface IEmits {
