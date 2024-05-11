@@ -23,8 +23,14 @@
           <span>847 постов</span>
         </div>
 
-        <div class="flex items-center gap-4">
-          <button class="btn btn--with-icon btn--success w-auto uppercase">
+        <div
+          class="flex items-center gap-4"
+          v-if="!myProfile"
+        >
+          <button
+            class="btn btn--with-icon btn--success w-auto uppercase"
+            @click="$emit('show-donate')"
+          >
             <svg>
               <use xlink:href="@/assets/icons/sprites/btns.svg#donate"></use>
             </svg>
@@ -37,13 +43,47 @@
             <span> Отслеживать </span>
           </button>
         </div>
+
+        <div
+          class="flex items-center gap-4"
+          v-else
+        >
+          <button class="btn btn--with-icon btn--primary w-auto uppercase">
+            <svg>
+              <use xlink:href="@/assets/icons/sprites/btns.svg#add"></use>
+            </svg>
+            <span> Создать пост </span>
+          </button>
+          <button
+            class="btn btn--with-icon btn--outline w-auto uppercase"
+            @click="$emit('add-subscription')"
+          >
+            <svg>
+              <use xlink:href="@/assets/icons/sprites/btns.svg#add-subscription"></use>
+            </svg>
+            <span> Добавить подписку </span>
+          </button>
+        </div>
       </div>
     </div>
   </article>
 </template>
 
 <script lang="ts" setup>
+import { defineProps, defineEmits } from 'vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
+
+interface IProps {
+  myProfile?: boolean;
+}
+
+interface IEmits {
+  (e: 'add-subscription'): void;
+  (e: 'show-donate'): void;
+}
+
+defineProps<IProps>();
+defineEmits<IEmits>();
 </script>
 
 <style scoped>
