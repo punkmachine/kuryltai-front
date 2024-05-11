@@ -4,6 +4,10 @@
     @apply h-10 w-full rounded-lg border border-blue-gray-100 px-4 py-3;
   }
 
+  .input--textarea {
+    @apply h-36 resize-none;
+  }
+
   .input--invalid {
     @apply border-red-700;
   }
@@ -24,6 +28,11 @@
     @apply text-sm text-blue-gray-300;
   }
 
+  /* select */
+  .select {
+    @apply relative cursor-pointer select-none rounded-lg border border-solid border-blue-gray-500 p-3;
+  }
+
   /* buttons */
   .btn {
     @apply flex h-12 w-full items-center justify-center rounded-md px-5 py-3 text-sm font-black text-gray-900 transition-colors;
@@ -41,8 +50,40 @@
       0 4px 6px -1px rgba(33, 33, 33, 0.2);
   }
 
+  .btn--success {
+    @apply rounded-lg bg-green-500 text-white hover:bg-green-800 focus:bg-gray-700;
+
+    box-shadow:
+      0px 4px 6px -1px rgba(76, 175, 80, 0.2),
+      0px 2px 4px -2px rgba(76, 175, 80, 0.2);
+  }
+
+  .btn--secondary {
+    @apply rounded-lg bg-gray-700 text-white hover:bg-gray-800;
+
+    box-shadow:
+      0px 4px 6px -1px rgba(33, 33, 33, 0.2),
+      0px 2px 4px -2px rgba(33, 33, 33, 0.2);
+  }
+
+  .btn--outline {
+    @apply rounded-lg border border-solid border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white focus:border-gray-700 focus:text-gray-700;
+
+    box-shadow:
+      0px 4px 6px -1px rgba(38, 50, 56, 0.2),
+      0px 2px 4px -2px rgba(38, 50, 56, 0.2);
+  }
+
+  .btn--outline:hover.btn--with-icon > svg {
+    @apply fill-white;
+  }
+
+  .btn--outline:focus.btn--with-icon > svg {
+    @apply fill-gray-700;
+  }
+
   .btn--with-icon {
-    @apply gap-1;
+    @apply gap-2;
   }
 
   .btn--with-icon > svg {

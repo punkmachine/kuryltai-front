@@ -8,6 +8,12 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Roboto', 'sans-serif']
+      },
+      rotate: {
+        270: '270deg',
+      },
+      width: {
+        108: '27rem'
       }
     },
     colors: {
