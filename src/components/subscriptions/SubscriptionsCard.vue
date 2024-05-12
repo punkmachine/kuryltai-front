@@ -1,5 +1,42 @@
 <template>
-  <article class="flex flex-col gap-3 rounded-xl bg-white p-6 text-center">
+  <article class="relative flex flex-col gap-3 rounded-xl bg-white p-6 text-center">
+    <div
+      v-if="isMy"
+      class="absolute right-3 top-3"
+    >
+      <button
+        class="flex h-6 w-6 cursor-pointer items-center justify-center rounded-lg"
+        :class="{
+          'bg-purple-800': activeOptions,
+        }"
+        @click="activeOptions = !activeOptions"
+      >
+        <svg
+          class="h-4 w-4 stroke-blue-gray-300"
+          :class="{
+            'stroke-white': activeOptions,
+          }"
+        >
+          <use xlink:href="@/assets/icons/sprites/btns.svg#dotted"></use>
+        </svg>
+      </button>
+
+      <div
+        class="absolute right-0 top-8 z-10 flex-col gap-1 rounded-lg bg-white p-3 shadow-xl"
+        :class="{
+          hidden: !activeOptions,
+          flex: activeOptions,
+        }"
+      >
+        <button
+          class="rounded-md p-2 text-left text-sm font-medium text-blue-gray-500 hover:bg-blue-50"
+          @click="$emit('delete-subscriptions')"
+        >
+          Удалить
+        </button>
+      </div>
+    </div>
+
     <p
       class="text-gray-900"
       :class="{
@@ -49,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, computed } from 'vue';
+import { defineProps, defineEmits, computed, ref } from 'vue';
 import dayjs from 'dayjs';
 
 interface IProps {
@@ -64,10 +101,13 @@ interface IProps {
 
 interface IEmits {
   (e: 'edit-subscription'): void;
+  (e: 'delete-subscriptions'): void;
 }
 
 const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
+
+const activeOptions = ref(false);
 
 const readableDate = computed(() => {
   if (props.validUntil) {
