@@ -47,6 +47,9 @@
           v-for="option in options"
           :key="option.value"
           class="cursor-pointer rounded-md p-3.5 text-sm font-medium text-blue-gray-500 hover:bg-blue-gray-50"
+          :class="{
+            'bg-blue-gray-50': selectedValue === option.value,
+          }"
           @click="selectedValue = option.value"
         >
           {{ option.label }}
@@ -61,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, ref } from 'vue';
+import { defineEmits, defineProps, ref, watch, onMounted } from 'vue';
 
 interface IProps {
   label?: string;
@@ -78,9 +81,21 @@ interface IEmits {
   (e: 'update:modelValue', newValue: string): void;
 }
 
-defineProps<IProps>();
-defineEmits<IEmits>();
+const props = defineProps<IProps>();
+const emit = defineEmits<IEmits>();
 
 const showOptions = ref(false);
 const selectedValue = ref('');
+
+watch(
+  () => selectedValue.value,
+  () => {
+    emit('update:modelValue', selectedValue.value);
+    showOptions.value = false;
+  },
+);
+
+onMounted(() => {
+  selectedValue.value = props.modelValue;
+});
 </script>
