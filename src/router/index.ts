@@ -23,6 +23,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/user/:slug',
+      name: 'user',
+      component: () => defineAsyncComponent(() => import('@/pages/user/view.vue')),
+      meta: {
+        layout: 'main',
+      },
+    },
+    {
       path: '/payments',
       name: 'payments',
       component: () => defineAsyncComponent(() => import('@/pages/payments/view.vue')),
