@@ -8,7 +8,9 @@
           <MainSidebar />
         </div>
 
-        <slot></slot>
+        <div class="main-container">
+          <slot></slot>
+        </div>
       </div>
     </main>
   </div>
@@ -32,15 +34,24 @@ import MainSidebar from '@/components/layout/main/MainSidebar.vue';
 }
 
 .main-layout__wrapper {
-  @apply mt-6 grid gap-x-5;
-  grid-template-columns: 292px 912px;
+  @apply mt-6 grid max-w-6xl gap-x-5;
 }
 
 .main-sidebar {
-  @apply w-[292px];
+  @apply hidden w-full xl:block;
+}
+
+.main-container {
+  @apply px-3 xl:p-0;
 }
 
 main {
   min-width: 100%;
+}
+
+@media (min-width: 1280px) {
+  .main-layout__wrapper {
+    grid-template-columns: 25% 75%;
+  }
 }
 </style>

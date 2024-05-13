@@ -52,6 +52,6 @@ const search = ref<string>('');
 }
 
 .header__content {
-  @apply flex w-full max-w-7xl items-center justify-between py-3;
+  @apply flex w-full items-center justify-between px-3 py-3 xl:max-w-7xl xl:px-0;
 }
 </style>

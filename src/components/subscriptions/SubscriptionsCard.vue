@@ -66,6 +66,7 @@
     <button
       v-else-if="!active"
       class="btn btn--primary uppercase"
+      @click="$emit('subscribe')"
     >
       Подписаться
     </button>
@@ -102,6 +103,7 @@ interface IProps {
 interface IEmits {
   (e: 'edit-subscription'): void;
   (e: 'delete-subscriptions'): void;
+  (e: 'subscribe'): void;
 }
 
 const props = defineProps<IProps>();
