@@ -28,6 +28,23 @@
     @apply text-sm text-blue-gray-300;
   }
 
+  /* upload */
+  .upload {
+    @apply flex w-max cursor-pointer items-center gap-2 rounded-lg border border-solid border-blue-gray-900 px-4 py-2.5 text-xs font-bold uppercase text-blue-gray-900 hover:bg-blue-gray-900 hover:text-white;
+
+    box-shadow:
+      0px 4px 6px -1px rgba(38, 50, 56, 0.2),
+      0px 2px 4px -2px rgba(38, 50, 56, 0.2);
+  }
+
+  .upload > svg {
+    @apply h-4 w-4 fill-blue-gray-900;
+  }
+
+  .upload:hover > svg {
+    @apply fill-white;
+  }
+
   /* select */
   .select {
     @apply relative cursor-pointer select-none rounded-lg border border-solid border-blue-gray-500 p-3;
