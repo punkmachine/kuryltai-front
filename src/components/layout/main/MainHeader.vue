@@ -38,7 +38,7 @@
         <div
           class="header__dropdown"
           :class="{
-            'header__dropdown--active': visibleDropdown
+            'header__dropdown--active': visibleDropdown,
           }"
         >
           <div class="header__dropdown-item">Денюжки</div>

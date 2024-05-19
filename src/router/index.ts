@@ -31,15 +31,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/payments',
-      name: 'payments',
-      component: () => defineAsyncComponent(() => import('@/pages/payments/view.vue')),
-      meta: {
-        layout: 'main',
-        requiresAuth: true,
-      },
-    },
-    {
       path: '/settings',
       name: 'settings',
       component: () => defineAsyncComponent(() => import('@/pages/settings/view.vue')),
@@ -49,18 +40,9 @@ const router = createRouter({
       },
     },
     {
-      path: '/new-post',
-      name: 'new-post',
-      component: () => defineAsyncComponent(() => import('@/pages/new-post/view.vue')),
-      meta: {
-        layout: 'main',
-        requiresAuth: true,
-      },
-    },
-    {
-      path: '/edit-post/:id',
-      name: 'edit-post',
-      component: () => defineAsyncComponent(() => import('@/pages/edit-post/view.vue')),
+      path: '/subscriptions',
+      name: 'subscriptions',
+      component: () => defineAsyncComponent(() => import('@/pages/subscriptions/view.vue')),
       meta: {
         layout: 'main',
         requiresAuth: true,
