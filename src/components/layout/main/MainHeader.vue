@@ -16,7 +16,10 @@
         />
       </div>
 
-      <div class="cursor-pointer">
+      <div
+        class="relative cursor-pointer"
+        @click="showProfileDropdown"
+      >
         <div class="flex items-center gap-1.5">
           <UIAvatar
             size="medium"
@@ -31,6 +34,16 @@
             </svg>
           </div>
         </div>
+
+        <div
+          class="header__dropdown"
+          :class="{
+            'header__dropdown--active': visibleDropdown
+          }"
+        >
+          <div class="header__dropdown-item">Денюжки</div>
+          <div class="header__dropdown-item">Выйти</div>
+        </div>
       </div>
     </div>
   </header>
@@ -42,6 +55,11 @@ import UIInput from '@/components/ui/UIInput.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 
 const search = ref<string>('');
+const visibleDropdown = ref<boolean>(false);
+
+function showProfileDropdown() {
+  visibleDropdown.value = !visibleDropdown.value;
+}
 </script>
 
 <style scoped>
@@ -53,5 +71,17 @@ const search = ref<string>('');
 
 .header__content {
   @apply flex w-full items-center justify-between px-3 py-3 xl:max-w-7xl xl:px-0;
+}
+
+.header__dropdown {
+  @apply absolute bottom-[-106px] right-0 z-30 hidden min-w-32 flex-col rounded-lg bg-white p-2;
+}
+
+.header__dropdown--active {
+  @apply flex;
+}
+
+.header__dropdown-item {
+  @apply rounded-md p-2 px-4 text-sm font-medium text-blue-gray-500 transition-colors hover:bg-blue-gray-50;
 }
 </style>
