@@ -19,7 +19,7 @@
       to="/subscriptions"
       class="flex w-full items-center gap-1 px-3 py-2"
       :class="{
-        'rounded-md bg-gray-50': activeLink === '/todo',
+        'rounded-md bg-gray-50': activeLink === '/subscriptions',
       }"
     >
       <div>
