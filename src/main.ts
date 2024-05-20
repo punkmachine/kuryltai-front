@@ -7,7 +7,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
-import '@/middlewares/auth';
+import '@/router/middlewares/auth';
 
 const app = createApp(App);
 
