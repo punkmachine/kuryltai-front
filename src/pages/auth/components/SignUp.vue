@@ -84,7 +84,7 @@
 <script lang="ts" setup>
 import { ref, defineEmits, defineProps, onMounted } from 'vue';
 import UIInput from '@/components/ui/UIInput.vue';
-import type { IPayloadSignUp } from '@/types/backend/user/user.payload';
+import type { IPayloadSignUp } from '@/entities/types/backend/user/user.payload';
 
 interface IProps {
   initialEmail: string;

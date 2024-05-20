@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 import router from '@/router';
 import { api } from '.';
-import { authCookies } from '@/constants/browserStoreKeys';
+import { authCookies } from '@/entities/constants/browserStoreKeys';
 
 const client = axios.create({
   baseURL: 'https://api-kuryltai.kz/api/v0',

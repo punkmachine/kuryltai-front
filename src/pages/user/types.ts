@@ -1,4 +1,4 @@
-import type { ICard } from '@/types/types';
+import type { ICard } from '@/entities/types/types';
 
 export interface ISendDonateBase {
   sum: string;

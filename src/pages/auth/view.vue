@@ -50,12 +50,12 @@ import ResetPassword from './components/ResetPassword.vue';
 import NewPassword from './components/NewPassword.vue';
 import SignUp from './components/SignUp.vue';
 
-import { googleAuthUrl, scopeGoogle } from '@/constants/googleAuth';
+import { googleAuthUrl, scopeGoogle } from '@/entities/constants/googleAuth';
 
-import type { IPayloadLogin, IPayloadResetPass, IPayloadSignUp } from '@/types/backend/user/user.payload';
-import type { IResponseLogin } from '@/types/backend/user/user.response';
+import type { IPayloadLogin, IPayloadResetPass, IPayloadSignUp } from '@/entities/types/backend/user/user.payload';
+import type { IResponseLogin } from '@/entities/types/backend/user/user.response';
 import { AuthStepEnum } from './types';
-import type { IResponseStandard } from '@/types/backend/responses';
+import type { IResponseStandard } from '@/entities/types/backend/responses';
 
 const router = useRouter();
 const route = useRoute();

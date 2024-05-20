@@ -73,7 +73,7 @@
 <script lang="ts" setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import UIInput from '@/components/ui/UIInput.vue';
-import type { IPayloadLogin } from '@/types/backend/user/user.payload';
+import type { IPayloadLogin } from '@/entities/types/backend/user/user.payload';
 import { AuthStepEnum } from '../types';
 
 interface IProps {

@@ -8,9 +8,9 @@ import type {
   IPayloadResetPass,
   IPayloadForgetEmail,
   IPayloadChangePassword,
-} from '@/types/backend/user/user.payload';
-import type { IResponseLogin, IResponseSignUp } from '@/types/backend/user/user.response';
-import type { IResponseStandard } from '@/types/backend/responses';
+} from '@/entities/types/backend/user/user.payload';
+import type { IResponseLogin, IResponseSignUp } from '@/entities/types/backend/user/user.response';
+import type { IResponseStandard } from '@/entities/types/backend/responses';
 
 // eslint-disable-next-line max-lines-per-function
 export const auth = (client: AxiosInstance) => {

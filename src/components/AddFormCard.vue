@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { ref, watch, defineEmits, defineProps, onMounted, toRaw } from 'vue';
 import UIInput from '@/components/ui/UIInput.vue';
-import type { ICard } from '@/types/types';
+import type { ICard } from '@/entities/types/types';
 
 interface IProps {
   initialCardData: ICard;
