@@ -31,7 +31,7 @@
           {{ options.find(option => option.value === selectedValue)?.label }}
         </span>
 
-        <svg class="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2">
+        <svg class="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 fill-blue-gray-500">
           <use xlink:href="@/assets/icons/sprites/btns.svg#arrow"></use>
         </svg>
       </div>

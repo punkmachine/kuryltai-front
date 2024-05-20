@@ -61,10 +61,6 @@ function cancelSubscribe() {
 }
 
 .subscriptions__content {
-  @apply w-[916px] rounded-lg bg-white px-6 py-3;
-
-  box-shadow:
-    0px 1px 3px 0px rgba(0, 0, 0, 0.1),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  @apply w-[916px] rounded-lg bg-white px-6 py-3 shadow-standard;
 }
 </style>

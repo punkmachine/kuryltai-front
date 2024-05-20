@@ -29,7 +29,7 @@
           <span class="text-sm font-medium text-gray-600">Алекс</span>
 
           <div>
-            <svg class="h-5 w-5">
+            <svg class="h-5 w-5 fill-blue-gray-500">
               <use xlink:href="@/assets/icons/sprites/btns.svg#arrow"></use>
             </svg>
           </div>
@@ -41,7 +41,11 @@
             'header__dropdown--active': visibleDropdown,
           }"
         >
-          <div class="header__dropdown-item">Денюжки</div>
+          <RouterLink
+            to="/money"
+            class="header__dropdown-item"
+            >Денюжки</RouterLink
+          >
           <div class="header__dropdown-item">Выйти</div>
         </div>
       </div>
@@ -51,6 +55,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import UIInput from '@/components/ui/UIInput.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 

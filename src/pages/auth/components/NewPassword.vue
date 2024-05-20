@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import { defineEmits, ref } from 'vue';
 import UIInput from '@/components/ui/UIInput.vue';
-import type { IPayloadResetPass } from '@/types/backend/user/user.payload';
+import type { IPayloadResetPass } from '@/entities/types/backend/user/user.payload';
 
 interface IEmits {
   (e: 'sendNewPassword', data: IPayloadResetPass): void;

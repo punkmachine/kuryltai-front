@@ -133,11 +133,7 @@ const fullContentVisible = ref(false);
 
 <style scoped>
 .post {
-  @apply rounded-lg bg-white px-6 py-3;
-
-  box-shadow:
-    0px 1px 3px 0px rgba(0, 0, 0, 0.1),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  @apply rounded-lg bg-white px-6 py-3 shadow-standard;
 }
 
 .post__content {

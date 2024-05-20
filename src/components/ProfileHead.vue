@@ -48,12 +48,12 @@
           class="flex items-center gap-4"
           v-else
         >
-          <button class="btn btn--with-icon btn--primary w-auto uppercase">
+          <RouterLink to="/add-post" class="btn btn--with-icon btn--primary w-auto uppercase">
             <svg>
               <use xlink:href="@/assets/icons/sprites/btns.svg#add"></use>
             </svg>
             <span> Создать пост </span>
-          </button>
+          </RouterLink>
           <button
             class="btn btn--with-icon btn--outline w-auto uppercase"
             @click="$emit('add-subscription')"
@@ -71,6 +71,7 @@
 
 <script lang="ts" setup>
 import { defineProps, defineEmits } from 'vue';
+import { RouterLink } from 'vue-router';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 
 interface IProps {
@@ -88,10 +89,7 @@ defineEmits<IEmits>();
 
 <style scoped>
 .profile__head {
-  @apply rounded-lg bg-white;
-  box-shadow:
-    0px 1px 3px 0px rgba(0, 0, 0, 0.1),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  @apply rounded-lg bg-white shadow-standard;
 }
 
 .profile__cover {
