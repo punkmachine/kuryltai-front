@@ -11,7 +11,10 @@
       />
     </div>
 
-    <UIUpload class="mt-3" />
+    <UIUpload
+      file-type=".jpg,.webp,.png,.jpeg,.avif"
+      class="mt-3"
+    />
 
     <p class="mt-6 text-sm text-gray-900">Фотография профиля</p>
 
@@ -21,7 +24,10 @@
       class="mt-3"
     />
 
-    <UIUpload class="mt-3" />
+    <UIUpload
+      file-type=".jpg,.webp,.png,.jpeg,.avif"
+      class="mt-3"
+    />
 
     <form
       class="mt-6 flex flex-col gap-3.5"
