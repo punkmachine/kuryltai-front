@@ -48,7 +48,10 @@
           class="flex items-center gap-4"
           v-else
         >
-          <RouterLink to="/add-post" class="btn btn--with-icon btn--primary w-auto uppercase">
+          <RouterLink
+            to="/add-post"
+            class="btn btn--with-icon btn--primary w-auto uppercase"
+          >
             <svg>
               <use xlink:href="@/assets/icons/sprites/btns.svg#add"></use>
             </svg>

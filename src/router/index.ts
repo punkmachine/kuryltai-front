@@ -49,6 +49,24 @@ const router = createRouter({
       },
     },
     {
+      path: '/money',
+      name: 'money',
+      component: () => defineAsyncComponent(() => import('@/pages/money/view.vue')),
+      meta: {
+        layout: 'main',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/add-post',
+      name: 'add-post',
+      component: () => defineAsyncComponent(() => import('@/pages/add-post/view.vue')),
+      meta: {
+        layout: 'main',
+        requiresAuth: true,
+      },
+    },
+    {
       path: '/:catchAll(.*)',
       name: 'not-found',
       component: () => defineAsyncComponent(() => import('@/pages/404/view.vue')),
