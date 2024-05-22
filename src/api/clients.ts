@@ -7,7 +7,7 @@ import { api } from '.';
 import { authCookies } from '@/entities/constants/browserStoreKeys';
 
 const client = axios.create({
-  baseURL: 'https://api-kuryltai.kz/api/v0',
+  baseURL: import.meta.env.VITE_APP_API_URL,
 });
 
 function goToLogin() {
