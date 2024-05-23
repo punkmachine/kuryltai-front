@@ -15,6 +15,7 @@
 
 <script lang="ts" setup>
 import { defineProps, computed } from 'vue';
+//@ts-ignore
 import icons from '@/assets/icons/sprites/inputs.svg';
 
 interface IProps {

@@ -61,7 +61,7 @@
 <script lang="ts" setup>
 import { defineProps, computed, ref, defineEmits } from 'vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
-import { getTimeHasPassed } from '@/helpers/getTimeHasPassed.ts';
+import { getTimeHasPassed } from '@/helpers/getTimeHasPassed';
 
 interface IProps {
   date: string;

@@ -94,6 +94,7 @@ function submitForm() {
 
   if (invalidPassword.value || invalidSecondPassword.value) return;
 
+  //@ts-ignore
   emit('sendNewPassword', { password: password.value, confirm_password: secondPassword.value });
 }
 </script>

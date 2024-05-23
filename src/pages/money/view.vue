@@ -31,6 +31,7 @@ import WithdrawalOfMoney from './components/WithdrawalOfMoney.vue';
 import IncomeMoney from './components/IncomeMoney.vue';
 import HistoryPayments from './components/HistoryPayments.vue';
 import { asideItems } from './constants';
+//@ts-ignore
 import icons from '@/assets/icons/sprites/menu.svg';
 import type { TMoneyState } from './types';
 
