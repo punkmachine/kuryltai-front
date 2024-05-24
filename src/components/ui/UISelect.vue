@@ -55,8 +55,11 @@
           {{ option.label }}
         </div>
 
-        <button class="rounded-md p-3.5 text-left text-sm font-medium text-blue-gray-500 hover:bg-blue-gray-50">
-          + Добавить карту
+        <button
+          class="rounded-md p-3.5 text-left text-sm font-medium text-blue-gray-500 hover:bg-blue-gray-50"
+          @click="lastItem.click"
+        >
+          {{ lastItem.label }}
         </button>
       </div>
     </div>
@@ -75,6 +78,10 @@ interface IProps {
     label: string;
     value: string;
   }[];
+  lastItem: {
+    label: string,
+    click: () => void;
+  }
 }
 
 interface IEmits {

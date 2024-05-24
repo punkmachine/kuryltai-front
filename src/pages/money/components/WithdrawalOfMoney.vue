@@ -25,6 +25,10 @@
             value: '2',
           },
         ]"
+        :last-item="{
+          label: '+ Добавить карту',
+          click: () => {},
+        }"
       />
     </template>
 
