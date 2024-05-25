@@ -1,6 +1,6 @@
-import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from '@/pages/profile/view.vue';
+import AuthPage from '@/pages/auth/view.vue';
 
 const router = createRouter({
   history: createWebHistory('/'),
@@ -17,7 +17,7 @@ const router = createRouter({
     {
       path: '/auth',
       name: 'auth',
-      component: () => defineAsyncComponent(() => import('@/pages/auth/view.vue')),
+      component: AuthPage,
       meta: {
         layout: 'auth',
       },
@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: '/user/:slug',
       name: 'user',
-      component: () => defineAsyncComponent(() => import('@/pages/user/view.vue')),
+      component: () => import('@/pages/user/view.vue'),
       meta: {
         layout: 'main',
       },
@@ -33,7 +33,7 @@ const router = createRouter({
     {
       path: '/settings',
       name: 'settings',
-      component: () => defineAsyncComponent(() => import('@/pages/settings/view.vue')),
+      component: () => import('@/pages/settings/view.vue'),
       meta: {
         layout: 'main',
         requiresAuth: true,
@@ -42,7 +42,7 @@ const router = createRouter({
     {
       path: '/subscriptions',
       name: 'subscriptions',
-      component: () => defineAsyncComponent(() => import('@/pages/subscriptions/view.vue')),
+      component: () => import('@/pages/subscriptions/view.vue'),
       meta: {
         layout: 'main',
         requiresAuth: true,
@@ -51,7 +51,7 @@ const router = createRouter({
     {
       path: '/money',
       name: 'money',
-      component: () => defineAsyncComponent(() => import('@/pages/money/view.vue')),
+      component: () => import('@/pages/money/view.vue'),
       meta: {
         layout: 'main',
         requiresAuth: true,
@@ -60,7 +60,7 @@ const router = createRouter({
     {
       path: '/add-post',
       name: 'add-post',
-      component: () => defineAsyncComponent(() => import('@/pages/add-post/view.vue')),
+      component: () => import('@/pages/add-post/view.vue'),
       meta: {
         layout: 'main',
         requiresAuth: true,
@@ -69,7 +69,7 @@ const router = createRouter({
     {
       path: '/:catchAll(.*)',
       name: 'not-found',
-      component: () => defineAsyncComponent(() => import('@/pages/404/view.vue')),
+      component: () => import('@/pages/404/view.vue'),
       meta: {
         layout: 'empty',
       },
