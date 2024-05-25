@@ -2,19 +2,13 @@ import axios, { type AxiosResponse, type AxiosError, type InternalAxiosRequestCo
 import { toast } from 'vue3-toastify';
 import Cookies from 'js-cookie';
 
-import router from '@/router';
 import { api } from '.';
 import { authCookies } from '@/entities/constants/browserStoreKeys';
+import { goToLogin } from '@/helpers/goToLoginPage';
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
 });
-
-function goToLogin() {
-  router.push('/auth');
-  Cookies.remove(authCookies.access);
-  Cookies.remove(authCookies.refresh);
-}
 
 function errorToast(error: AxiosError<{ error: { message: string } }>) {
   if (error.response?.data?.error?.message) {

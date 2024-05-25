@@ -46,7 +46,12 @@
             class="header__dropdown-item"
             >Денюжки</RouterLink
           >
-          <div class="header__dropdown-item">Выйти</div>
+          <button
+            class="header__dropdown-item text-left"
+            @click="logout"
+          >
+            Выйти
+          </button>
         </div>
       </div>
     </div>
@@ -58,12 +63,17 @@ import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import UIInput from '@/components/ui/UIInput.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
+import { goToLogin } from '@/helpers/goToLoginPage';
 
 const search = ref<string>('');
 const visibleDropdown = ref<boolean>(false);
 
 function showProfileDropdown() {
   visibleDropdown.value = !visibleDropdown.value;
+}
+
+function logout() {
+  goToLogin();
 }
 </script>
 
