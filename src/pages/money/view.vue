@@ -33,6 +33,7 @@ import HistoryPayments from './components/HistoryPayments.vue';
 import { asideItems } from './constants';
 //@ts-ignore
 import icons from '@/assets/icons/sprites/menu.svg';
+import { moneyStateKey } from '@/entities/constants/localStorageKeys';
 import type { TMoneyState } from './types';
 
 const moneyState = ref<TMoneyState>('withdrawal');
@@ -50,18 +51,18 @@ const component = computed(() => {
 watch(
   () => moneyState.value,
   () => {
-    localStorage.setItem('money-state', moneyState.value);
+    localStorage.setItem(moneyStateKey, moneyState.value);
   },
 );
 
 onMounted(() => {
-  if (localStorage.getItem('money-state')) {
-    moneyState.value = localStorage.getItem('money-state') as TMoneyState;
+  if (localStorage.getItem(moneyStateKey)) {
+    moneyState.value = localStorage.getItem(moneyStateKey) as TMoneyState;
   }
 });
 
 onBeforeUnmount(() => {
-  localStorage.removeItem('money-state');
+  localStorage.removeItem(moneyStateKey);
 });
 </script>
 

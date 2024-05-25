@@ -54,6 +54,7 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue';
 import AccountSettings from './components/AccountSettings.vue';
 import PasswordSettings from './components/PasswordSettings.vue';
 import PaymentSettings from './components/PaymentSettings.vue';
+import { settingsStateKey } from '@/entities/constants/localStorageKeys';
 
 type TSettingState = 'account' | 'password' | 'payment';
 
@@ -72,18 +73,18 @@ const component = computed(() => {
 watch(
   () => settingState.value,
   () => {
-    localStorage.setItem('settings-state', settingState.value);
+    localStorage.setItem(settingsStateKey, settingState.value);
   },
 );
 
 onMounted(() => {
-  if (localStorage.getItem('settings-state')) {
-    settingState.value = localStorage.getItem('settings-state') as TSettingState;
+  if (localStorage.getItem(settingsStateKey)) {
+    settingState.value = localStorage.getItem(settingsStateKey) as TSettingState;
   }
 });
 
 onBeforeUnmount(() => {
-  localStorage.removeItem('settings-state');
+  localStorage.removeItem(settingsStateKey);
 });
 </script>
 
