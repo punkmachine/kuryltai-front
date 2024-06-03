@@ -53,13 +53,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, defineProps, defineEmits, computed } from 'vue';
+import { reactive, defineProps, defineEmits, computed, onMounted } from 'vue';
 import UIModal from '@/components/ui/UIModal.vue';
 import UIInput from '@/components/ui/UIInput.vue';
 import type { IEditSubscriptionData } from '../types';
 
 interface IProps {
   visibleEditSubscription: boolean;
+  membership: any;
 }
 
 interface IEmits {
@@ -67,7 +68,7 @@ interface IEmits {
   (e: 'update-subscription', data: IEditSubscriptionData): void;
 }
 
-defineProps<IProps>();
+const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
 
 const editSubscriptionData = reactive<IEditSubscriptionData>({
@@ -83,4 +84,14 @@ const validData = computed(() => {
 function updateSubscription() {
   emit('update-subscription', editSubscriptionData);
 }
+
+onMounted(() => {
+  console.log(props.membership);
+
+  if (props.membership) {
+    editSubscriptionData.description = props.membership.membership_description;
+    editSubscriptionData.name = props.membership.name;
+    editSubscriptionData.sum = props.membership.monthly_price.slice(0, -3);
+  }
+});
 </script>
