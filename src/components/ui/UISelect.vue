@@ -79,9 +79,9 @@ interface IProps {
     value: string;
   }[];
   lastItem: {
-    label: string,
+    label: string;
     click: () => void;
-  }
+  };
 }
 
 interface IEmits {
