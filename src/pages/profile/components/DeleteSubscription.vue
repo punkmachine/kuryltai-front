@@ -44,17 +44,18 @@ import UIModal from '@/components/ui/UIModal.vue';
 
 interface IProps {
   visibleDeleteSubscription: boolean;
+  id: number;
 }
 
 interface IEmits {
   (e: 'close'): void;
-  (e: 'delete-subscription'): void;
+  (e: 'delete-subscription', id: number): void;
 }
 
-defineProps<IProps>();
+const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
 
 function deleteSubscription() {
-  emit('delete-subscription');
+  emit('delete-subscription', props.id);
 }
 </script>
