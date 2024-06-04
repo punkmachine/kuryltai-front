@@ -51,6 +51,31 @@
         ]"
       />
 
+      <UISelect
+        v-if="accessType === 'change-type'"
+        v-model="selectedAccessType"
+        class="mt-2"
+        placeholder="Выберите уровень"
+        :options="[
+          {
+            label: 'Стандартная',
+            value: 'standard',
+          },
+          {
+            label: 'Меценат',
+            value: 'mecenat',
+          },
+          {
+            label: 'Олигарх',
+            value: 'oligarh',
+          },
+        ]"
+        :last-item="{
+          label: '+ Добавить уровень',
+          click: () => {},
+        }"
+      />
+
       <button class="btn btn--primary mt-7 uppercase">Опубликовать</button>
     </div>
   </section>
@@ -76,6 +101,7 @@ const postData = reactive<INewPost>({
   description: '',
   tags: [],
 });
+const selectedAccessType = ref<string>('');
 </script>
 
 <style scoped>
