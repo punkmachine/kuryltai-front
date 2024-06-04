@@ -50,23 +50,16 @@
 
       <div class="subscriptions">
         <SubscriptionsCard
-          title="1200 ₸"
-          subtitle="Стандартная"
+          v-for="membership in membershipsList"
+          :key="membership.id"
+          :title="`${membership.monthly_price.slice(0, -3)} ₸`"
+          :subtitle="membership.name"
           active
           is-full
           is-my
-          valid-until="2024-05-15T07:40:00.000Z"
-          description="Подписка дает право на чтение всех материалов в блоге"
-          @edit-subscription="visibleEditSubscription = true"
-          @delete-subscriptions="visibleDelSubscription = true"
-        />
-
-        <SubscriptionsCard
-          title="2 400 ₸"
-          subtitle="Меценат"
-          is-full
-          is-my
-          description="Стоимость подписки 2 400 тенге в месяц. Автор хочет писать тексты тут, не отвлекаясь на сторонние заработки. Вы можете ему в этом помочь."
+          :description="membership.membership_description"
+          @edit-subscription="editSubscriptionClick(membership)"
+          @delete-subscriptions="deleteSubscriptionsClick(membership)"
         />
       </div>
     </section>
@@ -78,12 +71,15 @@
     />
 
     <EditSubscription
+      v-if="editedMembership"
       :visible-edit-subscription="visibleEditSubscription"
+      :membership="editedMembership"
       @close="visibleEditSubscription = false"
       @update-subscription="updateSubscription"
     />
 
     <DeleteSubscription
+      :id="deletedMembership?.id"
       :visible-delete-subscription="visibleDelSubscription"
       @close="visibleDelSubscription = false"
       @delete-subscription="deleteSubscription"
@@ -98,7 +94,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+
+import { api } from '@/api';
+
 import FullPost from '@/components/post/FullPost.vue';
 import ProfileHead from '@/components/ProfileHead.vue';
 import SubscriptionsCard from '@/components/subscriptions/SubscriptionsCard.vue';
@@ -113,26 +112,69 @@ const visibleEditSubscription = ref(false);
 const visibleDelSubscription = ref(false);
 const visibleDeletePost = ref(false);
 
+const deletedMembership = ref<any>(null);
+const editedMembership = ref<any>(null);
+
+const membershipsList = ref<any[]>([]);
+
+function deleteSubscriptionsClick(membership: any) {
+  deletedMembership.value = membership;
+  visibleDelSubscription.value = true;
+}
+
+function editSubscriptionClick(membership: any) {
+  editedMembership.value = membership;
+  visibleEditSubscription.value = true;
+}
+
 function addSubscription(data: IAddSubscriptionData) {
-  console.log(data);
-  // @todo: апишка создания подписки
-  visibleAddSubscription.value = false;
+  const payload = {
+    name: data.name,
+    monthly_price: data.sum,
+    membership_description: data.description,
+  };
+
+  api.memberships.createMembership(payload).then(() => {
+    visibleAddSubscription.value = false;
+    getMyMemberships();
+  });
 }
 
 function updateSubscription(data: IEditSubscriptionData) {
-  console.log(data);
-  // @todo: апишка обновления подписки
-  visibleEditSubscription.value = false;
+  const payload = {
+    name: data.name,
+    monthly_price: data.sum,
+    membership_description: data.description,
+  };
+
+  api.memberships.editMembership(payload, editedMembership.value.id).then(() => {
+    getMyMemberships();
+    visibleEditSubscription.value = false;
+    editedMembership.value = null;
+  });
 }
 
-function deleteSubscription() {
-  visibleDelSubscription.value = false;
+function deleteSubscription(id: number) {
+  api.memberships.deleteMembership({}, id).then(() => {
+    getMyMemberships();
+    visibleDelSubscription.value = false;
+    deletedMembership.value = null;
+  });
 }
 
 function deletePost() {
-  // @todo: апишка удаления поста
   visibleDeletePost.value = false;
 }
+
+function getMyMemberships() {
+  api.memberships.getUserMemberships().then(data => {
+    membershipsList.value = [...data];
+  });
+}
+
+onMounted(() => {
+  getMyMemberships();
+});
 </script>
 
 <style scoped>
