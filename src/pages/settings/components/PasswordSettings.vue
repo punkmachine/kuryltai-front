@@ -1,9 +1,6 @@
 <template>
   <div>
-    <form
-      @click.prevent="() => {}"
-      class="flex flex-col gap-3.5"
-    >
+    <div class="flex flex-col gap-3.5">
       <UIInput
         v-model="passwordData.currentPassword"
         type="password"
@@ -65,17 +62,18 @@
       </UIInput>
 
       <button
-        type="submit"
+        @click="changePassword"
         class="btn btn--primary mt-4 w-max px-10 uppercase"
       >
         Сохранить
       </button>
-    </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { api } from '@/api';
 import UIInput from '@/components/ui/UIInput.vue';
 
 const passwordData = ref({
@@ -94,5 +92,13 @@ function changeTypeInput(inputId: string) {
       input.type = 'password';
     }
   }
+}
+
+function changePassword() {
+  api.auth.changePassword({
+    old_password: passwordData.value.currentPassword,
+    new_password: passwordData.value.newPassword,
+    confirm_password: passwordData.value.repeatPassword,
+  });
 }
 </script>
