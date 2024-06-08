@@ -2,6 +2,7 @@
   <div>
     <UIInput
       v-model="cardData.number"
+      v-mask="'#### #### #### ####'"
       label="Номер карты"
       placeholder="0000 0000 0000 0000"
       required
@@ -10,6 +11,7 @@
     <div class="flex items-center gap-3">
       <UIInput
         v-model="cardData.date"
+        v-mask="'##/##'"
         label="Срок действия"
         placeholder="00/00"
         required
@@ -17,6 +19,7 @@
 
       <UIInput
         v-model="cardData.cvc"
+        v-mask="'###'"
         label="CVC"
         placeholder="000"
         required
