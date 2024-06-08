@@ -71,13 +71,14 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, ref } from 'vue';
+import { defineProps, defineEmits, ref, onMounted } from 'vue';
 import UIInput from '@/components/ui/UIInput.vue';
 import type { IPayloadLogin } from '@/entities/types/backend/user/user.payload';
 import { AuthStepEnum } from '../types';
 
 interface IProps {
   currentStep: AuthStepEnum;
+  initialEmail: string;
 }
 
 interface IEmits {
@@ -151,6 +152,10 @@ function submitForm() {
     goToInApp();
   }
 }
+
+onMounted(() => {
+  email.value = props.initialEmail;
+});
 </script>
 
 <style scoped>

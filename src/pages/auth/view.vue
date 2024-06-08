@@ -10,6 +10,7 @@
     <SignIn
       v-if="currentStep === AuthStepEnum.signInEmail || currentStep === AuthStepEnum.signInPassword"
       :current-step="currentStep"
+      :initial-email="emailForSignUp"
       @updateCurrentStep="nextStep"
       @goToApp="authorizeUser"
       @goToResetPassword="resetPasswordClick"
