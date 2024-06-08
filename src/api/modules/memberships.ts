@@ -21,5 +21,8 @@ export const memberships = (client: AxiosInstance) => {
     editMembership: (payload: any, id: number): Promise<any> => {
       return client.patch(`/profiles/membership/${id}/`, payload);
     },
+    getUserMembershipsBySlug: (slug: string): Promise<any> => {
+      return client.get(`/profiles/membership/get_memberships_by_slug/${slug}`);
+    },
   };
 };
