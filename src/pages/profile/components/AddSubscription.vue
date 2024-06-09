@@ -2,7 +2,7 @@
   <UIModal
     :visible="visibleAddSubscription"
     class="w-108"
-    @close="$emit('close')"
+    @close="closeModal"
   >
     <template #header>
       <h3 class="text-center text-xl font-bold text-gray-900">Создать подписку</h3>
@@ -80,7 +80,19 @@ const validData = computed(() => {
   return addSubscriptionData.name.length && addSubscriptionData.description.length && addSubscriptionData.sum.length;
 });
 
+function initSubscriptionData() {
+  addSubscriptionData.description = '';
+  addSubscriptionData.name = '';
+  addSubscriptionData.sum = '';
+}
+
+function closeModal() {
+  emit('close');
+  initSubscriptionData();
+}
+
 function createSubscription() {
   emit('add-subscription', addSubscriptionData);
+  initSubscriptionData();
 }
 </script>

@@ -8,13 +8,13 @@
         />
       </div>
 
-      <div>
+      <!-- <div>
         <UIInput
           v-model="search"
           placeholder="Поиск"
           class="w-96"
         />
-      </div>
+      </div> -->
 
       <div
         class="relative cursor-pointer"

@@ -79,7 +79,7 @@
 
     <p
       v-if="description"
-      class="text-left text-sm text-gray-900"
+      class="break-all text-left text-sm text-gray-900"
     >
       {{ description }}
     </p>
