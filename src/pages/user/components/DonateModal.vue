@@ -2,7 +2,7 @@
   <UIModal
     :visible="visibleDonateModal"
     class="w-108"
-    @close="$emit('close')"
+    @close="closeModal"
   >
     <template #header>
       <h3 class="text-center text-xl font-bold text-gray-900">Отправить донат</h3>
@@ -27,20 +27,12 @@
           v-model="donateDataWithCard.cardId"
           label="Выберите карту"
           placeholder="Выберите карту"
-          :options="[
-            {
-              label: '1234 43** **** 4342',
-              value: '1',
-            },
-            {
-              label: '1234 43** **** 4342',
-              value: '2',
-            },
-          ]"
-          :last-item="{
-            label: '+ Добавить карту',
-            click: () => {},
-          }"
+          :options="
+            profileCards.map(card => ({
+              label: getFormatCardNumber(card.card_number),
+              value: card.card_uuid,
+            }))
+          "
         />
       </div>
 
@@ -49,7 +41,7 @@
         class="flex flex-col gap-3.5"
       >
         <UIInput
-          v-model="donateDataWithCard.sum"
+          v-model="donateDataWithNewCard.sum"
           label="Введите сумму, тг."
           placeholder="Сумма"
           required
@@ -83,10 +75,17 @@
 
 <script lang="ts" setup>
 import { reactive, defineProps, defineEmits, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+
+import { useMyProfileStore } from '@/store';
+
 import UIModal from '@/components/ui/UIModal.vue';
 import UIInput from '@/components/ui/UIInput.vue';
 import UISelect from '@/components/ui/UISelect.vue';
 import AddFormCard from '@/components/AddFormCard.vue';
+
+import { getFormatCardNumber } from '@/helpers/getFormatCardNumber';
+
 import type { ISendDonateWithCard, ISendDonateWithNewCard } from '../types';
 
 interface IProps {
@@ -95,11 +94,14 @@ interface IProps {
 
 interface IEmits {
   (e: 'close'): void;
-  (e: 'send-donate', data: ISendDonateWithCard | ISendDonateWithNewCard): void;
+  (e: 'send-donate', data: ISendDonateWithCard | ISendDonateWithNewCard, type: 'token' | 'cryptogram'): void;
 }
 
 defineProps<IProps>();
 const emit = defineEmits<IEmits>();
+
+const profileStore = useMyProfileStore();
+const { profileCards } = storeToRefs(profileStore);
 
 const donateDataWithCard = reactive<ISendDonateWithCard>({
   sum: '',
@@ -124,23 +126,38 @@ const validData = computed(() => {
   }
 });
 
-const cardsExist = computed(() => false);
+const cardsExist = computed(() => profileCards.value.length > 0);
 
 function createSubscription() {
   if (cardsExist.value) {
-    emit('send-donate', donateDataWithCard);
+    emit('send-donate', donateDataWithCard, 'token');
   } else {
-    emit('send-donate', donateDataWithNewCard);
+    emit('send-donate', donateDataWithNewCard, 'cryptogram');
   }
 }
 
 function validateDonateNewCard() {
   return (
-    donateDataWithNewCard.cardData.name &&
-    donateDataWithNewCard.cardData.cvc &&
-    donateDataWithNewCard.cardData.date &&
-    donateDataWithNewCard.cardData.number &&
-    donateDataWithNewCard.sum
+    donateDataWithNewCard.cardData.name.length > 1 &&
+    donateDataWithNewCard.cardData.cvc.length === 3 &&
+    donateDataWithNewCard.cardData.date.length === 5 &&
+    donateDataWithNewCard.cardData.number.length === 19 &&
+    donateDataWithNewCard.sum.length > 1
   );
+}
+
+function setInitialDonateData() {
+  donateDataWithNewCard.sum = '';
+  donateDataWithNewCard.cardData.cvc = '';
+  donateDataWithNewCard.cardData.date = '';
+  donateDataWithNewCard.cardData.name = '';
+  donateDataWithNewCard.cardData.number = '';
+  donateDataWithCard.cardId = '';
+  donateDataWithCard.sum = '';
+}
+
+function closeModal() {
+  emit('close');
+  setInitialDonateData();
 }
 </script>
