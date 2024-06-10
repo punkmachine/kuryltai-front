@@ -61,11 +61,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import UIInput from '@/components/ui/UIInput.vue';
+// import UIInput from '@/components/ui/UIInput.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 import { goToLogin } from '@/helpers/goToLoginPage';
 
-const search = ref<string>('');
+// const search = ref<string>('');
 const visibleDropdown = ref<boolean>(false);
 
 function showProfileDropdown() {
