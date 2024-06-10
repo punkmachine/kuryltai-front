@@ -6,7 +6,11 @@
     </div>
 
     <div class="flex flex-col">
-      <div class="grid grid-cols-2 border-b border-solid border-gray-300 py-3">
+      <div
+        v-for="card in cards"
+        :key="card.card_uuid"
+        class="grid grid-cols-2 border-b border-solid border-gray-300 py-3"
+      >
         <div class="flex items-center gap-4">
           <div class="flex items-center justify-center rounded-md border border-solid border-gray-300 px-2">
             <svg class="h-8 w-8">
@@ -15,52 +19,261 @@
           </div>
 
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">Visa 1234</span>
-            <span class="text-sm text-blue-gray-500">До 06/2026</span>
+            <span class="text-sm font-medium text-gray-900">
+              {{ card.card_type }} {{ card.card_number.slice(-4) }}
+            </span>
+            <span class="text-sm text-blue-gray-500"
+              >До {{ card.expiration_month.toString().padStart(2, '0') }}/20{{ card.expiration_year }}</span
+            >
           </div>
         </div>
 
-        <div class="flex items-center justify-between">
-          <span class="text-sm text-blue-gray-500"> 12.04.2024 15:42 </span>
+        <div class="relative flex items-center justify-between">
+          <span class="text-sm text-blue-gray-500"> {{ dayjs(card.created).format('DD.MM.YYYY HH:mm') }} </span>
 
-          <button @click="() => {}">
+          <button @click="currentCard = card.card_uuid">
             <svg class="h-5 w-5">
               <use xlink:href="@/assets/icons/sprites/btns.svg#settings"></use>
             </svg>
           </button>
-        </div>
-      </div>
 
-      <div class="grid grid-cols-2 py-3">
-        <div class="flex items-center gap-4">
-          <div class="flex items-center justify-center rounded-md border border-solid border-gray-300 px-2">
-            <svg class="h-8 w-8">
-              <use xlink:href="@/assets/icons/sprites/cards.svg#mastercard"></use>
-            </svg>
+          <div
+            class="absolute -bottom-full right-0 hidden flex-col rounded-lg bg-white shadow-lg"
+            :class="{
+              '!flex': currentCard === card.card_uuid,
+            }"
+          >
+            <!-- <span
+              class="cursor-pointer rounded-t-lg px-4 py-2 pt-3 hover:bg-slate-100"
+              @click="editCardClick(card.card_uuid)"
+            >
+              Редактировать
+            </span> -->
+            <span
+              class="cursor-pointer rounded-b-lg px-4 py-2 pb-3 hover:bg-slate-100"
+              @click="deleteCardClick(card.card_uuid)"
+            >
+              Удалить
+            </span>
           </div>
-
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-gray-900">Mastercard 1234</span>
-            <span class="text-sm text-blue-gray-500">До 06/2026</span>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between">
-          <span class="text-sm text-blue-gray-500"> 12.04.2024 15:42 </span>
-
-          <button @click="() => {}">
-            <svg class="h-5 w-5">
-              <use xlink:href="@/assets/icons/sprites/btns.svg#settings"></use>
-            </svg>
-          </button>
         </div>
       </div>
     </div>
 
-    <div class="mt-7">
+    <!-- <div
+      class="mt-7"
+      @click="addCardClick"
+    >
       <button class="btn btn--primary w-max px-8 uppercase">Добавить карту</button>
-    </div>
+    </div> -->
+
+    <!-- <UIModal
+      :visible="addCardModalVisible"
+      class="w-108"
+      @close="addCardModalVisible = false"
+    >
+      <template #header>
+        <h3 class="text-center text-xl font-bold text-gray-900">Добавить карту</h3>
+      </template>
+
+      <template #body>
+        <AddFormCard
+          :initial-card-data="newCard"
+          @update-card-data="cardData => (newCard = cardData)"
+          class="flex flex-col gap-3.5"
+        />
+      </template>
+
+      <template #footer>
+        <button
+          @click="createCard"
+          class="btn w-full uppercase"
+          :disabled="!validData"
+          :class="{
+            'btn--secondary': !validData,
+            'btn--primary': validData,
+          }"
+        >
+          Добавить
+        </button>
+      </template>
+    </UIModal> -->
+
+    <UIModal
+      :visible="deleteCardModalVisible"
+      class="w-108"
+      @close="deleteCardModalClose"
+    >
+      <template #header>
+        <h3 class="text-xl font-bold text-gray-900">Удалить карту?</h3>
+      </template>
+
+      <template #body>
+        <div class="flex flex-col gap-3.5 text-base text-blue-gray-500">
+          <p>Текст по удалению карты</p>
+        </div>
+      </template>
+
+      <template #footer>
+        <div class="flex items-center gap-3">
+          <button
+            class="btn shadow-none"
+            @click="deleteCard"
+          >
+            Подтвердить
+          </button>
+
+          <button
+            class="btn btn--primary"
+            @click="deleteCardModalClose"
+          >
+            Оставить карту
+          </button>
+        </div>
+      </template>
+    </UIModal>
+
+    <!-- <UIModal
+      :visible="editCardModalVisible"
+      class="w-108"
+      @close="editCardModalClose"
+    >
+      <template #header>
+        <h3 class="text-center text-xl font-bold text-gray-900">Редактировать карту</h3>
+      </template>
+
+      <template #body>
+        <AddFormCard
+          :initial-card-data="updatedCard"
+          @update-card-data="cardData => (updatedCard = cardData)"
+          class="flex flex-col gap-3.5"
+        />
+      </template>
+
+      <template #footer>
+        <button
+          @click="updateCard"
+          class="btn w-full uppercase"
+          :disabled="!validDataUpdated"
+          :class="{
+            'btn--secondary': !validDataUpdated,
+            'btn--primary': validDataUpdated,
+          }"
+        >
+          Сохранить
+        </button>
+      </template>
+    </UIModal> -->
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import dayjs from 'dayjs';
+import { api } from '@/api';
+import UIModal from '@/components/ui/UIModal.vue';
+// import AddFormCard from '@/components/AddFormCard.vue';
+
+// const addCardModalVisible = ref<boolean>(false);
+const deleteCardModalVisible = ref<boolean>(false);
+// const editCardModalVisible = ref<boolean>(false);
+
+const currentCard = ref<string>('');
+const cards = ref<any[]>([]);
+
+// const newCard = ref({
+//   name: '',
+//   number: '',
+//   cvc: '',
+//   date: '',
+// });
+
+// const updatedCard = ref({
+//   name: '',
+//   number: '',
+//   cvc: '',
+//   date: '',
+// });
+
+// const validData = computed(
+//   () =>
+//     newCard.value.name.length > 3 &&
+//     newCard.value.cvc.length === 3 &&
+//     newCard.value.number.length === 19 &&
+//     newCard.value.date.length === 5,
+// );
+
+// const validDataUpdated = computed(
+//   () =>
+//     updatedCard.value.name.length > 3 &&
+//     updatedCard.value.cvc.length === 3 &&
+//     updatedCard.value.number.length === 19 &&
+//     updatedCard.value.date.length === 5,
+// );
+
+function deleteCardModalClose() {
+  deleteCardModalVisible.value = false;
+  currentCard.value = '';
+}
+
+// function editCardModalClose() {
+//   editCardModalVisible.value = false;
+//   currentCard.value = '';
+// }
+
+// function addCardClick() {
+//   addCardModalVisible.value = true;
+// }
+
+function deleteCardClick(uuid: string) {
+  deleteCardModalVisible.value = true;
+  currentCard.value = uuid;
+}
+
+// function editCardClick(uuid: string) {
+//   editCardModalVisible.value = true;
+//   currentCard.value = uuid;
+// }
+
+// function adapterCreatePaymentCard(newCard: any) {
+//   return {
+//     cardholder_name: newCard.value.name,
+//     card_number: newCard.value.number,
+//     expiration_month: newCard.value.date.slice(0, 2),
+//     expiration_year: newCard.value.date.slice(3),
+//   };
+// }
+
+function getPayments() {
+  api.payments.getPaymentsCards().then(data => {
+    cards.value = [...data.results];
+  });
+}
+
+// function createCard() {
+//   api.payments.createPaymentsCard(adapterCreatePaymentCard(newCard)).then(() => {
+//     getPayments();
+//     addCardModalVisible.value = false;
+//   });
+// }
+
+function deleteCard() {
+  api.payments.deletePaymentsCard(currentCard.value).then(() => {
+    getPayments();
+    deleteCardModalClose();
+  });
+}
+
+// function updateCard() {
+//   const card = cards.value.find(card => card.uuid === currentCard.value);
+
+//   api.payments.editPaymentsCard(adapterCreatePaymentCard(card), currentCard.value).then(() => {
+//     getPayments();
+//     // editCardModalClose();
+//   });
+// }
+
+onMounted(() => {
+  getPayments();
+});
+</script>
