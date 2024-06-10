@@ -5,13 +5,14 @@
     @close="$emit('close')"
   >
     <template #header>
-      <h3 class="text-center text-xl font-bold text-gray-900">Название подписки</h3>
+      <h3 class="text-center text-xl font-bold text-gray-900">
+        {{ currentMembership.name }}
+      </h3>
     </template>
 
     <template #body>
-      <p class="text-center text-base text-blue-gray-500">
-        Стоимость подписки 2 400 тенге в месяц. Автор хочет писать тексты тут, не отвлекаясь на сторонние заработки. Вы
-        можете ему в этом помочь.
+      <p class="break-all text-center text-base text-blue-gray-500">
+        {{ currentMembership.membership_description }}
       </p>
 
       <h3 class="mt-7 text-center text-xl font-bold text-gray-900">Способ оплаты</h3>
@@ -24,24 +25,17 @@
           v-model="subscribeData.cardId"
           label="Выберите карту"
           placeholder="Выберите карту"
-          :options="[
-            {
-              label: '1234 43** **** 4342',
-              value: '1',
-            },
-            {
-              label: '1234 43** **** 4342',
-              value: '2',
-            },
-          ]"
-          :last-item="{
-            label: '+ Добавить карту',
-            click: () => {},
-          }"
+          :options="
+            profileCards.map(card => ({
+              label: getFormatCardNumber(card.card_number),
+              value: card.card_uuid,
+            }))
+          "
         />
       </div>
 
       <AddFormCard
+        v-else
         :initial-card-data="subscribeDataWithNewCard"
         @update-card-data="cardData => (subscribeDataWithNewCard = cardData)"
         class="flex flex-col gap-3.5"
@@ -64,23 +58,37 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, defineEmits, computed } from 'vue';
+import { ref, defineProps, defineEmits, computed, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+
+import { useUsersStore } from '@/store';
+import { useMyProfileStore } from '@/store';
+
 import UIModal from '@/components/ui/UIModal.vue';
 import UISelect from '@/components/ui/UISelect.vue';
 import AddFormCard from '@/components/AddFormCard.vue';
+
+import { getFormatCardNumber } from '@/helpers/getFormatCardNumber';
+
 import type { ISubscribeWithNewCard, ISubscribeWithCard } from '../types';
 
 interface IProps {
   visibleSubscribeModal: boolean;
+  subscribedMembershipId: number;
 }
 
 interface IEmits {
   (e: 'close'): void;
-  (e: 'subscribe', data: ISubscribeWithCard | ISubscribeWithNewCard): void;
+  (e: 'subscribe', data: ISubscribeWithCard | ISubscribeWithNewCard, type: 'token' | 'cryptogram'): void;
 }
 
-defineProps<IProps>();
+const props = defineProps<IProps>();
 const emit = defineEmits<IEmits>();
+
+const userStore = useUsersStore();
+const profileStore = useMyProfileStore();
+const { currentUserMemberships } = storeToRefs(userStore);
+const { profileCards } = storeToRefs(profileStore);
 
 const subscribeData = ref<ISubscribeWithCard>({
   cardId: '',
@@ -98,21 +106,25 @@ const validData = computed(() => {
     return subscribeData.value.cardId.length;
   } else {
     return (
-      subscribeDataWithNewCard.value.name.length &&
-      subscribeDataWithNewCard.value.cvc.length &&
-      subscribeDataWithNewCard.value.number.length &&
-      subscribeDataWithNewCard.value.date.length
+      subscribeDataWithNewCard.value.name.length > 1 &&
+      subscribeDataWithNewCard.value.cvc.length === 3 &&
+      subscribeDataWithNewCard.value.number.length === 19 &&
+      subscribeDataWithNewCard.value.date.length === 5
     );
   }
 });
 
-const cardsExist = computed(() => false);
+const cardsExist = computed(() => currentUserMemberships.value.length > 0);
+
+const currentMembership = computed(() =>
+  currentUserMemberships.value.find(item => item.id === props.subscribedMembershipId),
+);
 
 function createSubscription() {
   if (cardsExist.value) {
-    emit('subscribe', subscribeData.value);
+    emit('subscribe', subscribeData.value, 'token');
   } else {
-    emit('subscribe', subscribeDataWithNewCard.value);
+    emit('subscribe', subscribeDataWithNewCard.value, 'cryptogram');
   }
 }
 </script>
