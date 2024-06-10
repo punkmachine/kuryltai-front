@@ -9,44 +9,64 @@
 
     <div class="flex flex-col">
       <HistoryPaymentRow
+        v-for="(hist, index) in historyStat"
+        :key="hist.payment_uuid"
         class="table-grid"
-        id="12345"
-        :sum="getFormatSum('9999999')"
-        :date="dayjs().format('DD.MM.YYYY, HH:MM')"
-        :status="1"
-      />
-
-      <HistoryPaymentRow
-        class="table-grid"
-        id="12345"
-        :sum="getFormatSum('9999999')"
-        :date="dayjs().format('DD.MM.YYYY, HH:MM')"
-        :status="2"
-      />
-
-      <HistoryPaymentRow
-        class="table-grid"
-        id="12345"
-        :sum="getFormatSum('9999999')"
-        :date="dayjs().format('DD.MM.YYYY, HH:MM')"
-        :status="3"
+        :id="index + 1 + (currentPage > 1 ? currentPage * 10 : 0)"
+        :sum="getFormatSum(hist.amount_with_commission)"
+        :date="dayjs(hist.created).format('DD.MM.YYYY, HH:MM')"
+        :status="hist.payment_status"
       />
     </div>
 
     <div class="mt-6 flex justify-end">
       <UIPagination
-        :current-page="1"
-        :count-pages="10"
+        :current-page="currentPage"
+        :count-pages="countPages"
+        @prev-page="loadNewPage('prev')"
+        @next-page="loadNewPage('next')"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { onMounted, ref } from 'vue';
 import dayjs from 'dayjs';
+
+import { api } from '@/api';
+
 import UIPagination from '@/components/ui/UIPagination.vue';
 import HistoryPaymentRow from './HistoryPaymentRow.vue';
+
 import { getFormatSum } from '@/helpers/getFormatSum';
+
+const historyStat = ref<any[]>([]);
+
+const currentPage = ref<number>(1);
+const countPages = ref<number>(1);
+
+function fetchHistoryPayments() {
+  api.payments.getStatistics('OUT', currentPage.value)
+    .then(data => {
+      countPages.value = Math.ceil(data.count / 10);
+      historyStat.value = [...data.results];
+    });
+}
+
+function loadNewPage(type: 'prev' | 'next') {
+  if (type === 'next') {
+    currentPage.value += 1;
+  } else {
+    currentPage.value -= 1;
+  }
+
+  fetchHistoryPayments();
+}
+
+onMounted(() => {
+  fetchHistoryPayments();
+});
 </script>
 
 <style scoped>

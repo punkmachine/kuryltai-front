@@ -6,9 +6,9 @@
     <div
       class="text-sm"
       :class="{
-        'text-amber-500': status === 1,
-        'text-green-500': status === 2,
-        'text-red-500': status === 3,
+        'text-amber-500': status === 'Wait_completed',
+        'text-green-500': status === 'Completed',
+        'text-red-500': status === 'Declined',
       }"
     >
       {{ readableStatus }}
@@ -20,19 +20,19 @@
 import { defineProps, computed } from 'vue';
 
 interface IProps {
-  id: string;
+  id: number | string;
   sum: string;
   date: string;
-  status: 1 | 2 | 3;
+  status: 'Wait_completed' | 'Completed' | 'Declined';
 }
 
 const props = defineProps<IProps>();
 
 const readableStatus = computed(() => {
   const dict = {
-    1: 'Ожидает',
-    2: 'Готово',
-    3: 'Ошибка',
+    'Wait_completed': 'Ожидает',
+    'Completed': 'Готово',
+    'Declined': 'Ошибка',
   };
 
   return dict[props.status];
