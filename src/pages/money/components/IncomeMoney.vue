@@ -9,44 +9,64 @@
 
     <div class="flex flex-col">
       <IncomeMoneyRow
-        :date="dayjs().format('DD.MM.YYYY, HH:MM')"
-        :sum="getFormatSum('999999')"
-        payment-type="Подписка"
-        login="Логинчик"
-        class="table-grid"
-      />
-
-      <IncomeMoneyRow
-        :date="dayjs().format('DD.MM.YYYY, HH:MM')"
-        :sum="getFormatSum('999999')"
-        payment-type="Подписка"
-        login="Логинчик"
-        class="table-grid"
-      />
-
-      <IncomeMoneyRow
-        :date="dayjs().format('DD.MM.YYYY, HH:MM')"
-        :sum="getFormatSum('999999')"
-        payment-type="Подписка"
-        login="Логинчик"
+        v-for="item in incomeStat"
+        :key="item.payment_uuid"
+        :date="dayjs(item.created).format('DD.MM.YYYY, HH:MM')"
+        :sum="getFormatSum(item.amount_with_commission)"
+        :payment-type="item.payment_type"
+        :login="item.username"
         class="table-grid"
       />
     </div>
 
     <div class="mt-6 flex justify-end">
       <UIPagination
-        :current-page="1"
-        :count-pages="10"
+        :current-page="currentPage"
+        :count-pages="countPages"
+        @prev-page="loadNewPage('prev')"
+        @next-page="loadNewPage('next')"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { onMounted, ref } from 'vue';
 import dayjs from 'dayjs';
+
+import { api } from '@/api';
+
 import UIPagination from '@/components/ui/UIPagination.vue';
 import IncomeMoneyRow from './IncomeMoneyRow.vue';
+
 import { getFormatSum } from '@/helpers/getFormatSum';
+
+const incomeStat = ref<any[]>([]);
+
+const currentPage = ref<number>(1);
+const countPages = ref<number>(1);
+
+function fetchIncomeMoney() {
+  api.payments.getStatistics('IN', currentPage.value)
+    .then(data => {
+      countPages.value = Math.ceil(data.count / 10);
+      incomeStat.value = [...data.results];
+    });
+}
+
+function loadNewPage(type: 'prev' | 'next') {
+  if (type === 'next') {
+    currentPage.value += 1;
+  } else {
+    currentPage.value -= 1;
+  }
+
+  fetchIncomeMoney();
+}
+
+onMounted(() => {
+  fetchIncomeMoney();
+});
 </script>
 
 <style scoped>
