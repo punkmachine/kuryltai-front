@@ -41,7 +41,7 @@ function successResponse<T>(data: AxiosResponse<T>): T {
 // eslint-disable-next-line max-lines-per-function
 function errorResponse(error: AxiosError<{ error: { message: string } }>): Promise<never> {
   if (error.response?.status === 401) {
-    const refresh = Cookies.get('refresh');
+    const refresh = Cookies.get(authCookies.refresh);
 
     if (!refresh) {
       goToLogin();
@@ -50,15 +50,16 @@ function errorResponse(error: AxiosError<{ error: { message: string } }>): Promi
         .getAccessByRefreshToken({ refresh })
         .then(data => {
           Cookies.set(authCookies.access, data.access);
-          Cookies.set(authCookies.refresh, data.refresh);
 
           return axios({
             ...error.config,
             // @ts-ignore
-            headers: { ...error.config.headers, Authorization: `Bearer ${data.token}` },
+            headers: { ...error.config.headers, Authorization: `Bearer ${data.access}` },
           });
         })
-        .catch(goToLogin);
+        .catch(err => {
+          goToLogin();
+        });
     }
   } else {
     errorToast(error);
