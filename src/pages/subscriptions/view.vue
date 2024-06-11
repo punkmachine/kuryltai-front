@@ -11,23 +11,15 @@
 
         <div class="flex flex-col">
           <SubscribeRow
-            avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-            user-name="Досмурат"
-            :status="1"
-            date="2024-05-19T11:50:22.111Z"
-            sum="2500"
+            v-for="subscribe in subscriptions"
+            :key="subscribe.profile_uuid"
+            :avatar="subscribe.avatar_image"
+            :user-name="subscribe.username"
+            :status="subscribe.membership_subscription.state === 'Active' ? 1 : 2"
+            :date="subscribe.membership_subscription.end_date"
+            :sum="subscribe.membership_info.monthly_price"
             class="table-grid"
-            @open-settings="visibleCancelSubs = true"
-          />
-
-          <SubscribeRow
-            avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-            user-name="Досмурат"
-            :status="2"
-            date="2024-05-19T11:50:22.111Z"
-            sum="2500"
-            class="table-grid"
-            @open-settings="visibleCancelSubs = true"
+            @open-settings="cancelSubscribeClick(subscribe.membership_subscription.id)"
           />
         </div>
       </div>
@@ -42,15 +34,40 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { api } from '@/api';
 import SubscribeRow from './components/SubscribeRow.vue';
 import CancelSubscribe from './components/CancelSubscribe.vue';
 
 const visibleCancelSubs = ref<boolean>(false);
+const currentSubscriptionId = ref<any>(null);
+const subscriptions = ref<any[]>([]);
+
+function fetchSubscribed() {
+  api.profile.getMySubscribed().then(data => {
+    subscriptions.value = [...data.author_subscribers];
+  });
+}
 
 function cancelSubscribe() {
-  visibleCancelSubs.value = false;
+  api.memberships
+    .deactivateMembership({
+      membership_subscription_id: currentSubscriptionId.value,
+    })
+    .then(fetchSubscribed)
+    .finally(() => {
+      visibleCancelSubs.value = false;
+    });
 }
+
+function cancelSubscribeClick(id: string) {
+  visibleCancelSubs.value = true;
+  currentSubscriptionId.value = id;
+}
+
+onMounted(() => {
+  fetchSubscribed();
+});
 </script>
 
 <style scoped>
