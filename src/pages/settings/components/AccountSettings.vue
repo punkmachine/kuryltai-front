@@ -29,10 +29,7 @@
       class="mt-3"
     />
 
-    <form
-      class="mt-6 flex flex-col gap-3.5"
-      @submit.prevent="() => {}"
-    >
+    <div class="mt-6 flex flex-col gap-3.5">
       <UIInput
         v-model="profileData.name"
         label="Имя профиля"
@@ -55,17 +52,18 @@
       />
 
       <button
-        type="submit"
         class="btn btn--primary mt-4 w-max px-10 uppercase"
+        @click="saveProfileSettings"
       >
         Сохранить
       </button>
-    </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { api } from '@/api';
 import UIUpload from '@/components/ui/UIUpload.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 import UIInput from '@/components/ui/UIInput.vue';
@@ -75,4 +73,10 @@ const profileData = ref({
   description: '',
   login: '',
 });
+
+function saveProfileSettings() {
+  api.profile.editMyProfile({
+    bio: profileData.value.description,
+  });
+}
 </script>

@@ -98,6 +98,8 @@ import { ref, onMounted } from 'vue';
 
 import { api } from '@/api';
 
+import { useMyProfileStore } from '@/store';
+
 import FullPost from '@/components/post/FullPost.vue';
 import ProfileHead from '@/components/ProfileHead.vue';
 import SubscriptionsCard from '@/components/subscriptions/SubscriptionsCard.vue';
@@ -106,6 +108,8 @@ import EditSubscription from './components/EditSubscription.vue';
 import DeleteSubscription from './components/DeleteSubscription.vue';
 import DeletePost from './components/DeletePost.vue';
 import type { IAddSubscriptionData, IEditSubscriptionData } from './types';
+
+const myProfileStore = useMyProfileStore();
 
 const visibleAddSubscription = ref(false);
 const visibleEditSubscription = ref(false);
@@ -174,6 +178,7 @@ function getMyMemberships() {
 
 onMounted(() => {
   getMyMemberships();
+  myProfileStore.fetchMyProfile();
 });
 </script>
 
