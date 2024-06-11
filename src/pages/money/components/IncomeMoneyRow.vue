@@ -22,7 +22,7 @@ defineProps<IProps>();
 function getReadablePaymentType(paymentType: string) {
   const dict = {
     membership: 'Подписка',
-    donation: 'Донат'
+    donation: 'Донат',
   };
 
   // @ts-ignore

@@ -47,11 +47,10 @@ const currentPage = ref<number>(1);
 const countPages = ref<number>(1);
 
 function fetchHistoryPayments() {
-  api.payments.getStatistics('OUT', currentPage.value)
-    .then(data => {
-      countPages.value = Math.ceil(data.count / 10);
-      historyStat.value = [...data.results];
-    });
+  api.payments.getStatistics('OUT', currentPage.value).then(data => {
+    countPages.value = Math.ceil(data.count / 10);
+    historyStat.value = [...data.results];
+  });
 }
 
 function loadNewPage(type: 'prev' | 'next') {

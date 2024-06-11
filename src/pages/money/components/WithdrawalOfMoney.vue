@@ -37,19 +37,19 @@ const validData = computed(() => {
 });
 
 function createPayment() {
-  api.payments.makePayout({
-    amount: sum.value,
-  })
+  api.payments
+    .makePayout({
+      amount: sum.value,
+    })
     .then(data => {
       window.open(data.checkout_url, '_blank');
-    })
+    });
 }
 
 onMounted(() => {
-  api.profile.getBalance()
-    .then(data => {
-      balance.value = data.balance;
-      sum.value = 0;
-    });
+  api.profile.getBalance().then(data => {
+    balance.value = data.balance;
+    sum.value = 0;
+  });
 });
 </script>

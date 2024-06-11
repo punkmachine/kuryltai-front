@@ -3,7 +3,7 @@
     <button
       class="flex items-center justify-center rounded-lg border border-solid border-blue-gray-50 p-2"
       :class="{
-        'opacity-30': !prevPageActive
+        'opacity-30': !prevPageActive,
       }"
       :disabled="!prevPageActive"
       @click="$emit('prev-page')"
@@ -19,7 +19,7 @@
     <button
       class="flex items-center justify-center rounded-lg border border-solid border-blue-gray-50 p-2"
       :class="{
-        'opacity-30': !nextPageActive
+        'opacity-30': !nextPageActive,
       }"
       :disabled="!nextPageActive"
       @click="$emit('next-page')"

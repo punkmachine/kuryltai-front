@@ -30,9 +30,9 @@ const props = defineProps<IProps>();
 
 const readableStatus = computed(() => {
   const dict = {
-    'Wait_completed': 'Ожидает',
-    'Completed': 'Готово',
-    'Declined': 'Ошибка',
+    Wait_completed: 'Ожидает',
+    Completed: 'Готово',
+    Declined: 'Ошибка',
   };
 
   return dict[props.status];

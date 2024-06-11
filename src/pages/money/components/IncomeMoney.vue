@@ -47,11 +47,10 @@ const currentPage = ref<number>(1);
 const countPages = ref<number>(1);
 
 function fetchIncomeMoney() {
-  api.payments.getStatistics('IN', currentPage.value)
-    .then(data => {
-      countPages.value = Math.ceil(data.count / 10);
-      incomeStat.value = [...data.results];
-    });
+  api.payments.getStatistics('IN', currentPage.value).then(data => {
+    countPages.value = Math.ceil(data.count / 10);
+    incomeStat.value = [...data.results];
+  });
 }
 
 function loadNewPage(type: 'prev' | 'next') {

@@ -40,7 +40,7 @@ import { defineEmits, defineProps } from 'vue';
 
 interface IProps {
   label?: string;
-  modelValue: string;
+  modelValue: string | number;
   invalid?: boolean;
   isTextarea?: boolean;
 }
