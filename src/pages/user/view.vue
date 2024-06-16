@@ -149,7 +149,7 @@ function getPayloadForNewCard(data: any, cryptogram: string, isMembership?: bool
     currency: 'KZT',
     profile_uuid: currentUser.value.profile_uuid,
     name: currentUser.value.username,
-    is_save_card: true,
+    is_save_card: false,
   };
 
   if (isMembership) {
@@ -173,7 +173,10 @@ function donateByNewCardCallback(data: any) {
     };
 
     localStorage.setItem('secureData', JSON.stringify(secureData.value));
-    window.open(`${data.AcsUrl}-get?MD=${data.MD}&PaReq=${data.PaReq}&TermUrl=http://kuryltai.kz/api/v0/payments/complete-3d-secure/`, '_self');
+    window.open(
+      `${data.AcsUrl}-get?MD=${data.MD}&PaReq=${data.PaReq}&TermUrl=http://kuryltai.kz/api/v0/payments/complete-3d-secure/`,
+      '_self',
+    );
   } else if (data.error) {
     toast.error(data.error);
   } else {
