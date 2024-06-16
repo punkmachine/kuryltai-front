@@ -65,6 +65,11 @@
       @close="subscribeModalClose"
       @subscribe="subscribe"
     />
+
+    <SecureForm
+      v-if="secureData"
+      :secure-data="secureData"
+    />
   </section>
 </template>
 
@@ -84,6 +89,7 @@ import ProfileHead from '@/components/ProfileHead.vue';
 import SubscriptionsCard from '@/components/subscriptions/SubscriptionsCard.vue';
 import SubscribeModal from './components/SubscribeModal.vue';
 import DonateModal from './components/DonateModal.vue';
+import SecureForm from '@/components/SecureForm';
 
 const route = useRoute();
 const usersStore = useUsersStore();
@@ -95,6 +101,7 @@ const { loadScript } = useLoadScript();
 const visibleDonateModal = ref(false);
 const visibleSubscribeModal = ref(false);
 const subscribedMembership = ref<any>(null);
+const secureData = ref<any>(JSON.parse(localStorage.getItem('secureData') || '{}'));
 
 const slug = ref<string>('');
 let checkout: any = null;
@@ -153,10 +160,20 @@ function getPayloadForNewCard(data: any, cryptogram: string, isMembership?: bool
   return result;
 }
 
+// eslint-disable-next-line
 function donateByNewCardCallback(data: any) {
   if (data.success) {
     toast.success('Успешно!');
     myProfileStore.fetchMyCards();
+  } else if (data.is_3d_secure) {
+    secureData.value = {
+      MD: data.MD,
+      PaReq: data.PaReq,
+      AcsUrl: `${data.AcsUrl}-get`,
+    };
+
+    localStorage.setItem('secureData', JSON.stringify(secureData.value));
+    window.open(`${data.AcsUrl}-get?MD=${data.MD}&PaReq=${data.PaReq}&TermUrl=http://kuryltai.kz/api/v0/payments/complete-3d-secure/`, '_self');
   } else if (data.error) {
     toast.error(data.error);
   } else {
