@@ -7,7 +7,7 @@
       {{ label }}
     </span>
     <div class="relative">
-      <div class="absolute top-1/2 -translate-y-1/2 left-2">
+      <div class="absolute left-2 top-1/2 -translate-y-1/2">
         <slot name="inner-icon-left"></slot>
       </div>
 

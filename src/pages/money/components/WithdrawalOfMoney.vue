@@ -9,7 +9,7 @@
     />
 
     <div class="mt-7">
-      <h2 class="text-gray-900 text-center text-xl font-bold">Способ оплаты</h2>
+      <h2 class="text-center text-xl font-bold text-gray-900">Способ оплаты</h2>
 
       <div class="flex flex-col gap-3.5">
         <UIInput
@@ -22,7 +22,7 @@
           inner-icon-left
         >
           <template #inner-icon-left>
-            <svg class="w-4 h-4">
+            <svg class="h-4 w-4">
               <use xlink:href="@/assets/icons/sprites/inputs.svg#card"></use>
             </svg>
           </template>
@@ -65,17 +65,18 @@ const pan = ref<string>('');
 const balance = ref<number>(0);
 
 const validData = computed(() => {
-  return Number(sum.value) <= balance.value && Number(sum.value) > 0 && pan.value.length === 19 && holder.value.length > 2;
+  return (
+    Number(sum.value) <= balance.value && Number(sum.value) > 0 && pan.value.length === 19 && holder.value.length > 2
+  );
 });
 
 function createPayment() {
-  api.payments
-    .makePayout({
-      amount: sum.value,
-      // @ts-ignore
-      pan: pan.value.replaceAll(' ', ''),
-      holder: holder.value,
-    });
+  api.payments.makePayout({
+    amount: sum.value,
+    // @ts-ignore
+    pan: pan.value.replaceAll(' ', ''),
+    holder: holder.value,
+  });
 }
 
 onMounted(() => {
