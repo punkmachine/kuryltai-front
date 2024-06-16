@@ -1,12 +1,12 @@
 <template>
   <header class="header">
     <div class="header__content">
-      <div class="mb-1 h-8 w-[122px] cursor-pointer">
+      <RouterLink to="/" class="block mb-1 h-8 w-[122px] cursor-pointer">
         <img
           src="@/assets/icons/logo.svg"
           alt=""
         />
-      </div>
+      </RouterLink>
 
       <!-- <div>
         <UIInput
@@ -23,7 +23,7 @@
         <div class="flex items-center gap-1.5">
           <UIAvatar
             size="medium"
-            src="https://avatars.githubusercontent.com/u/76869388?v=4"
+            :src="profileStore.profile.avatar_image"
           />
 
           <span class="text-sm font-medium text-gray-600">Алекс</span>
@@ -61,9 +61,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+
+import { useMyProfileStore } from '@/store';
+
 // import UIInput from '@/components/ui/UIInput.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 import { goToLogin } from '@/helpers/goToLoginPage';
+
+const profileStore = useMyProfileStore();
 
 // const search = ref<string>('');
 const visibleDropdown = ref<boolean>(false);

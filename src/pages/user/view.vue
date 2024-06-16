@@ -138,7 +138,7 @@ function createDonateBySavedCard(data: any) {
 function getPayloadForNewCard(data: any, cryptogram: string, isMembership?: boolean) {
   let result = {
     cryptogram,
-    amount: data.sum,
+    amount: data.sum || currentUserMemberships.value.find(item => item.id === subscribedMembership.value).monthly_price,
     currency: 'KZT',
     profile_uuid: currentUser.value.profile_uuid,
     name: currentUser.value.username,
@@ -159,6 +159,8 @@ function donateByNewCardCallback(data: any) {
     myProfileStore.fetchMyCards();
   } else if (data.error) {
     toast.error(data.error);
+  } else {
+    toast.error('Произошла ошибка при донате');
   }
 }
 
@@ -229,7 +231,7 @@ function subscribeByNewCard(data: any, cryptogram: string) {
 
 // eslint-disable-next-line id-length
 async function subscribeByNewCardWrapper(data: any) {
-  const cryptogram = await createCryptogram(data.cardData);
+  const cryptogram = await createCryptogram(data);
 
   if (!cryptogram) throw 'Error Payment';
 
@@ -251,6 +253,7 @@ async function subscribe(data: any, type: 'token' | 'cryptogram') {
 
 onMounted(() => {
   loadScript('https://checkout.cloudpayments.ru/checkout.js');
+  myProfileStore.fetchMyCards();
 
   setTimeout(() => {
     initPayment();

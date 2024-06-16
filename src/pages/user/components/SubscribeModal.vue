@@ -51,7 +51,7 @@
           'btn--primary': validData,
         }"
       >
-        Создать
+        Подписаться
       </button>
     </template>
   </UIModal>
@@ -114,7 +114,7 @@ const validData = computed(() => {
   }
 });
 
-const cardsExist = computed(() => currentUserMemberships.value.length > 0);
+const cardsExist = computed(() => profileCards.value.length > 0);
 
 const currentMembership = computed(() =>
   currentUserMemberships.value.find(item => item.id === props.subscribedMembershipId),

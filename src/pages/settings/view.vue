@@ -51,12 +51,17 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue';
+
+import { useMyProfileStore } from '@/store';
+
 import AccountSettings from './components/AccountSettings.vue';
 import PasswordSettings from './components/PasswordSettings.vue';
 import PaymentSettings from './components/PaymentSettings.vue';
 import { settingsStateKey } from '@/entities/constants/localStorageKeys';
 
 type TSettingState = 'account' | 'password' | 'payment';
+
+const myProfileStore = useMyProfileStore();
 
 const settingState = ref<TSettingState>('account');
 
@@ -78,6 +83,8 @@ watch(
 );
 
 onMounted(() => {
+  myProfileStore.fetchMyProfile();
+
   if (localStorage.getItem(settingsStateKey)) {
     settingState.value = localStorage.getItem(settingsStateKey) as TSettingState;
   }
