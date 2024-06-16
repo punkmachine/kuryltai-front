@@ -7,6 +7,10 @@
       {{ label }}
     </span>
     <div class="relative">
+      <div class="absolute top-1/2 -translate-y-1/2 left-2">
+        <slot name="inner-icon-left"></slot>
+      </div>
+
       <input
         v-if="!isTextarea"
         type="text"
@@ -14,6 +18,7 @@
         class="input"
         :class="{
           'input--invalid': invalid,
+          'input--inner-icon-left': innerIconLeft,
         }"
         :value="modelValue"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
@@ -43,6 +48,7 @@ interface IProps {
   modelValue: string | number;
   invalid?: boolean;
   isTextarea?: boolean;
+  innerIconLeft?: boolean;
 }
 
 interface IEmits {

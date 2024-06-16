@@ -12,6 +12,10 @@
     @apply border-red-700;
   }
 
+  .input--inner-icon-left {
+    @apply pl-7;
+  }
+
   .input--inner-icon-right {
     @apply pr-10;
   }
