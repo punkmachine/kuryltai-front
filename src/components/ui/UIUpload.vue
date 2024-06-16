@@ -23,7 +23,7 @@ interface IProps {
   label?: string;
   icon?: string;
   fileType: string;
-  modelValue: string;
+  modelValue?: string;
 }
 
 interface IEmits {
