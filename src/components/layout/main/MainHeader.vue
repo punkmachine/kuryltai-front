@@ -1,7 +1,10 @@
 <template>
   <header class="header">
     <div class="header__content">
-      <RouterLink to="/" class="block mb-1 h-8 w-[122px] cursor-pointer">
+      <RouterLink
+        to="/"
+        class="mb-1 block h-8 w-[122px] cursor-pointer"
+      >
         <img
           src="@/assets/icons/logo.svg"
           alt=""
@@ -23,7 +26,7 @@
         <div class="flex items-center gap-1.5">
           <UIAvatar
             size="medium"
-            :src="profileStore.profile.avatar_image"
+            :src="profileStore.profile?.avatar_image"
           />
 
           <span class="text-sm font-medium text-gray-600">Алекс</span>
@@ -59,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import { useMyProfileStore } from '@/store';
@@ -80,6 +83,12 @@ function showProfileDropdown() {
 function logout() {
   goToLogin();
 }
+
+onMounted(() => {
+  if (!profileStore.profile) {
+    profileStore.fetchMyProfile();
+  }
+});
 </script>
 
 <style scoped>

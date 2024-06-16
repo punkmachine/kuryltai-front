@@ -9,10 +9,17 @@ export const useMyProfileStore = defineStore('my-profile', () => {
   const profile = ref<any>(null);
   const profileCards = ref<any[]>([]);
 
-  function fetchMyProfile() {
-    api.profile.getMyProfile().then(data => {
-      profile.value = data;
-    });
+  function fetchMyProfile(callback?: () => void) {
+    api.profile
+      .getMyProfile()
+      .then(data => {
+        profile.value = data;
+      })
+      .then(() => {
+        if (callback) {
+          callback();
+        }
+      });
   }
 
   function fetchMyCards() {
