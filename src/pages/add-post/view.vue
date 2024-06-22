@@ -9,7 +9,17 @@
         autocomplete="off"
       />
 
-      <UIUploadGroup />
+      <UIUploadGroup
+        v-model:image="currentImage"
+      />
+
+      <div
+        v-for="(image, index) in content.images"
+        :key="`image-${index}`"
+        class="mb-6 flex flex-col gap-2"
+      >
+        <UIImage :src="image" />
+      </div>
 
       <UIInput
         v-model="postData.description"
@@ -75,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
@@ -86,6 +96,7 @@ import UIInput from '@/components/ui/UIInput.vue';
 import UIUploadGroup from '@/components/ui/UIUploadGroup.vue';
 import UISelect from '@/components/ui/UISelect.vue';
 import UIInputTags from '@/components/ui/UIInputTags.vue';
+import UIImage from '@/components/ui/UIImage.vue';
 
 const myProfileStore = useMyProfileStore();
 
@@ -98,15 +109,35 @@ const postData = reactive<any>({
   tags: [],
 });
 const selectedAccessType = ref<string>('');
+const content = reactive<any>({
+  images: [],
+})
+const currentImage = ref<any>('');
 
+watch(() => currentImage.value, () => {
+  if (currentImage.value) {
+    content.images.push(currentImage.value);
+  }
+
+  currentImage.value = '';
+});
+
+// eslint-disable-next-line max-lines-per-function
 function adapterCreatePost() {
-  return {
+  let payload: any = {
     title: postData.title,
     text: postData.description,
     permission_level: accessType.value,
     membership: accessType.value === 'SELECT_LEVEL' ? [selectedAccessType.value] : [],
     content: {},
+    tags: postData.tags,
   };
+
+  if (content.images.length) {
+    payload.content.images = [...content.images];
+  }
+
+  return payload;
 }
 
 function createPost() {

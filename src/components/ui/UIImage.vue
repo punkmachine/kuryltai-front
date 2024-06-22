@@ -3,6 +3,7 @@
     <img
       :src="src"
       :alt="alt ?? ''"
+      class="w-full"
     />
   </div>
 </template>
