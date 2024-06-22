@@ -8,6 +8,7 @@ import { api } from '@/api';
 export const useMyProfileStore = defineStore('my-profile', () => {
   const profile = ref<any>(null);
   const profileCards = ref<any[]>([]);
+  const myMemberships = ref<any[]>([]);
 
   function fetchMyProfile(callback?: () => void) {
     api.profile
@@ -28,10 +29,18 @@ export const useMyProfileStore = defineStore('my-profile', () => {
     });
   }
 
+  function fetchMyMemberships() {
+    api.memberships.getUserMemberships().then(data => {
+      myMemberships.value = data;
+    });
+  }
+
   return {
     fetchMyProfile,
     fetchMyCards,
+    fetchMyMemberships,
     profile,
     profileCards,
+    myMemberships
   };
 });

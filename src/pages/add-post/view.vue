@@ -34,19 +34,19 @@
       <UIRadioGroup
         v-model="accessType"
         id="access-type"
-        :default-value="'public'"
+        :default-value="'PUBLIC'"
         :options="[
           {
             label: 'Публичный',
-            value: 'public',
+            value: 'PUBLIC',
           },
           {
             label: 'Только подписчики',
-            value: 'followers-only',
+            value: 'SUBSCRIBES_ONLY',
           },
           {
             label: 'Выбрать уровень',
-            value: 'change-type',
+            value: 'SELECT_LEVEL',
           },
         ]"
       />
@@ -56,24 +56,10 @@
         v-model="selectedAccessType"
         class="mt-2"
         placeholder="Выберите уровень"
-        :options="[
-          {
-            label: 'Стандартная',
-            value: 'standard',
-          },
-          {
-            label: 'Меценат',
-            value: 'mecenat',
-          },
-          {
-            label: 'Олигарх',
-            value: 'oligarh',
-          },
-        ]"
-        :last-item="{
-          label: '+ Добавить уровень',
-          click: () => {},
-        }"
+        :options="myMemberships.map(item => ({
+          label: item.name,
+          value: item.id,
+        }))"
       />
 
       <button class="btn btn--primary mt-7 uppercase">Опубликовать</button>
@@ -82,26 +68,43 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+
+import { useMyProfileStore } from '@/store';
+
 import UIRadioGroup from '@/components/ui/UIRadioGroup.vue';
 import UIInput from '@/components/ui/UIInput.vue';
 import UIUploadGroup from '@/components/ui/UIUploadGroup.vue';
 import UISelect from '@/components/ui/UISelect.vue';
 import UIInputTags from '@/components/ui/UIInputTags.vue';
 
-interface INewPost {
-  title: string;
-  description: string;
-  tags: string[];
-}
+const myProfileStore = useMyProfileStore();
 
-const accessType = ref<string>('');
-const postData = reactive<INewPost>({
+const { myMemberships } = storeToRefs(myProfileStore);
+
+const accessType = ref<string>('PUBLIC');
+const postData = reactive<any>({
   title: '',
   description: '',
   tags: [],
 });
 const selectedAccessType = ref<string>('');
+
+function adapterCreatePost(data: any) {
+  return {
+    title: data.title,
+    text: data.description,
+    permission_level: accessType.value,
+    membership: accessType.value === 'SELECT_LEVEL' ? [selectedAccessType.value] : [],
+    content: {},
+  };
+}
+
+onMounted(() => {
+  myProfileStore.fetchMyProfile();
+  myProfileStore.fetchMyMemberships();
+});
 </script>
 
 <style scoped>
