@@ -60,14 +60,14 @@
       </div>
     </div>
 
-    <!-- <div
+    <div
       class="mt-7"
       @click="addCardClick"
     >
       <button class="btn btn--primary w-max px-8 uppercase">Добавить карту</button>
-    </div> -->
+    </div>
 
-    <!-- <UIModal
+    <UIModal
       :visible="addCardModalVisible"
       class="w-108"
       @close="addCardModalVisible = false"
@@ -97,7 +97,7 @@
           Добавить
         </button>
       </template>
-    </UIModal> -->
+    </UIModal>
 
     <UIModal
       :visible="deleteCardModalVisible"
@@ -132,6 +132,11 @@
         </div>
       </template>
     </UIModal>
+
+    <SecureForm
+      v-if="secureData"
+      :secure-data="secureData"
+    />
 
     <!-- <UIModal
       :visible="editCardModalVisible"
@@ -168,25 +173,36 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import dayjs from 'dayjs';
+import { toast } from 'vue3-toastify';
 import { api } from '@/api';
+import { useMyProfileStore } from '@/store';
+import { useLoadScript } from '@/composables/useLoadScript';
 import UIModal from '@/components/ui/UIModal.vue';
-// import AddFormCard from '@/components/AddFormCard.vue';
+import AddFormCard from '@/components/AddFormCard.vue';
+import SecureForm from '@/components/SecureForm';
 
-// const addCardModalVisible = ref<boolean>(false);
+const { loadScript } = useLoadScript();
+
+const myProfileStore = useMyProfileStore();
+
+const addCardModalVisible = ref<boolean>(false);
 const deleteCardModalVisible = ref<boolean>(false);
+const secureData = ref<any>({});
 // const editCardModalVisible = ref<boolean>(false);
 
 const currentCard = ref<string>('');
 const cards = ref<any[]>([]);
 
-// const newCard = ref({
-//   name: '',
-//   number: '',
-//   cvc: '',
-//   date: '',
-// });
+const newCard = ref({
+  name: '',
+  number: '',
+  cvc: '',
+  date: '',
+});
+
+let checkout: any = null;
 
 // const updatedCard = ref({
 //   name: '',
@@ -195,13 +211,13 @@ const cards = ref<any[]>([]);
 //   date: '',
 // });
 
-// const validData = computed(
-//   () =>
-//     newCard.value.name.length > 3 &&
-//     newCard.value.cvc.length === 3 &&
-//     newCard.value.number.length === 19 &&
-//     newCard.value.date.length === 5,
-// );
+const validData = computed(
+  () =>
+    newCard.value.name.length > 3 &&
+    newCard.value.cvc.length === 3 &&
+    newCard.value.number.length === 19 &&
+    newCard.value.date.length === 5,
+);
 
 // const validDataUpdated = computed(
 //   () =>
@@ -221,9 +237,9 @@ function deleteCardModalClose() {
 //   currentCard.value = '';
 // }
 
-// function addCardClick() {
-//   addCardModalVisible.value = true;
-// }
+function addCardClick() {
+  addCardModalVisible.value = true;
+}
 
 function deleteCardClick(uuid: string) {
   deleteCardModalVisible.value = true;
@@ -235,14 +251,39 @@ function deleteCardClick(uuid: string) {
 //   currentCard.value = uuid;
 // }
 
-// function adapterCreatePaymentCard(newCard: any) {
-//   return {
-//     cardholder_name: newCard.value.name,
-//     card_number: newCard.value.number,
-//     expiration_month: newCard.value.date.slice(0, 2),
-//     expiration_year: newCard.value.date.slice(3),
-//   };
-// }
+function initPayment() {
+  // @ts-ignore
+  checkout = new cp.Checkout({
+    publicId: import.meta.env.VITE_APP_CRYPTO_KEY,
+  });
+}
+
+async function createCryptogram(cardData: any) {
+  const fieldValues = {
+    cvv: cardData.cvc,
+    cardNumber: cardData.number,
+    expDateMonth: cardData.date.slice(0, 2),
+    expDateYear: cardData.date.slice(3),
+  };
+
+  return checkout.createPaymentCryptogram(fieldValues);
+}
+
+// eslint-disable-next-line max-lines-per-function
+async function adapterCreatePaymentCard(newCard: any) {
+  const cryptogram = await createCryptogram(newCard.value);
+
+  if (!cryptogram) throw 'Error Payment';
+
+  return {
+    name: newCard.value.name,
+    profile_uuid: myProfileStore.profile.profile_uuid,
+    is_save_card: true,
+    amount: 0,
+    currency: 'KZT',
+    cryptogram: cryptogram,
+  };
+}
 
 function getPayments() {
   api.payments.getPaymentsCards().then(data => {
@@ -250,12 +291,36 @@ function getPayments() {
   });
 }
 
-// function createCard() {
-//   api.payments.createPaymentsCard(adapterCreatePaymentCard(newCard)).then(() => {
-//     getPayments();
-//     addCardModalVisible.value = false;
-//   });
-// }
+// eslint-disable-next-line max-lines-per-function
+async function createCard() {
+  const payload = await adapterCreatePaymentCard(newCard);
+
+  // eslint-disable-next-line max-lines-per-function
+  api.payments.makeMembership(payload).then(data => {
+    if (data.success) {
+      getPayments();
+      addCardModalVisible.value = false;
+      toast.success('Успешно!');
+      myProfileStore.fetchMyCards();
+    } else if (data.is_3d_secure) {
+      secureData.value = {
+        MD: data.MD,
+        PaReq: data.PaReq,
+        AcsUrl: `${data.AcsUrl}-get`,
+      };
+
+      localStorage.setItem('secureData', JSON.stringify(secureData.value));
+      window.open(
+        `${data.AcsUrl}-get?MD=${data.MD}&PaReq=${data.PaReq}&TermUrl=http://kuryltai.kz/api/v0/payments/complete-3d-secure/`,
+        '_self',
+      );
+    } else if (data.error) {
+      toast.error(data.error);
+    } else {
+      toast.error('Произошла ошибка при донате');
+    }
+  });
+}
 
 function deleteCard() {
   api.payments.deletePaymentsCard(currentCard.value).then(() => {
@@ -274,6 +339,12 @@ function deleteCard() {
 // }
 
 onMounted(() => {
+  loadScript('https://checkout.cloudpayments.ru/checkout.js');
+
+  setTimeout(() => {
+    initPayment();
+  }, 2000);
+
   getPayments();
 });
 </script>

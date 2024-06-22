@@ -137,6 +137,10 @@ const profileData = computed(() => {
   @apply flex h-full w-full items-center justify-center bg-slate-100 text-2xl uppercase text-slate-500;
 }
 
+.profile__cover > img {
+  @apply w-full object-cover h-full;
+}
+
 .profile__info {
   @apply relative pb-4 pl-4 pt-2;
 }
