@@ -138,7 +138,7 @@ const profileData = computed(() => {
 }
 
 .profile__cover > img {
-  @apply w-full object-cover h-full;
+  @apply h-full w-full object-cover;
 }
 
 .profile__info {

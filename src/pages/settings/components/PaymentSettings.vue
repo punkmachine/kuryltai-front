@@ -137,38 +137,6 @@
       v-if="secureData"
       :secure-data="secureData"
     />
-
-    <!-- <UIModal
-      :visible="editCardModalVisible"
-      class="w-108"
-      @close="editCardModalClose"
-    >
-      <template #header>
-        <h3 class="text-center text-xl font-bold text-gray-900">Редактировать карту</h3>
-      </template>
-
-      <template #body>
-        <AddFormCard
-          :initial-card-data="updatedCard"
-          @update-card-data="cardData => (updatedCard = cardData)"
-          class="flex flex-col gap-3.5"
-        />
-      </template>
-
-      <template #footer>
-        <button
-          @click="updateCard"
-          class="btn w-full uppercase"
-          :disabled="!validDataUpdated"
-          :class="{
-            'btn--secondary': !validDataUpdated,
-            'btn--primary': validDataUpdated,
-          }"
-        >
-          Сохранить
-        </button>
-      </template>
-    </UIModal> -->
   </div>
 </template>
 
@@ -190,7 +158,6 @@ const myProfileStore = useMyProfileStore();
 const addCardModalVisible = ref<boolean>(false);
 const deleteCardModalVisible = ref<boolean>(false);
 const secureData = ref<any>({});
-// const editCardModalVisible = ref<boolean>(false);
 
 const currentCard = ref<string>('');
 const cards = ref<any[]>([]);
@@ -204,13 +171,6 @@ const newCard = ref({
 
 let checkout: any = null;
 
-// const updatedCard = ref({
-//   name: '',
-//   number: '',
-//   cvc: '',
-//   date: '',
-// });
-
 const validData = computed(
   () =>
     newCard.value.name.length > 3 &&
@@ -219,23 +179,10 @@ const validData = computed(
     newCard.value.date.length === 5,
 );
 
-// const validDataUpdated = computed(
-//   () =>
-//     updatedCard.value.name.length > 3 &&
-//     updatedCard.value.cvc.length === 3 &&
-//     updatedCard.value.number.length === 19 &&
-//     updatedCard.value.date.length === 5,
-// );
-
 function deleteCardModalClose() {
   deleteCardModalVisible.value = false;
   currentCard.value = '';
 }
-
-// function editCardModalClose() {
-//   editCardModalVisible.value = false;
-//   currentCard.value = '';
-// }
 
 function addCardClick() {
   addCardModalVisible.value = true;
@@ -245,11 +192,6 @@ function deleteCardClick(uuid: string) {
   deleteCardModalVisible.value = true;
   currentCard.value = uuid;
 }
-
-// function editCardClick(uuid: string) {
-//   editCardModalVisible.value = true;
-//   currentCard.value = uuid;
-// }
 
 function initPayment() {
   // @ts-ignore
@@ -328,15 +270,6 @@ function deleteCard() {
     deleteCardModalClose();
   });
 }
-
-// function updateCard() {
-//   const card = cards.value.find(card => card.uuid === currentCard.value);
-
-//   api.payments.editPaymentsCard(adapterCreatePaymentCard(card), currentCard.value).then(() => {
-//     getPayments();
-//     // editCardModalClose();
-//   });
-// }
 
 onMounted(() => {
   loadScript('https://checkout.cloudpayments.ru/checkout.js');
