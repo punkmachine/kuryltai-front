@@ -41,6 +41,6 @@ export const useMyProfileStore = defineStore('my-profile', () => {
     fetchMyMemberships,
     profile,
     profileCards,
-    myMemberships
+    myMemberships,
   };
 });

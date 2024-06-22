@@ -56,13 +56,20 @@
         v-model="selectedAccessType"
         class="mt-2"
         placeholder="Выберите уровень"
-        :options="myMemberships.map(item => ({
-          label: item.name,
-          value: item.id,
-        }))"
+        :options="
+          myMemberships.map(item => ({
+            label: item.name,
+            value: item.id,
+          }))
+        "
       />
 
-      <button class="btn btn--primary mt-7 uppercase">Опубликовать</button>
+      <button
+        @click="createPost"
+        class="btn btn--primary mt-7 uppercase"
+      >
+        Опубликовать
+      </button>
     </div>
   </section>
 </template>
@@ -72,6 +79,7 @@ import { reactive, ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
+import { api } from '@/api';
 
 import UIRadioGroup from '@/components/ui/UIRadioGroup.vue';
 import UIInput from '@/components/ui/UIInput.vue';
@@ -91,14 +99,22 @@ const postData = reactive<any>({
 });
 const selectedAccessType = ref<string>('');
 
-function adapterCreatePost(data: any) {
+function adapterCreatePost() {
   return {
-    title: data.title,
-    text: data.description,
+    title: postData.title,
+    text: postData.description,
     permission_level: accessType.value,
     membership: accessType.value === 'SELECT_LEVEL' ? [selectedAccessType.value] : [],
     content: {},
   };
+}
+
+function createPost() {
+  const payload = adapterCreatePost();
+
+  api.posts.createPost(payload).then(data => {
+    console.log('data >>>', data);
+  });
 }
 
 onMounted(() => {
