@@ -6,7 +6,7 @@
     />
 
     <section class="profile__content">
-      <div class="profile__posts">
+      <div class="profile__posts infinite-list">
         <FullPost
           v-for="post in posts"
           :key="post.id"
@@ -27,6 +27,8 @@
           @delete-post="deletePostClick(post.id)"
           @like="likePost(post.id)"
         />
+
+        <infinite-loading @infinite="fetchNextPage" />
       </div>
 
       <div class="subscriptions">
@@ -106,6 +108,8 @@ const deletedPost = ref<number>(0);
 
 const membershipsList = ref<any[]>([]);
 
+const page = ref<number>(1);
+
 function deleteSubscriptionsClick(membership: any) {
   deletedMembership.value = membership;
   visibleDelSubscription.value = true;
@@ -119,6 +123,23 @@ function editSubscriptionClick(membership: any) {
 function deletePostClick(id: number) {
   visibleDeletePost.value = true;
   deletedPost.value = id;
+}
+
+// eslint-disable-next-line
+async function fetchNextPage($state: any) {
+  try {
+    page.value = page.value + 1;
+
+    myProfileStore.fetchMyPosts(page.value, (data: any) => {
+      if (data.next) {
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    });
+  } catch (error) {
+    $state.error();
+  }
 }
 
 // eslint-disable-next-line

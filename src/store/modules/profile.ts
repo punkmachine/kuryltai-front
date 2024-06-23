@@ -36,12 +36,13 @@ export const useMyProfileStore = defineStore('my-profile', () => {
     });
   }
 
-  function fetchMyPosts(page: number = 1) {
+  function fetchMyPosts(page: number = 1, callback?: (postData: any) => void) {
     api.posts.getMyPosts(page).then(data => {
-      if (page > 1) {
-        posts.value = [...posts.value, ...data.results];
-      } else {
-        posts.value = data.results;
+      console.log("🚀 ~ api.posts.getMyPosts ~ data:", data)
+      posts.value = [...posts.value, ...data.results];
+
+      if (callback) {
+        callback({ next: data.next });
       }
     });
   }
