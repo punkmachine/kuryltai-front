@@ -66,7 +66,7 @@
             to="/add-post"
             class="btn btn--with-icon btn--primary w-auto uppercase"
           >
-            <svg>
+            <svg class="fill-white">
               <use xlink:href="@/assets/icons/sprites/btns.svg#add"></use>
             </svg>
             <span> Создать пост </span>

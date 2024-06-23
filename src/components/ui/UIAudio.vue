@@ -70,18 +70,33 @@
         type="audio/mp3"
       ></audio>
     </div>
+
+    <button class="absolute right-2 top-2">
+      <svg
+        @click="$emit('delete')"
+        class="h-6 w-6 rotate-45 fill-black"
+      >
+        <use xlink:href="@/assets/icons/sprites/btns.svg#add"></use>
+      </svg>
+    </button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, onMounted } from 'vue';
+import { defineProps, ref, onMounted, defineEmits } from 'vue';
 
 interface IProps {
   src: string;
   fileName: string;
+  withDelete?: boolean;
+}
+
+interface IEmits {
+  (e: 'delete'): void;
 }
 
 defineProps<IProps>();
+defineEmits<IEmits>();
 
 const isPlaying = ref(false);
 const audioPlayer = ref<HTMLAudioElement | null>(null);

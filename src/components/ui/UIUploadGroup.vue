@@ -15,7 +15,7 @@
       file-type=".mp4,.mov,.mkv"
       emit-full-file
       with-click
-      @click="emit('click', 'video')"
+      @click="$emit('click', 'video')"
     />
     <UIUpload
       v-model="currentAudio"

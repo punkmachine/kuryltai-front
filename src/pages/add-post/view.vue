@@ -21,7 +21,11 @@
         :key="`image-${index}`"
         class="mb-4 flex flex-col gap-2"
       >
-        <UIImage :src="image" />
+        <UIImage
+          :src="image"
+          :with-delete="isEditPost"
+          @delete="addDeletedImage(image)"
+        />
       </div>
 
       <div
@@ -32,6 +36,8 @@
         <UIAudio
           :file-name="isEditPost ? audio : content.audio.audio_file_names[index]"
           :src="audio"
+          :with-delete="isEditPost"
+          @delete="addDeletedAudio(audio)"
         />
       </div>
 
@@ -43,6 +49,8 @@
         <UIVideo
           :file-name="content.video.video_file_names[index]"
           :src="video"
+          :with-delete="isEditPost"
+          @delete="addDeletedVideo(video)"
         />
       </div>
 
@@ -51,7 +59,11 @@
         :key="`video-${index}`"
         class="mb-4 flex flex-col gap-2"
       >
-        <UIYouTube :src="video" />
+        <UIYouTube
+          :src="video"
+          :with-delete="isEditPost"
+          @delete="addDeletedYouTube(video)"
+        />
       </div>
 
       <div
@@ -62,6 +74,8 @@
         <UIFile
           :name="isEditPost ? file : content.document.document_file_names[index]"
           :src="file"
+          :with-delete="isEditPost"
+          @delete="addDeletedFile(file)"
         />
       </div>
 
@@ -288,7 +302,7 @@ const validContent = computed(() => {
 });
 
 const isEditPost = computed(() => {
-  return route.query.edited;
+  return Boolean(route.query.edited);
 });
 
 watch(
@@ -328,6 +342,97 @@ watch(
     }
   },
 );
+
+// eslint-disable-next-line
+function addDeletedImage(image: string) {
+  let imgId = null;
+
+  if (editedPost.value.contents.image.length) {
+    imgId = editedPost.value.contents.image.find((img: any) => img.value === image)?.id;
+
+    if (imgId) {
+      deletedContent.value.push(imgId);
+    }
+  } else {
+    addedContent.image.image_files = addedContent.image.image_files.filter((img: string) => img !== image);
+  }
+
+  content.image.image_files = content.image.image_files.filter((img: string) => img !== image);
+}
+
+// eslint-disable-next-line
+function addDeletedAudio(audio: string) {
+  let audioId = null;
+
+  if (editedPost.value.contents.audio?.length) {
+    audioId = editedPost.value.contents.audio.find((audioItem: any) => audioItem.value === audio)?.id;
+
+    if (audioId) {
+      deletedContent.value.push(audioId);
+    }
+  } else {
+    addedContent.audio.audio_file_urls = addedContent.audio.audio_file_urls.filter(
+      (audioStr: string) => audioStr !== audio,
+    );
+  }
+
+  content.audio.audio_file_urls = content.audio.audio_file_urls.filter((audioStr: string) => audioStr !== audio);
+}
+
+// eslint-disable-next-line
+function addDeletedVideo(video: string) {
+  let videoId = null;
+
+  if (editedPost.value.contents.video?.files?.length) {
+    videoId = editedPost.value.contents.video?.files?.find((videoItem: any) => videoItem.value === video)?.id;
+
+    if (videoId) {
+      deletedContent.value.push(videoId);
+    }
+  } else {
+    addedContent.video.video_file_urls = addedContent.video.video_file_urls.filter(
+      (videoStr: string) => videoStr !== video,
+    );
+  }
+
+  content.video.video_file_urls = content.video.video_file_urls.filter((videoStr: string) => videoStr !== video);
+}
+
+// eslint-disable-next-line
+function addDeletedYouTube(video: string) {
+  let videoId = null;
+
+  if (editedPost.value.contents.video?.urls?.length) {
+    videoId = editedPost.value.contents.video?.urls?.find((videoItem: any) => videoItem.value === video)?.id;
+
+    if (videoId) {
+      deletedContent.value.push(videoId);
+    }
+  } else {
+    addedContent.video.video_urls = addedContent.video.video_urls.filter((videoStr: string) => videoStr !== video);
+  }
+
+  content.video.video_urls = content.video.video_urls.filter((videoStr: string) => videoStr !== video);
+}
+
+// eslint-disable-next-line
+function addDeletedFile(file: string) {
+  let fileId = null;
+
+  if (editedPost.value.contents.document?.length) {
+    fileId = editedPost.value.contents.document?.find((documentItem: any) => documentItem.value === file)?.id;
+
+    if (fileId) {
+      deletedContent.value.push(fileId);
+    }
+  } else {
+    addedContent.document.document_file_urls = addedContent.document.document_file_urls.filter(
+      (docStr: string) => docStr !== file,
+    );
+  }
+
+  content.document.document_file_urls = content.document.document_file_urls.filter((docStr: string) => docStr !== file);
+}
 
 // eslint-disable-next-line
 function addUploadVideo() {
@@ -392,7 +497,7 @@ function uploadFile(file: any, contentType: string) {
             content.audio.audio_file_urls.push(data.url);
 
             if (isEditPost.value) {
-              addedContent.audio.audio_file_urls.push(data.url)
+              addedContent.audio.audio_file_urls.push(data.url);
             }
 
             currentAudio.value = '';
@@ -484,11 +589,19 @@ function adapterSavePost() {
 
   if (addedContent.image.image_files.length) {
     payload.added_contents.image = addedContent.image;
+  } else {
+    payload.added_contents.image = {
+      image_files: [],
+    };
   }
 
   if (addedContent.document.document_file_urls.length) {
     payload.added_contents.document = {
       document_file_urls: addedContent.document.document_file_urls,
+    };
+  } else {
+    payload.added_contents.document = {
+      document_file_urls: [],
     };
   }
 
@@ -496,11 +609,19 @@ function adapterSavePost() {
     payload.added_contents.audio = {
       audio_file_urls: addedContent.audio.audio_file_urls,
     };
+  } else {
+    payload.added_contents.audio = {
+      audio_file_urls: [],
+    };
   }
 
   if (addedContent.video.video_file_urls.length) {
     payload.added_contents.video = {
       video_file_urls: addedContent.video.video_file_urls,
+    };
+  } else {
+    payload.added_contents.video = {
+      video_file_urls: [],
     };
   }
 
@@ -508,6 +629,11 @@ function adapterSavePost() {
     payload.added_contents.video = {
       ...payload.added_contents.video,
       video_urls: addedContent.video.video_urls,
+    };
+  } else {
+    payload.added_contents.video = {
+      ...payload.added_contents.video,
+      video_urls: [],
     };
   }
 
@@ -537,10 +663,9 @@ function postSave() {
   const payload = adapterSavePost();
 
   // @ts-ignore
-  api.posts.editPostById(payload, route.query.edited)
-    .then(() => {
-      fetchEditPost();
-    });
+  api.posts.editPostById(payload, route.query.edited).then(() => {
+    fetchEditPost();
+  });
 }
 
 // eslint-disable-next-line max-lines-per-function
