@@ -21,5 +21,8 @@ export const posts = (client: AxiosInstance) => {
     createPost: (payload: any): Promise<any> => {
       return client.post(`/contents/post/`, payload);
     },
+    uploadContent: (payload: any): Promise<any> => {
+      return client.post(`/contents/upload-content/`, payload);
+    },
   };
 };

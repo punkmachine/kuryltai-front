@@ -11,14 +11,50 @@
 
       <UIUploadGroup
         v-model:image="currentImage"
+        v-model:video="currentVideo"
+        v-model:file="currentFile"
+        v-model:audio="currentAudio"
       />
 
       <div
-        v-for="(image, index) in content.images"
+        v-for="(image, index) in content.image.image_files"
         :key="`image-${index}`"
-        class="mb-6 flex flex-col gap-2"
+        class="mb-4 flex flex-col gap-2"
       >
         <UIImage :src="image" />
+      </div>
+
+      <div
+        v-for="(audio, index) in content.audio.audio_file_urls"
+        :key="`audio-${index}`"
+        class="mb-4 flex flex-col gap-2"
+      >
+        <UIAudio
+          :file-name="content.audio.audio_file_names[index]"
+          :src="audio"
+        />
+      </div>
+
+      <div
+        v-for="(video, index) in content.video.video_file_urls"
+        :key="`video-${index}`"
+        class="mb-4 flex flex-col gap-2"
+      >
+        <UIVideo
+          :file-name="content.video.video_file_names[index]"
+          :src="video"
+        />
+      </div>
+
+      <div
+        v-for="(file, index) in content.document.document_file_urls"
+        :key="`file-${index}`"
+        class="mb-4 flex flex-col gap-2"
+      >
+        <UIFile
+          :name="content.document.document_file_names[index]"
+          :src="file"
+        />
       </div>
 
       <UIInput
@@ -62,7 +98,7 @@
       />
 
       <UISelect
-        v-if="accessType === 'change-type'"
+        v-if="accessType === 'SELECT_LEVEL'"
         v-model="selectedAccessType"
         class="mt-2"
         placeholder="Выберите уровень"
@@ -85,6 +121,7 @@
 </template>
 
 <script lang="ts" setup>
+/* eslint-disable max-lines */
 import { reactive, ref, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 
@@ -97,6 +134,9 @@ import UIUploadGroup from '@/components/ui/UIUploadGroup.vue';
 import UISelect from '@/components/ui/UISelect.vue';
 import UIInputTags from '@/components/ui/UIInputTags.vue';
 import UIImage from '@/components/ui/UIImage.vue';
+import UIAudio from '@/components/ui/UIAudio.vue';
+import UIVideo from '@/components/ui/UIVideo.vue';
+import UIFile from '@/components/ui/UIFile.vue';
 
 const myProfileStore = useMyProfileStore();
 
@@ -110,17 +150,114 @@ const postData = reactive<any>({
 });
 const selectedAccessType = ref<string>('');
 const content = reactive<any>({
-  images: [],
-})
-const currentImage = ref<any>('');
-
-watch(() => currentImage.value, () => {
-  if (currentImage.value) {
-    content.images.push(currentImage.value);
-  }
-
-  currentImage.value = '';
+  image: {
+    image_files: [],
+  },
+  video: {
+    video_urls: [],
+    video_file_urls: [],
+    video_file_names: [],
+  },
+  audio: {
+    audio_file_urls: [],
+    audio_file_names: [],
+  },
+  document: {
+    document_file_urls: [],
+    document_file_names: [],
+  },
 });
+const currentImage = ref<any>('');
+const currentVideo = ref<any>('');
+const currentAudio = ref<any>('');
+const currentFile = ref<any>('');
+
+watch(
+  () => currentImage.value,
+  () => {
+    if (currentImage.value) {
+      content.image.image_files.push(currentImage.value);
+    }
+
+    currentImage.value = '';
+  },
+);
+
+watch(
+  () => currentVideo.value,
+  () => {
+    uploadFile(currentVideo.value, 'video_type');
+  },
+);
+
+watch(
+  () => currentAudio.value,
+  () => {
+    uploadFile(currentAudio.value, 'audio_type');
+  },
+);
+
+watch(
+  () => currentFile.value,
+  () => {
+    uploadFile(currentFile.value, 'file_type');
+  },
+);
+
+// eslint-disable-next-line
+function uploadFile(file: any, contentType: string) {
+  const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+  const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+  const uploadChunk = async (chunk: any, chunkNumber: any) => {
+    const formData = new FormData();
+    formData.append('file', chunk);
+    formData.append('total_chunks', `${totalChunks}`);
+    formData.append('total_file_size', `${file.size}`);
+    formData.append('file_name', file.name);
+    formData.append('content_type', contentType);
+    formData.append('chunk_number', `${chunkNumber}`);
+
+    return await api.posts.uploadContent(formData);
+  };
+
+  // eslint-disable-next-line
+  const uploadChunks = async () => {
+    for (let chunkNumber = 0; chunkNumber < totalChunks; chunkNumber++) {
+      const start = chunkNumber * CHUNK_SIZE;
+      const end = Math.min(start + CHUNK_SIZE, file.size);
+      const chunk = file.slice(start, end);
+
+      try {
+        const data = await uploadChunk(chunk, chunkNumber);
+
+        if (data.is_finish) {
+          if (contentType === 'audio_type') {
+            content.audio.audio_file_names.push(currentAudio.value.name);
+            content.audio.audio_file_urls.push(data.url);
+            currentAudio.value = '';
+          }
+
+          if (contentType === 'video_type') {
+            content.video.video_file_names.push(currentVideo.value.name);
+            content.video.video_file_urls.push(data.url);
+            currentVideo.value = '';
+          }
+
+          if (contentType === 'file_type') {
+            content.document.document_file_names.push(currentFile.value.name);
+            content.document.document_file_urls.push(data.url);
+            currentFile.value = '';
+          }
+        }
+      } catch (error) {
+        console.log('🚀 ~ uploadChunks ~ error:', error);
+      }
+    }
+  };
+
+  uploadChunks();
+}
 
 // eslint-disable-next-line max-lines-per-function
 function adapterCreatePost() {
@@ -133,8 +270,24 @@ function adapterCreatePost() {
     tags: postData.tags,
   };
 
-  if (content.images.length) {
-    payload.content.images = [...content.images];
+  if (content.image.image_files.length) {
+    payload.content.image = content.image;
+  }
+
+  if (content.document.document_file_urls.length) {
+    payload.content.document = content.document.document_file_urls;
+  }
+
+  if (content.audio.audio_file_urls.length) {
+    payload.content.audio = content.audio.audio_file_urls;
+  }
+
+  if (content.video.video_file_urls.length) {
+    payload.content.video.video_file_urls = content.video.video_file_urls;
+  }
+
+  if (content.video.video_urls.length) {
+    payload.content.video.video_urls = content.video.video_urls;
   }
 
   return payload;

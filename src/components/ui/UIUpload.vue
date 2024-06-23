@@ -23,11 +23,12 @@ interface IProps {
   label?: string;
   icon?: string;
   fileType: string;
-  modelValue?: string;
+  modelValue?: any;
+  emitFullFile?: boolean;
 }
 
 interface IEmits {
-  (e: 'update:modelValue', newValue: string): void;
+  (e: 'update:modelValue', newValue: any): void;
 }
 
 const props = defineProps<IProps>();
@@ -55,6 +56,13 @@ const handleFileChange = (event: Event) => {
 
   if (target.files && target.files.length > 0) {
     const file = target.files[0];
+
+    if (props.emitFullFile) {
+      emit('update:modelValue', file);
+
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = () => {
