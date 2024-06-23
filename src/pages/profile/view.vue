@@ -8,19 +8,25 @@
     <section class="profile__content">
       <div class="profile__posts">
         <FullPost
-          name="Алекс"
-          date="2024-05-09T07:40:00.000Z"
-          avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-          heading="Здесь заголовок будет"
-          text="text text text text text text text text text text text text text"
-          has-access
+          v-for="post in posts"
+          :key="post.id"
+          :name="post.profile.username"
+          :date="post.created"
+          :avatar="post.profile.avatar_image"
+          :heading="post.title"
+          :text="post.description"
+          :has-access="post.have_access"
           is-my-post
-          :images="['/demo/demo1.png', '/demo/demo2.png']"
-          :tags="['tag1', 'tag2', 'tag3']"
+          :images="post.contents.image?.map((item: any) => item.value)"
+          :videos="post.contents.video?.files?.map((item: any) => item.value)"
+          :audios="post.contents.audio?.map((item: any) => item.value)"
+          :files="post.contents.document?.map((item: any) => item.value)"
+          :you-tubes="post.contents.video?.urls.map((item: any) => item.value)"
+          :tags="post.tags"
           @delete-post="visibleDeletePost = true"
         />
 
-        <FullPost
+        <!-- <FullPost
           name="Алекс"
           date="2024-05-09T07:40:00.000Z"
           avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
@@ -45,7 +51,7 @@
           :videos="['/demo/demo.mp4']"
           :audios="['/demo/demo1.mp3', '/demo/demo1.mp3']"
           @delete-post="visibleDeletePost = true"
-        />
+        /> -->
       </div>
 
       <div class="subscriptions">
@@ -95,6 +101,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import { api } from '@/api';
 
@@ -110,6 +117,8 @@ import DeletePost from './components/DeletePost.vue';
 import type { IAddSubscriptionData, IEditSubscriptionData } from './types';
 
 const myProfileStore = useMyProfileStore();
+
+const { posts } = storeToRefs(myProfileStore);
 
 const visibleAddSubscription = ref(false);
 const visibleEditSubscription = ref(false);
@@ -179,6 +188,7 @@ function getMyMemberships() {
 onMounted(() => {
   getMyMemberships();
   myProfileStore.fetchMyProfile();
+  myProfileStore.fetchMyPosts(1);
 });
 </script>
 

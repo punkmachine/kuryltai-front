@@ -46,7 +46,34 @@
         v-if="videos?.length"
         class="mt-6 flex flex-col gap-2"
       >
-        <UIVideo src="/demo/demo.mp4" />
+        <UIVideo
+          v-for="video in videos"
+          :key="video"
+          :src="video"
+        />
+      </div>
+
+      <div
+        v-if="youTubes?.length"
+        class="mt-6 flex flex-col gap-2"
+      >
+        <UIYouTube
+          v-for="video in youTubes"
+          :key="video"
+          :src="video"
+        />
+      </div>
+
+      <div
+        v-if="files?.length"
+        class="mt-6 flex flex-col gap-2"
+      >
+        <UIFile
+          v-for="file in files"
+          :key="file"
+          :name="file"
+          :src="file"
+        />
       </div>
 
       <div
@@ -104,6 +131,8 @@ import UIImage from '@/components/ui/UIImage.vue';
 import UIAudio from '@/components/ui/UIAudio.vue';
 import UIVideo from '@/components/ui/UIVideo.vue';
 import UITag from '@/components/ui/UITag.vue';
+import UIYouTube from '@/components/ui/UIYouTube.vue';
+import UIFile from '@/components/ui/UIFile.vue';
 import PostHead from '@/components/post/PostHead.vue';
 import SubscriptionsCard from '@/components/subscriptions/SubscriptionsCard.vue';
 
@@ -115,6 +144,8 @@ interface IProps {
   images?: string[];
   videos?: string[];
   audios?: string[];
+  files?: string[];
+  youTubes?: string[];
   text?: string;
   tags?: string[];
   hasAccess?: boolean;

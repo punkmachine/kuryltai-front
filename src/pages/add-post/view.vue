@@ -378,26 +378,26 @@ function adapterCreatePost() {
 
   if (content.document.document_file_urls.length) {
     payload.content.document = {
-      document_file_urls: content.document.document_file_urls
+      document_file_urls: content.document.document_file_urls,
     };
   }
 
   if (content.audio.audio_file_urls.length) {
     payload.content.audio = {
-      audio_file_urls: content.audio.audio_file_urls
+      audio_file_urls: content.audio.audio_file_urls,
     };
   }
 
   if (content.video.video_file_urls.length) {
     payload.content.video = {
-      video_file_urls: content.video.video_file_urls
+      video_file_urls: content.video.video_file_urls,
     };
   }
 
   if (content.video.video_urls.length) {
     payload.content.video = {
       ...payload.content.video,
-      video_urls: content.video.video_urls
+      video_urls: content.video.video_urls,
     };
   }
 

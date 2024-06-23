@@ -3,8 +3,8 @@ import type { AxiosInstance } from 'axios';
 // eslint-disable-next-line max-lines-per-function
 export const posts = (client: AxiosInstance) => {
   return {
-    getMyPosts: (): Promise<any> => {
-      return client.get('/contents/post/get/');
+    getMyPosts: (page: number): Promise<any> => {
+      return client.get(`/contents/post/get/?page=${page}`);
     },
     getPostById: (id: number | string): Promise<any> => {
       return client.get(`/contents/post/${id}/`);
