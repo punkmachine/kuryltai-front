@@ -120,7 +120,12 @@
 
       <button
         @click="createPost"
-        class="btn btn--primary mt-7 uppercase"
+        class="btn mt-7 uppercase"
+        :class="{
+          'btn--primary': !loading && validContent,
+          'btn--secondary': loading || !validContent,
+        }"
+        :disabled="loading || !validContent"
       >
         Опубликовать
       </button>
@@ -197,6 +202,7 @@ const myProfileStore = useMyProfileStore();
 
 const { myMemberships } = storeToRefs(myProfileStore);
 
+const loading = ref<boolean>(false);
 const accessType = ref<string>('PUBLIC');
 const postData = reactive<any>({
   title: '',
@@ -237,6 +243,10 @@ const validVideo = computed(() => {
   return Boolean(currentYouTube.value) || uploadedVideo.value;
 });
 
+const validContent = computed(() => {
+  return Boolean(postData.title);
+});
+
 watch(
   () => currentImage.value,
   () => {
@@ -251,21 +261,27 @@ watch(
 watch(
   () => currentVideo.value,
   () => {
-    uploadFile(currentVideo.value, 'video_type');
+    if (currentVideo.value) {
+      uploadFile(currentVideo.value, 'video_type');
+    }
   },
 );
 
 watch(
   () => currentAudio.value,
   () => {
-    uploadFile(currentAudio.value, 'audio_type');
+    if (currentAudio.value) {
+      uploadFile(currentAudio.value, 'audio_type');
+    }
   },
 );
 
 watch(
   () => currentFile.value,
   () => {
-    uploadFile(currentFile.value, 'file_type');
+    if (currentFile.value) {
+      uploadFile(currentFile.value, 'file_type');
+    }
   },
 );
 
@@ -289,6 +305,7 @@ function closeUploadVideoModal() {
 
 // eslint-disable-next-line
 function uploadFile(file: any, contentType: string) {
+  loading.value = true;
   const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
   const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 
@@ -332,6 +349,8 @@ function uploadFile(file: any, contentType: string) {
             content.document.document_file_urls.push(data.url);
             currentFile.value = '';
           }
+
+          loading.value = false;
         }
       } catch (error) {
         console.log('🚀 ~ uploadChunks ~ error:', error);
@@ -358,19 +377,28 @@ function adapterCreatePost() {
   }
 
   if (content.document.document_file_urls.length) {
-    payload.content.document = content.document.document_file_urls;
+    payload.content.document = {
+      document_file_urls: content.document.document_file_urls
+    };
   }
 
   if (content.audio.audio_file_urls.length) {
-    payload.content.audio = content.audio.audio_file_urls;
+    payload.content.audio = {
+      audio_file_urls: content.audio.audio_file_urls
+    };
   }
 
   if (content.video.video_file_urls.length) {
-    payload.content.video.video_file_urls = content.video.video_file_urls;
+    payload.content.video = {
+      video_file_urls: content.video.video_file_urls
+    };
   }
 
   if (content.video.video_urls.length) {
-    payload.content.video.video_urls = content.video.video_urls;
+    payload.content.video = {
+      ...payload.content.video,
+      video_urls: content.video.video_urls
+    };
   }
 
   return payload;
