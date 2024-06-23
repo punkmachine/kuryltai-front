@@ -99,7 +99,7 @@ const router = useRouter();
 
 const myProfileStore = useMyProfileStore();
 
-const { posts } = storeToRefs(myProfileStore);
+const { posts, loadingPosts } = storeToRefs(myProfileStore);
 
 const visibleAddSubscription = ref(false);
 const visibleEditSubscription = ref(false);
@@ -132,6 +132,7 @@ function deletePostClick(id: number) {
 // eslint-disable-next-line
 async function fetchNextPage($state: any) {
   try {
+    if (loadingPosts.value) return;
     page.value = page.value + 1;
 
     myProfileStore.fetchMyPosts(page.value, (data: any) => {
@@ -143,6 +144,7 @@ async function fetchNextPage($state: any) {
     });
   } catch (error) {
     $state.error();
+    $state.complete();
   }
 }
 

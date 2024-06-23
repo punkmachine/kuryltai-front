@@ -42,7 +42,7 @@ import MainSidebar from '@/components/layout/main/MainSidebar.vue';
 }
 
 .main-container {
-  @apply px-3 xl:p-0;
+  @apply min-w-[860px] px-3 xl:p-0;
 }
 
 main {

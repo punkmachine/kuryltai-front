@@ -71,7 +71,10 @@
       ></audio>
     </div>
 
-    <button class="absolute right-2 top-2">
+    <button
+      v-if="withDelete"
+      class="absolute right-2 top-2"
+    >
       <svg
         @click="$emit('delete')"
         class="h-6 w-6 rotate-45 fill-black"

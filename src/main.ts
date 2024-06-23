@@ -1,6 +1,5 @@
 import '@/assets/styles/main.css';
 import 'vue3-toastify/dist/index.css';
-import 'v3-infinite-loading/lib/style.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';

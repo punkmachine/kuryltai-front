@@ -7,6 +7,7 @@
     />
 
     <button
+      v-if="withDelete"
       @click="$emit('delete')"
       class="absolute right-2 top-2 fill-slate-300"
     >

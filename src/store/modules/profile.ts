@@ -10,8 +10,11 @@ export const useMyProfileStore = defineStore('my-profile', () => {
   const profileCards = ref<any[]>([]);
   const myMemberships = ref<any[]>([]);
   const posts = ref<any[]>([]);
+  const loadingPosts = ref<boolean>(false);
 
   function fetchMyProfile(callback?: () => void) {
+    loadingPosts.value = true;
+
     api.profile
       .getMyProfile()
       .then(data => {
@@ -21,6 +24,9 @@ export const useMyProfileStore = defineStore('my-profile', () => {
         if (callback) {
           callback();
         }
+      })
+      .finally(() => {
+        loadingPosts.value = false;
       });
   }
 
@@ -60,5 +66,6 @@ export const useMyProfileStore = defineStore('my-profile', () => {
     profileCards,
     myMemberships,
     posts,
+    loadingPosts,
   };
 });

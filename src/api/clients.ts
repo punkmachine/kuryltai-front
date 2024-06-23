@@ -57,7 +57,7 @@ function errorResponse(error: AxiosError<{ error: { message: string } }>): Promi
             headers: { ...error.config.headers, Authorization: `Bearer ${data.access}` },
           });
         })
-        .catch(err => {
+        .catch(() => {
           goToLogin();
         });
     }
