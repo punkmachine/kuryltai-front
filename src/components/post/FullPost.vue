@@ -153,7 +153,7 @@ interface IProps {
   tags?: string[];
   hasAccess?: boolean;
   isMyPost?: boolean;
-  likes: number,
+  likes: number;
 }
 
 interface IEmits {

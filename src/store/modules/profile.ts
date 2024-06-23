@@ -38,8 +38,16 @@ export const useMyProfileStore = defineStore('my-profile', () => {
 
   function fetchMyPosts(page: number = 1) {
     api.posts.getMyPosts(page).then(data => {
-      posts.value = data.results;
+      if (page > 1) {
+        posts.value = [...posts.value, ...data.results];
+      } else {
+        posts.value = data.results;
+      }
     });
+  }
+
+  function deletePostInStore(id: number) {
+    posts.value = posts.value.filter(post => post.id !== id);
   }
 
   return {
@@ -47,6 +55,7 @@ export const useMyProfileStore = defineStore('my-profile', () => {
     fetchMyCards,
     fetchMyMemberships,
     fetchMyPosts,
+    deletePostInStore,
     profile,
     profileCards,
     myMemberships,

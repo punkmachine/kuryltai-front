@@ -123,19 +123,18 @@ function deletePostClick(id: number) {
 
 // eslint-disable-next-line
 function likePost(id: number) {
-  api.posts.likePost({ post_id: id })
-    .then(() => {
-      posts.value = posts.value.map(post => {
-        if (post.id !== id) {
-          return post;
-        } else {
-          return {
-            ...post,
-            likes_count: post.likes_count + 1,
-          }
-        }
-      });
+  api.posts.likePost({ post_id: id }).then(() => {
+    posts.value = posts.value.map(post => {
+      if (post.id !== id) {
+        return post;
+      } else {
+        return {
+          ...post,
+          likes_count: post.likes_count + 1,
+        };
+      }
     });
+  });
 }
 
 function addSubscription(data: IAddSubscriptionData) {
@@ -174,7 +173,11 @@ function deleteSubscription(id: number) {
 }
 
 function deletePost() {
-  visibleDeletePost.value = false;
+  api.posts.deletePostById(deletedPost.value).then(() => {
+    myProfileStore.deletePostInStore(deletedPost.value);
+    visibleDeletePost.value = false;
+    deletedPost.value = 0;
+  });
 }
 
 function getMyMemberships() {
