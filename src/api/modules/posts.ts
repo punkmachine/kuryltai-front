@@ -24,5 +24,8 @@ export const posts = (client: AxiosInstance) => {
     uploadContent: (payload: any): Promise<any> => {
       return client.post(`/contents/upload-content/`, payload);
     },
+    likePost: (payload: any): Promise<any> => {
+      return client.post('/contents/like/', payload);
+    },
   };
 };

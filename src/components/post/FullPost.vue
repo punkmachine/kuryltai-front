@@ -114,12 +114,15 @@
     </div>
 
     <div class="mt-3 flex items-center gap-6">
-      <button class="flex items-center gap-1">
+      <button
+        class="flex items-center gap-1"
+        @click="$emit('like')"
+      >
         <svg class="h-5 w-5">
           <use xlink:href="@/assets/icons/sprites/btns.svg#heart"></use>
         </svg>
 
-        <span class="text-sm text-gray-900"> 2345 </span>
+        <span class="text-sm text-gray-900"> {{ likes }} </span>
       </button>
     </div>
   </article>
@@ -150,10 +153,12 @@ interface IProps {
   tags?: string[];
   hasAccess?: boolean;
   isMyPost?: boolean;
+  likes: number,
 }
 
 interface IEmits {
   (e: 'delete-post'): void;
+  (e: 'like'): void;
 }
 
 defineProps<IProps>();

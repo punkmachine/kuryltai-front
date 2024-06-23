@@ -23,35 +23,10 @@
           :files="post.contents.document?.map((item: any) => item.value)"
           :you-tubes="post.contents.video?.urls.map((item: any) => item.value)"
           :tags="post.tags"
-          @delete-post="visibleDeletePost = true"
+          :likes="post.likes_count"
+          @delete-post="deletePostClick(post.id)"
+          @like="likePost(post.id)"
         />
-
-        <!-- <FullPost
-          name="Алекс"
-          date="2024-05-09T07:40:00.000Z"
-          avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-          heading="Здесь заголовок будет"
-          text="text text text text text text text text text text text text text"
-          has-access
-          is-my-post
-          :audios="['/demo/demo1.mp3', '/demo/demo1.mp3']"
-          :tags="['tag1', 'tag2', 'tag3']"
-          @delete-post="visibleDeletePost = true"
-        />
-
-        <FullPost
-          name="Алекс"
-          date="2024-05-09T07:40:00.000Z"
-          avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-          heading="Здесь заголовок будет"
-          text="text text text text text text text text text text text text text"
-          has-access
-          is-my-post
-          :images="['/demo/demo1.png', '/demo/demo2.png']"
-          :videos="['/demo/demo.mp4']"
-          :audios="['/demo/demo1.mp3', '/demo/demo1.mp3']"
-          @delete-post="visibleDeletePost = true"
-        /> -->
       </div>
 
       <div class="subscriptions">
@@ -127,6 +102,7 @@ const visibleDeletePost = ref(false);
 
 const deletedMembership = ref<any>(null);
 const editedMembership = ref<any>(null);
+const deletedPost = ref<number>(0);
 
 const membershipsList = ref<any[]>([]);
 
@@ -138,6 +114,28 @@ function deleteSubscriptionsClick(membership: any) {
 function editSubscriptionClick(membership: any) {
   editedMembership.value = membership;
   visibleEditSubscription.value = true;
+}
+
+function deletePostClick(id: number) {
+  visibleDeletePost.value = true;
+  deletedPost.value = id;
+}
+
+// eslint-disable-next-line
+function likePost(id: number) {
+  api.posts.likePost({ post_id: id })
+    .then(() => {
+      posts.value = posts.value.map(post => {
+        if (post.id !== id) {
+          return post;
+        } else {
+          return {
+            ...post,
+            likes_count: post.likes_count + 1,
+          }
+        }
+      });
+    });
 }
 
 function addSubscription(data: IAddSubscriptionData) {

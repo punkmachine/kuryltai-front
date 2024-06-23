@@ -180,6 +180,7 @@
 <script lang="ts" setup>
 /* eslint-disable max-lines */
 import { reactive, ref, onMounted, watch, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
@@ -197,6 +198,8 @@ import UIFile from '@/components/ui/UIFile.vue';
 import UIModal from '@/components/ui/UIModal.vue';
 import UIUpload from '@/components/ui/UIUpload.vue';
 import UIYouTube from '@/components/ui/UIYouTube.vue';
+
+const router = useRouter();
 
 const myProfileStore = useMyProfileStore();
 
@@ -408,10 +411,8 @@ function createPost() {
   const payload = adapterCreatePost();
 
   api.posts.createPost(payload).then(data => {
-    console.log('data >>>', data);
-
     uploadedVideo.value = false;
-    // заинитить все current значения и reactive.
+    router.push('/');
   });
 }
 
