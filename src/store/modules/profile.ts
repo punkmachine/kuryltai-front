@@ -38,7 +38,6 @@ export const useMyProfileStore = defineStore('my-profile', () => {
 
   function fetchMyPosts(page: number = 1, callback?: (postData: any) => void) {
     api.posts.getMyPosts(page).then(data => {
-      console.log("🚀 ~ api.posts.getMyPosts ~ data:", data)
       posts.value = [...posts.value, ...data.results];
 
       if (callback) {

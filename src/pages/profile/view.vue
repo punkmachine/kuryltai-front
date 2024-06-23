@@ -25,6 +25,7 @@
           :tags="post.tags"
           :likes="post.likes_count"
           @delete-post="deletePostClick(post.id)"
+          @edit-post="router.push(`/add-post?edited=${[post.id]}`)"
           @like="likePost(post.id)"
         />
 
@@ -79,6 +80,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 import { api } from '@/api';
 
@@ -92,6 +94,8 @@ import EditSubscription from './components/EditSubscription.vue';
 import DeleteSubscription from './components/DeleteSubscription.vue';
 import DeletePost from './components/DeletePost.vue';
 import type { IAddSubscriptionData, IEditSubscriptionData } from './types';
+
+const router = useRouter();
 
 const myProfileStore = useMyProfileStore();
 

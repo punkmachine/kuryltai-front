@@ -6,6 +6,7 @@
       :avatar="avatar"
       :is-my-post="isMyPost"
       @delete-post="$emit('delete-post')"
+      @edit-post="$emit('edit-post')"
     />
 
     <div class="mb-4">
@@ -158,6 +159,7 @@ interface IProps {
 
 interface IEmits {
   (e: 'delete-post'): void;
+  (e: 'edit-post'): void;
   (e: 'like'): void;
 }
 

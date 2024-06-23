@@ -44,6 +44,12 @@
           >
             Удалить
           </button>
+          <button
+            class="rounded-md p-2 text-left text-sm font-medium text-blue-gray-500 hover:bg-blue-50"
+            @click="$emit('edit-post')"
+          >
+            Редактировать
+          </button>
         </template>
         <template v-else>
           <button class="rounded-md p-2 text-left text-sm font-medium text-blue-gray-500 hover:bg-blue-50">
@@ -72,6 +78,7 @@ interface IProps {
 
 interface IEmits {
   (e: 'delete-post'): void;
+  (e: 'edit-post'): void;
 }
 
 const props = defineProps<IProps>();

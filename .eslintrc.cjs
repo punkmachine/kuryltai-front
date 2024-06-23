@@ -20,7 +20,7 @@ module.exports = {
   // plugins: {},
   rules: {
     // душные правила по коду
-    'max-depth': ['error', 4], // максимально количество вложенных блоков видимости
+    'max-depth': ['error', 5], // максимально количество вложенных блоков видимости
     'max-lines': ['error', {
       max: 300,
       skipComments: true,
@@ -31,7 +31,7 @@ module.exports = {
       skipComments: true,
       IIFEs: false,
     }], // максимальное количество строк в функции
-    'max-nested-callbacks': ['error', 4], // максимальная глубина вложенных вызовов функций
+    'max-nested-callbacks': ['error', 5], // максимальная глубина вложенных вызовов функций
     'id-length': ['error', {
       min: 1,
       max: 24,

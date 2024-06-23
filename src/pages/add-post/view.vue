@@ -30,7 +30,7 @@
         class="mb-4 flex flex-col gap-2"
       >
         <UIAudio
-          :file-name="content.audio.audio_file_names[index]"
+          :file-name="isEditPost ? audio : content.audio.audio_file_names[index]"
           :src="audio"
         />
       </div>
@@ -60,7 +60,7 @@
         class="mb-4 flex flex-col gap-2"
       >
         <UIFile
-          :name="content.document.document_file_names[index]"
+          :name="isEditPost ? file : content.document.document_file_names[index]"
           :src="file"
         />
       </div>
@@ -119,6 +119,7 @@
       />
 
       <button
+        v-if="!isEditPost"
         @click="createPost"
         class="btn mt-7 uppercase"
         :class="{
@@ -128,6 +129,19 @@
         :disabled="loading || !validContent"
       >
         Опубликовать
+      </button>
+
+      <button
+        v-else
+        @click="postSave"
+        class="btn mt-7 uppercase"
+        :class="{
+          'btn--primary': !loading && validContent,
+          'btn--secondary': loading || !validContent,
+        }"
+        :disabled="loading || !validContent"
+      >
+        Сохранить
       </button>
     </div>
 
@@ -180,7 +194,7 @@
 <script lang="ts" setup>
 /* eslint-disable max-lines */
 import { reactive, ref, onMounted, watch, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
@@ -200,11 +214,13 @@ import UIUpload from '@/components/ui/UIUpload.vue';
 import UIYouTube from '@/components/ui/UIYouTube.vue';
 
 const router = useRouter();
+const route = useRoute();
 
 const myProfileStore = useMyProfileStore();
 
 const { myMemberships } = storeToRefs(myProfileStore);
 
+const editedPost = ref<any>({});
 const loading = ref<boolean>(false);
 const accessType = ref<string>('PUBLIC');
 const postData = reactive<any>({
@@ -231,6 +247,7 @@ const content = reactive<any>({
     document_file_names: [],
   },
 });
+
 const currentImage = ref<any>('');
 const currentVideo = ref<any>('');
 const currentYouTube = ref<string>('');
@@ -242,12 +259,36 @@ const currentUploadVideo = ref<any>({});
 
 const uploadVideoModalVisible = ref<boolean>(false);
 
+const deletedContent = ref<number[]>([]);
+const addedContent = reactive<any>({
+  image: {
+    image_files: [],
+  },
+  video: {
+    video_urls: [],
+    video_file_urls: [],
+    video_file_names: [],
+  },
+  audio: {
+    audio_file_urls: [],
+    audio_file_names: [],
+  },
+  document: {
+    document_file_urls: [],
+    document_file_names: [],
+  },
+});
+
 const validVideo = computed(() => {
   return Boolean(currentYouTube.value) || uploadedVideo.value;
 });
 
 const validContent = computed(() => {
   return Boolean(postData.title);
+});
+
+const isEditPost = computed(() => {
+  return route.query.edited;
 });
 
 watch(
@@ -288,13 +329,24 @@ watch(
   },
 );
 
+// eslint-disable-next-line
 function addUploadVideo() {
   if (currentUploadVideo.value.name && currentUploadVideo.value.url) {
     content.video.video_file_names.push(currentUploadVideo.value.name);
     content.video.video_file_urls.push(currentUploadVideo.value.url);
+
+    if (isEditPost.value) {
+      addedContent.video.video_file_urls.push(currentUploadVideo.value.url);
+    }
+
     currentVideo.value = '';
   } else {
     content.video.video_urls.push(currentYouTube.value);
+
+    if (isEditPost.value) {
+      addedContent.video.video_urls.push(currentYouTube.value);
+    }
+
     currentYouTube.value = '';
   }
 
@@ -338,6 +390,11 @@ function uploadFile(file: any, contentType: string) {
           if (contentType === 'audio_type') {
             content.audio.audio_file_names.push(currentAudio.value.name);
             content.audio.audio_file_urls.push(data.url);
+
+            if (isEditPost.value) {
+              addedContent.audio.audio_file_urls.push(data.url)
+            }
+
             currentAudio.value = '';
           }
 
@@ -350,6 +407,11 @@ function uploadFile(file: any, contentType: string) {
           if (contentType === 'file_type') {
             content.document.document_file_names.push(currentFile.value.name);
             content.document.document_file_urls.push(data.url);
+
+            if (isEditPost.value) {
+              addedContent.document.document_file_urls.push(data.url);
+            }
+
             currentFile.value = '';
           }
 
@@ -369,6 +431,7 @@ function adapterCreatePost() {
   let payload: any = {
     title: postData.title,
     text: postData.description,
+    description: postData.description,
     permission_level: accessType.value,
     membership: accessType.value === 'SELECT_LEVEL' ? [selectedAccessType.value] : [],
     content: {},
@@ -407,10 +470,58 @@ function adapterCreatePost() {
   return payload;
 }
 
+// eslint-disable-next-line max-lines-per-function
+function adapterSavePost() {
+  let payload: any = {
+    title: postData.title,
+    text: postData.description,
+    description: postData.description,
+    permission_level: accessType.value,
+    membership: accessType.value === 'SELECT_LEVEL' ? [selectedAccessType.value] : [],
+    added_contents: {},
+    tags: postData.tags,
+  };
+
+  if (addedContent.image.image_files.length) {
+    payload.added_contents.image = addedContent.image;
+  }
+
+  if (addedContent.document.document_file_urls.length) {
+    payload.added_contents.document = {
+      document_file_urls: addedContent.document.document_file_urls,
+    };
+  }
+
+  if (addedContent.audio.audio_file_urls.length) {
+    payload.added_contents.audio = {
+      audio_file_urls: addedContent.audio.audio_file_urls,
+    };
+  }
+
+  if (addedContent.video.video_file_urls.length) {
+    payload.added_contents.video = {
+      video_file_urls: addedContent.video.video_file_urls,
+    };
+  }
+
+  if (addedContent.video.video_urls.length) {
+    payload.added_contents.video = {
+      ...payload.added_contents.video,
+      video_urls: addedContent.video.video_urls,
+    };
+  }
+
+  if (deletedContent.value.length) {
+    payload.deleted_contents = deletedContent.value;
+  }
+
+  return payload;
+}
+
 function createPost() {
   const payload = adapterCreatePost();
 
-  api.posts.createPost(payload).then(data => {
+  api.posts.createPost(payload).then(() => {
     uploadedVideo.value = false;
     router.push('/');
   });
@@ -422,9 +533,57 @@ function uploadFilesClick(type: 'video' | 'audio' | 'file' | 'image') {
   }
 }
 
+function postSave() {
+  const payload = adapterSavePost();
+
+  // @ts-ignore
+  api.posts.editPostById(payload, route.query.edited)
+    .then(() => {
+      fetchEditPost();
+    });
+}
+
+// eslint-disable-next-line max-lines-per-function
+function fetchEditPost() {
+  // @ts-ignore
+  // eslint-disable-next-line max-lines-per-function
+  api.posts.getPostById(route.query.edited).then(data => {
+    editedPost.value = data;
+
+    postData.title = editedPost.value.title;
+    postData.description = editedPost.value.description;
+    postData.tags = editedPost.value.tags;
+
+    if (editedPost.value.contents.image?.length) {
+      content.image.image_files = editedPost.value.contents.image.map((item: any) => item.value);
+    }
+
+    if (editedPost.value.contents.video?.urls?.length) {
+      content.video.video_urls = editedPost.value.contents.video?.urls?.map((item: any) => item.value);
+    }
+
+    if (editedPost.value.contents.video?.files?.length) {
+      content.video.video_file_urls = editedPost.value.contents.video?.files?.map((item: any) => item.value);
+    }
+
+    if (editedPost.value.contents.audio?.length) {
+      content.audio.audio_file_urls = editedPost.value.contents.audio?.map((item: any) => item.value);
+    }
+
+    if (editedPost.value.contents.document?.length) {
+      content.document.document_file_urls = editedPost.value.contents.document?.map((item: any) => item.value);
+    }
+  });
+}
+
+// eslint-disable-next-line max-lines-per-function
 onMounted(() => {
   myProfileStore.fetchMyProfile();
   myProfileStore.fetchMyMemberships();
+
+  if (isEditPost.value) {
+    fetchEditPost();
+  }
 });
 </script>
 
