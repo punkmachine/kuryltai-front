@@ -30,7 +30,10 @@
           <slot name="body"></slot>
         </div>
 
-        <div class="modal__footer">
+        <div
+          v-if="$slots.footer"
+          class="modal__footer"
+        >
           <slot name="footer"></slot>
         </div>
       </article>

@@ -1,11 +1,15 @@
 <template>
-  <button class="upload">
+  <button
+    @click="uploadClick"
+    class="upload"
+  >
     <svg>
       <use :xlink:href="`${icons}#${iconUpload}`"></use>
     </svg>
     <span>{{ labelUpload }}</span>
 
     <input
+      v-if="!withClick"
       class="absolute bottom-0 left-0 right-0 top-0 z-50 opacity-0"
       type="file"
       :accept="fileType"
@@ -25,10 +29,12 @@ interface IProps {
   fileType: string;
   modelValue?: any;
   emitFullFile?: boolean;
+  withClick?: boolean;
 }
 
 interface IEmits {
   (e: 'update:modelValue', newValue: any): void;
+  (e: 'click'): void;
 }
 
 const props = defineProps<IProps>();
@@ -52,6 +58,8 @@ const labelUpload = computed(() => {
 
 // eslint-disable-next-line
 const handleFileChange = (event: Event) => {
+  if (props.withClick) return;
+
   const target = event.target as HTMLInputElement;
 
   if (target.files && target.files.length > 0) {
@@ -74,4 +82,10 @@ const handleFileChange = (event: Event) => {
     reader.readAsDataURL(file);
   }
 };
+
+function uploadClick() {
+  if (props.withClick) {
+    emit('click');
+  }
+}
 </script>

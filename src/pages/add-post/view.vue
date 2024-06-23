@@ -11,9 +11,9 @@
 
       <UIUploadGroup
         v-model:image="currentImage"
-        v-model:video="currentVideo"
         v-model:file="currentFile"
         v-model:audio="currentAudio"
+        @click="uploadFilesClick"
       />
 
       <div
@@ -44,6 +44,14 @@
           :file-name="content.video.video_file_names[index]"
           :src="video"
         />
+      </div>
+
+      <div
+        v-for="(video, index) in content.video.video_urls"
+        :key="`video-${index}`"
+        class="mb-4 flex flex-col gap-2"
+      >
+        <UIYouTube :src="video" />
       </div>
 
       <div
@@ -117,12 +125,56 @@
         Опубликовать
       </button>
     </div>
+
+    <UIModal
+      :visible="uploadVideoModalVisible"
+      class="w-108"
+      @close="closeUploadVideoModal"
+    >
+      <template #header>
+        <h3 class="text-center text-xl font-bold text-gray-900">Добавить видео</h3>
+      </template>
+
+      <template #body>
+        <UIInput
+          v-model="currentYouTube"
+          required
+          autocomplete="off"
+          placeholder="Ссылка"
+          label="Ссылка на YouTube"
+        />
+
+        <div class="divider-with-text">или</div>
+
+        <p class="mt-3 text-center text-sm text-blue-gray-500">Загрузите видео до 500 МБ</p>
+
+        <UIUpload
+          v-model="currentVideo"
+          label="Файл"
+          icon="file"
+          class="mt-3 w-full justify-center"
+          file-type=".mp4,.mov,.mkv"
+          emit-full-file
+        />
+
+        <button
+          class="btn mt-5 uppercase"
+          :class="{
+            'btn--primary': validVideo,
+            'btn--secondary': !validVideo,
+          }"
+          @click="addUploadVideo"
+        >
+          Добавить
+        </button>
+      </template>
+    </UIModal>
   </section>
 </template>
 
 <script lang="ts" setup>
 /* eslint-disable max-lines */
-import { reactive, ref, onMounted, watch } from 'vue';
+import { reactive, ref, onMounted, watch, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
@@ -137,6 +189,9 @@ import UIImage from '@/components/ui/UIImage.vue';
 import UIAudio from '@/components/ui/UIAudio.vue';
 import UIVideo from '@/components/ui/UIVideo.vue';
 import UIFile from '@/components/ui/UIFile.vue';
+import UIModal from '@/components/ui/UIModal.vue';
+import UIUpload from '@/components/ui/UIUpload.vue';
+import UIYouTube from '@/components/ui/UIYouTube.vue';
 
 const myProfileStore = useMyProfileStore();
 
@@ -169,8 +224,18 @@ const content = reactive<any>({
 });
 const currentImage = ref<any>('');
 const currentVideo = ref<any>('');
+const currentYouTube = ref<string>('');
 const currentAudio = ref<any>('');
 const currentFile = ref<any>('');
+
+const uploadedVideo = ref<boolean>(false);
+const currentUploadVideo = ref<any>({});
+
+const uploadVideoModalVisible = ref<boolean>(false);
+
+const validVideo = computed(() => {
+  return Boolean(currentYouTube.value) || uploadedVideo.value;
+});
 
 watch(
   () => currentImage.value,
@@ -203,6 +268,24 @@ watch(
     uploadFile(currentFile.value, 'file_type');
   },
 );
+
+function addUploadVideo() {
+  if (currentUploadVideo.value.name && currentUploadVideo.value.url) {
+    content.video.video_file_names.push(currentUploadVideo.value.name);
+    content.video.video_file_urls.push(currentUploadVideo.value.url);
+    currentVideo.value = '';
+  } else {
+    content.video.video_urls.push(currentYouTube.value);
+    currentYouTube.value = '';
+  }
+
+  uploadVideoModalVisible.value = false;
+}
+
+function closeUploadVideoModal() {
+  uploadVideoModalVisible.value = false;
+  uploadedVideo.value = false;
+}
 
 // eslint-disable-next-line
 function uploadFile(file: any, contentType: string) {
@@ -239,9 +322,9 @@ function uploadFile(file: any, contentType: string) {
           }
 
           if (contentType === 'video_type') {
-            content.video.video_file_names.push(currentVideo.value.name);
-            content.video.video_file_urls.push(data.url);
-            currentVideo.value = '';
+            uploadedVideo.value = true;
+            currentUploadVideo.value.name = currentVideo.value.name;
+            currentUploadVideo.value.url = data.url;
           }
 
           if (contentType === 'file_type') {
@@ -298,7 +381,16 @@ function createPost() {
 
   api.posts.createPost(payload).then(data => {
     console.log('data >>>', data);
+
+    uploadedVideo.value = false;
+    // заинитить все current значения и reactive.
   });
+}
+
+function uploadFilesClick(type: 'video' | 'audio' | 'file' | 'image') {
+  if (type === 'video') {
+    uploadVideoModalVisible.value = true;
+  }
 }
 
 onMounted(() => {
@@ -320,5 +412,19 @@ onMounted(() => {
 
 .add-post__aside {
   @apply flex h-max w-[292px] flex-col rounded-lg bg-white px-3 py-6 shadow-standard;
+}
+
+.divider-with-text {
+  @apply relative mt-3 text-center text-sm text-blue-gray-500;
+}
+
+.divider-with-text::before {
+  content: '';
+  @apply absolute bottom-1/2 left-0 h-px w-40 translate-y-1/2 bg-gray-300;
+}
+
+.divider-with-text::after {
+  content: '';
+  @apply absolute bottom-1/2 right-0 h-px w-40 translate-y-1/2 bg-gray-300;
 }
 </style>

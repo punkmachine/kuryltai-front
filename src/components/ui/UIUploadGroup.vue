@@ -14,6 +14,8 @@
       class="w-full justify-center rounded-none border-r-0"
       file-type=".mp4,.mov,.mkv"
       emit-full-file
+      with-click
+      @click="emit('click', 'video')"
     />
     <UIUpload
       v-model="currentAudio"
@@ -40,7 +42,6 @@ import UIUpload from '@/components/ui/UIUpload.vue';
 
 interface IProps {
   image: string;
-  video: any;
 }
 
 interface IEmits {
@@ -48,6 +49,7 @@ interface IEmits {
   (e: 'update:video', newValue: any): void;
   (e: 'update:audio', newValue: any): void;
   (e: 'update:file', newValue: any): void;
+  (e: 'click', type: 'video' | 'audio' | 'file' | 'image'): void;
 }
 
 defineProps<IProps>();
