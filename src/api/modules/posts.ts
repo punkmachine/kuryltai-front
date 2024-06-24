@@ -9,8 +9,8 @@ export const posts = (client: AxiosInstance) => {
     getPostById: (id: number | string): Promise<any> => {
       return client.get(`/contents/post/${id}/`);
     },
-    getPostsBySlug: (slug: string): Promise<any> => {
-      return client.get(`/contents/post/${slug}/`);
+    getPostsBySlug: (slug: string, page: number): Promise<any> => {
+      return client.get(`/contents/post/get/${slug}/?page=${page}`);
     },
     editPostById: (payload: any, id: number | string): Promise<any> => {
       return client.patch(`/contents/post/${id}/`, payload);

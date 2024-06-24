@@ -7,6 +7,7 @@ import { api } from '@/api';
 export const useUsersStore = defineStore('users', () => {
   const currentUser = ref<any>(null);
   const currentUserMemberships = ref<any[]>([]);
+  const userPosts = ref<any[]>([]);
 
   function fetchUser(slug: string) {
     api.profile.getProfileBySlug(slug).then(data => {
@@ -20,10 +21,18 @@ export const useUsersStore = defineStore('users', () => {
     });
   }
 
+  function fetchUserPosts(slug: string, page: number = 1) {
+    api.posts.getPostsBySlug(slug, page).then(data => {
+      userPosts.value = [...userPosts.value, ...data.results];
+    })
+  }
+
   return {
     fetchUser,
     fetchMemberships,
+    fetchUserPosts,
     currentUser,
     currentUserMemberships,
+    userPosts
   };
 });

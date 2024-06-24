@@ -6,35 +6,21 @@
     <section class="profile__content">
       <div class="profile__posts">
         <FullPost
-          name="Алекс"
-          date="2024-05-09T07:40:00.000Z"
-          avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-          heading="Здесь заголовок будет"
-          text="text text text text text text text text text text text text text"
-          has-access
-          :images="['/demo/demo1.png', '/demo/demo2.png']"
-        />
-
-        <FullPost
-          name="Алекс"
-          date="2024-05-09T07:40:00.000Z"
-          avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-          heading="Здесь заголовок будет"
-          text="text text text text text text text text text text text text text"
-          has-access
-          :audios="['/demo/demo1.mp3', '/demo/demo1.mp3']"
-          :tags="['tag1', 'tag2', 'tag3']"
-        />
-
-        <FullPost
-          name="Алекс"
-          date="2024-05-09T07:40:00.000Z"
-          avatar="https://avatars.githubusercontent.com/u/76869388?v=4"
-          heading="Здесь заголовок будет"
-          text="text text text text text text text text text text text text text"
-          :images="['/demo/demo1.png', '/demo/demo2.png']"
-          :videos="['/demo/demo.mp4']"
-          :audios="['/demo/demo1.mp3', '/demo/demo1.mp3']"
+          v-for="post in userPosts"
+          :key="post.id"
+          :name="post.profile.username"
+          :date="post.created"
+          :avatar="post.profile.avatar_image"
+          :heading="post.title"
+          :text="post.description"
+          :has-access="post.have_access"
+          :images="post.contents.image?.map((item: any) => item.value)"
+          :videos="post.contents.video?.files?.map((item: any) => item.value)"
+          :audios="post.contents.audio?.map((item: any) => item.value)"
+          :files="post.contents.document?.map((item: any) => item.value)"
+          :you-tubes="post.contents.video?.urls.map((item: any) => item.value)"
+          :tags="post.tags"
+          :likes="post.likes_count"
         />
       </div>
 
@@ -94,7 +80,8 @@ import SecureForm from '@/components/SecureForm';
 const route = useRoute();
 const usersStore = useUsersStore();
 const myProfileStore = useMyProfileStore();
-const { currentUserMemberships, currentUser } = storeToRefs(usersStore);
+
+const { currentUserMemberships, currentUser, userPosts } = storeToRefs(usersStore);
 
 const { loadScript } = useLoadScript();
 
@@ -217,6 +204,7 @@ async function createDonate(data: any, type: 'token' | 'cryptogram') {
 function fetchersData() {
   usersStore.fetchUser(slug.value);
   usersStore.fetchMemberships(slug.value);
+  usersStore.fetchUserPosts(slug.value, 1);
 }
 
 function subscribeClick(membershipId: number) {
