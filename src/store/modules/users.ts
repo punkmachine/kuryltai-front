@@ -24,7 +24,7 @@ export const useUsersStore = defineStore('users', () => {
   function fetchUserPosts(slug: string, page: number = 1) {
     api.posts.getPostsBySlug(slug, page).then(data => {
       userPosts.value = [...userPosts.value, ...data.results];
-    })
+    });
   }
 
   return {
@@ -33,6 +33,6 @@ export const useUsersStore = defineStore('users', () => {
     fetchUserPosts,
     currentUser,
     currentUserMemberships,
-    userPosts
+    userPosts,
   };
 });
