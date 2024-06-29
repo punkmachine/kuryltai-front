@@ -19,13 +19,13 @@
         />
 
         <div
-          class="absolute left-0 bg-white z-50 rounded-xl shadow-md p-6 top-14"
+          class="absolute left-0 top-14 z-50 rounded-xl bg-white p-6 shadow-md"
           :class="{
-            'hidden': !openedSearch,
-            'block': openedSearch,
+            hidden: !openedSearch,
+            block: openedSearch,
           }"
         >
-          <h4 class="mb-2.5 text-base text-gray-900 font-bold">Результаты поиска</h4>
+          <h4 class="mb-2.5 text-base font-bold text-gray-900">Результаты поиска</h4>
 
           <RouterLink
             v-for="user in searchResults"
@@ -34,14 +34,14 @@
             class="flex flex-col"
             @click="openedSearch = false"
           >
-            <div class="py-3.5 border-b border-blue-gray-50 last:border-none flex items-center gap-4">
+            <div class="flex items-center gap-4 border-b border-blue-gray-50 py-3.5 last:border-none">
               <UIAvatar
                 :src="user.avatar_image"
                 size="medium"
               />
 
               <div class="flex flex-col items-center">
-                <p class="text-gray-900 text-sm font-bold">
+                <p class="text-sm font-bold text-gray-900">
                   {{ user.username }}
                 </p>
               </div>
@@ -96,7 +96,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { useDebounceFn } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core';
 
 import { api } from '@/api';
 import { useMyProfileStore } from '@/store';
@@ -114,21 +114,23 @@ const searchResults = ref<any[]>([]);
 const visibleDropdown = ref<boolean>(false);
 const openedSearch = ref<boolean>(false);
 
-watch(() => search.value, () => {
-  if (search.value.length > 2) {
-    fetchSearchResults();
-  } else {
-    searchResults.value = [];
-    openedSearch.value = false;
-  }
-});
+watch(
+  () => search.value,
+  () => {
+    if (search.value.length > 2) {
+      fetchSearchResults();
+    } else {
+      searchResults.value = [];
+      openedSearch.value = false;
+    }
+  },
+);
 
 const fetchSearchResults = useDebounceFn(() => {
-  api.profile.searchProfileByUsername(search.value)
-    .then(data => {
-      openedSearch.value = true;
-      searchResults.value = data.results;
-    });
+  api.profile.searchProfileByUsername(search.value).then(data => {
+    openedSearch.value = true;
+    searchResults.value = data.results;
+  });
 }, 400);
 
 function showProfileDropdown() {
