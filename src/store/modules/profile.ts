@@ -56,12 +56,17 @@ export const useMyProfileStore = defineStore('my-profile', () => {
     posts.value = posts.value.filter(post => post.id !== id);
   }
 
+  function initPosts() {
+    posts.value = [];
+  }
+
   return {
     fetchMyProfile,
     fetchMyCards,
     fetchMyMemberships,
     fetchMyPosts,
     deletePostInStore,
+    initPosts,
     profile,
     profileCards,
     myMemberships,

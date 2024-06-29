@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 
@@ -217,6 +217,10 @@ onMounted(() => {
   getMyMemberships();
   myProfileStore.fetchMyProfile();
   myProfileStore.fetchMyPosts(1);
+});
+
+onBeforeUnmount(() => {
+  myProfileStore.initPosts();
 });
 </script>
 

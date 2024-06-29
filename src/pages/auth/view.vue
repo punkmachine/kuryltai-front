@@ -91,8 +91,13 @@ function authorizeUser(data: IPayloadLogin) {
 }
 
 function successAuthUser(data: any) {
-  Cookies.set('access', data.access_token);
-  Cookies.set('refresh', data.refresh_token);
+  if (data.access) {
+    Cookies.set('access', data.access);
+    Cookies.set('refresh', data.refresh);
+  } else {
+    Cookies.set('access', data.access_token);
+    Cookies.set('refresh', data.refres_token);
+  }
 
   router.push('/');
 }
@@ -158,9 +163,6 @@ function setNewPasswordQuery() {
 
 function googleAuthByRedirectUrl() {
   const query = route.fullPath.replace('step=google-redirect&', '').split('?');
-  console.log("🚀 ~ googleAuthByRedirectUrl ~ query:", query)
-  console.log(route.fullPath);
-
   api.auth.googleAuth(`?${query[1]}`).then(successAuthUser);
 }
 

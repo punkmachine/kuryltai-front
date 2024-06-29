@@ -38,11 +38,16 @@ interface IEmits {
 const props = defineProps<IProps>();
 defineEmits<IEmits>();
 
+// eslint-disable-next-line max-lines-per-function
 const link = computed(() => {
   let id = null;
 
+  // https://www.youtube.com/watch?v=HSMmx4W66tM&ab_channel=ДжоШизо
+
   if (props.src.includes('youtu.be')) {
     id = props.src.replace('https://youtu.be/', '').split('?')[0];
+  } else if (props.src.includes('ab_channel')) {
+    id = props.src.replace('https://www.youtube.com/watch?v=', '').split('&')[0];
   } else if (props.src.includes('watch')) {
     id = props.src.replace('https://www.youtube.com/watch?v=', '');
   } else if (props.src.includes('embed')) {

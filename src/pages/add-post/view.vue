@@ -23,7 +23,7 @@
       >
         <UIImage
           :src="image"
-          :with-delete="isEditPost"
+          with-delete
           @delete="addDeletedImage(image)"
         />
       </div>
@@ -36,7 +36,7 @@
         <UIAudio
           :file-name="isEditPost ? audio : content.audio.audio_file_names[index]"
           :src="audio"
-          :with-delete="isEditPost"
+          with-delete
           @delete="addDeletedAudio(audio)"
         />
       </div>
@@ -49,7 +49,7 @@
         <UIVideo
           :file-name="content.video.video_file_names[index]"
           :src="video"
-          :with-delete="isEditPost"
+          with-delete
           @delete="addDeletedVideo(video)"
         />
       </div>
@@ -61,7 +61,7 @@
       >
         <UIYouTube
           :src="video"
-          :with-delete="isEditPost"
+          with-delete
           @delete="addDeletedYouTube(video)"
         />
       </div>
@@ -74,7 +74,7 @@
         <UIFile
           :name="isEditPost ? file : content.document.document_file_names[index]"
           :src="file"
-          :with-delete="isEditPost"
+          with-delete
           @delete="addDeletedFile(file)"
         />
       </div>
@@ -362,71 +362,88 @@ function addDeletedImage(image: string) {
 
 // eslint-disable-next-line
 function addDeletedAudio(audio: string) {
-  let audioId = null;
+  if (isEditPost.value) {
+    let audioId = null;
 
-  if (editedPost.value.contents.audio?.length) {
-    audioId = editedPost.value.contents.audio.find((audioItem: any) => audioItem.value === audio)?.id;
+    if (editedPost.value.contents.audio?.length) {
+      audioId = editedPost.value.contents.audio.find((audioItem: any) => audioItem.value === audio)?.id;
 
-    if (audioId) {
-      deletedContent.value.push(audioId);
+      if (audioId) {
+        deletedContent.value.push(audioId);
+      }
+    } else {
+      addedContent.audio.audio_file_urls = addedContent.audio.audio_file_urls.filter(
+        (audioStr: string) => audioStr !== audio,
+      );
     }
+    content.audio.audio_file_urls = content.audio.audio_file_urls.filter((audioStr: string) => audioStr !== audio);
   } else {
-    addedContent.audio.audio_file_urls = addedContent.audio.audio_file_urls.filter(
-      (audioStr: string) => audioStr !== audio,
-    );
+    content.audio.audio_file_urls = content.audio.audio_file_urls.filter((audioStr: string) => audioStr !== audio);
   }
-
-  content.audio.audio_file_urls = content.audio.audio_file_urls.filter((audioStr: string) => audioStr !== audio);
 }
 
 // eslint-disable-next-line
 function addDeletedVideo(video: string) {
-  let videoId = null;
+  if (isEditPost.value) {
+    let videoId = null;
 
-  if (editedPost.value.contents.video?.files?.length) {
-    videoId = editedPost.value.contents.video?.files?.find((videoItem: any) => videoItem.value === video)?.id;
+    if (editedPost.value.contents.video?.files?.length) {
+      videoId = editedPost.value.contents.video?.files?.find((videoItem: any) => videoItem.value === video)?.id;
 
-    if (videoId) {
-      deletedContent.value.push(videoId);
+      if (videoId) {
+        deletedContent.value.push(videoId);
+      }
+    } else {
+      addedContent.video.video_file_urls = addedContent.video.video_file_urls.filter(
+        (videoStr: string) => videoStr !== video,
+      );
     }
-  } else {
-    addedContent.video.video_file_urls = addedContent.video.video_file_urls.filter(
-      (videoStr: string) => videoStr !== video,
-    );
-  }
 
-  content.video.video_file_urls = content.video.video_file_urls.filter((videoStr: string) => videoStr !== video);
+    content.video.video_file_urls = content.video.video_file_urls.filter((videoStr: string) => videoStr !== video);
+  } else {
+    content.video.video_file_urls = content.video.video_file_urls.filter((videoStr: string) => videoStr !== video);
+  }
 }
 
 // eslint-disable-next-line
 function addDeletedYouTube(video: string) {
-  let videoId = null;
+  if (isEditPost.value) {
+    let videoId = null;
 
-  if (editedPost.value.contents.video?.urls?.length) {
-    videoId = editedPost.value.contents.video?.urls?.find((videoItem: any) => videoItem.value === video)?.id;
+    if (editedPost.value.contents.video?.urls?.length) {
+      videoId = editedPost.value.contents.video?.urls?.find((videoItem: any) => videoItem.value === video)?.id;
 
-    if (videoId) {
-      deletedContent.value.push(videoId);
+      if (videoId) {
+        deletedContent.value.push(videoId);
+      }
+    } else {
+      addedContent.video.video_urls = addedContent.video.video_urls.filter((videoStr: string) => videoStr !== video);
     }
-  } else {
-    addedContent.video.video_urls = addedContent.video.video_urls.filter((videoStr: string) => videoStr !== video);
-  }
 
-  content.video.video_urls = content.video.video_urls.filter((videoStr: string) => videoStr !== video);
+    content.video.video_urls = content.video.video_urls.filter((videoStr: string) => videoStr !== video);
+  } else {
+    content.video.video_urls = content.video.video_urls.filter((videoStr: string) => videoStr !== video);
+  }
 }
 
 // eslint-disable-next-line
 function addDeletedFile(file: string) {
-  let fileId = null;
+  if (isEditPost.value) {
+    let fileId = null;
 
-  if (editedPost.value.contents.document?.length) {
-    fileId = editedPost.value.contents.document?.find((documentItem: any) => documentItem.value === file)?.id;
+    if (editedPost.value.contents.document?.length) {
+      fileId = editedPost.value.contents.document?.find((documentItem: any) => documentItem.value === file)?.id;
 
-    if (fileId) {
-      deletedContent.value.push(fileId);
+      if (fileId) {
+        deletedContent.value.push(fileId);
+      }
+    } else {
+      addedContent.document.document_file_urls = addedContent.document.document_file_urls.filter(
+        (docStr: string) => docStr !== file,
+      );
     }
-  } else {
-    addedContent.document.document_file_urls = addedContent.document.document_file_urls.filter(
+
+    content.document.document_file_urls = content.document.document_file_urls.filter(
       (docStr: string) => docStr !== file,
     );
   }

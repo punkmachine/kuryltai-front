@@ -29,7 +29,7 @@
             :src="profileStore.profile?.avatar_image"
           />
 
-          <span class="text-sm font-medium text-gray-600">Алекс</span>
+          <span class="text-sm font-medium text-gray-600">{{ profile?.username || '' }}</span>
 
           <div>
             <svg class="h-5 w-5 fill-blue-gray-500">
@@ -64,6 +64,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
 
@@ -72,6 +73,8 @@ import UIAvatar from '@/components/ui/UIAvatar.vue';
 import { goToLogin } from '@/helpers/goToLoginPage';
 
 const profileStore = useMyProfileStore();
+
+const { profile } = storeToRefs(profileStore);
 
 // const search = ref<string>('');
 const visibleDropdown = ref<boolean>(false);
