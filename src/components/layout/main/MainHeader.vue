@@ -11,12 +11,43 @@
         />
       </RouterLink>
 
-      <div>
+      <div class="relative">
         <UIInput
           v-model="search"
           placeholder="Поиск"
           class="w-96"
         />
+
+        <div
+          class="absolute left-0 bg-white z-50 rounded-xl shadow-md p-6 top-14"
+          :class="{
+            'hidden': !openedSearch,
+            'block': openedSearch,
+          }"
+        >
+          <h4 class="mb-2.5 text-base text-gray-900 font-bold">Результаты поиска</h4>
+
+          <RouterLink
+            v-for="user in searchResults"
+            :key="user.profile_uuid"
+            :to="`/user/${user.slug}`"
+            class="flex flex-col"
+            @click="openedSearch = false"
+          >
+            <div class="py-3.5 border-b border-blue-gray-50 last:border-none flex items-center gap-4">
+              <UIAvatar
+                :src="user.avatar_image"
+                size="medium"
+              />
+
+              <div class="flex flex-col items-center">
+                <p class="text-gray-900 text-sm font-bold">
+                  {{ user.username }}
+                </p>
+              </div>
+            </div>
+          </RouterLink>
+        </div>
       </div>
 
       <div
@@ -62,10 +93,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { useDebounceFn } from '@vueuse/core'
 
+import { api } from '@/api';
 import { useMyProfileStore } from '@/store';
 
 import UIInput from '@/components/ui/UIInput.vue';
@@ -77,7 +110,26 @@ const profileStore = useMyProfileStore();
 const { profile } = storeToRefs(profileStore);
 
 const search = ref<string>('');
+const searchResults = ref<any[]>([]);
 const visibleDropdown = ref<boolean>(false);
+const openedSearch = ref<boolean>(false);
+
+watch(() => search.value, () => {
+  if (search.value.length > 2) {
+    fetchSearchResults();
+  } else {
+    searchResults.value = [];
+    openedSearch.value = false;
+  }
+});
+
+const fetchSearchResults = useDebounceFn(() => {
+  api.profile.searchProfileByUsername(search.value)
+    .then(data => {
+      openedSearch.value = true;
+      searchResults.value = data.results;
+    });
+}, 400);
 
 function showProfileDropdown() {
   visibleDropdown.value = !visibleDropdown.value;

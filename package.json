@@ -19,6 +19,7 @@
     "pre-push": "run-p format lint:code:fix"
   },
   "dependencies": {
+    "@vueuse/core": "^10.11.0",
     "axios": "^1.5.1",
     "dayjs": "^1.11.11",
     "js-cookie": "^3.0.5",
