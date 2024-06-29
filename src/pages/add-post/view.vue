@@ -175,6 +175,7 @@
           autocomplete="off"
           placeholder="Ссылка"
           label="Ссылка на YouTube"
+          :disabled="Boolean(currentVideo)"
         />
 
         <div class="divider-with-text">или</div>
@@ -188,6 +189,7 @@
           class="mt-3 w-full justify-center"
           file-type=".mp4,.mov,.mkv"
           emit-full-file
+          :disabled="Boolean(currentYouTube)"
         />
 
         <button
@@ -196,6 +198,7 @@
             'btn--primary': validVideo,
             'btn--secondary': !validVideo,
           }"
+          :disabled="!validVideo"
           @click="addUploadVideo"
         >
           Добавить
@@ -473,6 +476,9 @@ function addUploadVideo() {
   }
 
   uploadVideoModalVisible.value = false;
+  uploadedVideo.value = false;
+  currentUploadVideo.value.name = '';
+  currentUploadVideo.value.url = '';
 }
 
 function closeUploadVideoModal() {

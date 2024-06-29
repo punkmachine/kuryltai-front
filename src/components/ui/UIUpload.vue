@@ -10,6 +10,7 @@
 
     <input
       v-if="!withClick"
+      v-bind="$attrs"
       class="absolute bottom-0 left-0 right-0 top-0 z-50 opacity-0"
       type="file"
       :accept="fileType"

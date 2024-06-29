@@ -11,13 +11,13 @@
         />
       </RouterLink>
 
-      <!-- <div>
+      <div>
         <UIInput
           v-model="search"
           placeholder="Поиск"
           class="w-96"
         />
-      </div> -->
+      </div>
 
       <div
         class="relative cursor-pointer"
@@ -68,7 +68,7 @@ import { storeToRefs } from 'pinia';
 
 import { useMyProfileStore } from '@/store';
 
-// import UIInput from '@/components/ui/UIInput.vue';
+import UIInput from '@/components/ui/UIInput.vue';
 import UIAvatar from '@/components/ui/UIAvatar.vue';
 import { goToLogin } from '@/helpers/goToLoginPage';
 
@@ -76,7 +76,7 @@ const profileStore = useMyProfileStore();
 
 const { profile } = storeToRefs(profileStore);
 
-// const search = ref<string>('');
+const search = ref<string>('');
 const visibleDropdown = ref<boolean>(false);
 
 function showProfileDropdown() {
