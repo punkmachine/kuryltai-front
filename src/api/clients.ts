@@ -11,6 +11,8 @@ const client = axios.create({
 });
 
 function errorToast(error: AxiosError<{ error: { message: string } }>) {
+  if (error.response?.request?.responseURL.includes('check-email')) return;
+
   if (error.response?.data?.error?.message) {
     toast.error(error.response.data.error.message);
   }

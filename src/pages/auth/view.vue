@@ -90,9 +90,9 @@ function authorizeUser(data: IPayloadLogin) {
   api.auth.login(data).then(successAuthUser);
 }
 
-function successAuthUser(data: IResponseLogin) {
-  Cookies.set('access', data.access);
-  Cookies.set('refresh', data.refresh);
+function successAuthUser(data: any) {
+  Cookies.set('access', data.access_token);
+  Cookies.set('refresh', data.refresh_token);
 
   router.push('/');
 }
@@ -158,10 +158,13 @@ function setNewPasswordQuery() {
 
 function googleAuthByRedirectUrl() {
   const query = route.fullPath.replace('step=google-redirect&', '').split('?');
+  console.log("🚀 ~ googleAuthByRedirectUrl ~ query:", query)
+  console.log(route.fullPath);
 
   api.auth.googleAuth(`?${query[1]}`).then(successAuthUser);
 }
 
+// eslint-disable-next-line max-lines-per-function
 onMounted(() => {
   const stepParam = route.query.step as AuthStepEnum | undefined;
 
