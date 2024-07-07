@@ -15,6 +15,7 @@ import '@/router/middlewares/auth';
 
 const app = createApp(App);
 
+
 app.use(createPinia());
 app.use(router);
 // @ts-ignore
