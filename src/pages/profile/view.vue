@@ -26,7 +26,6 @@
           :likes="post.likes_count"
           @delete-post="deletePostClick(post.id)"
           @edit-post="router.push(`/add-post?edited=${[post.id]}`)"
-          @like="likePost(post.id)"
         />
 
         <infinite-loading @infinite="fetchNextPage" />
@@ -148,21 +147,21 @@ async function fetchNextPage($state: any) {
   }
 }
 
-// eslint-disable-next-line
-function likePost(id: number) {
-  api.posts.likePost({ post_id: id }).then(() => {
-    posts.value = posts.value.map(post => {
-      if (post.id !== id) {
-        return post;
-      } else {
-        return {
-          ...post,
-          likes_count: post.likes_count + 1,
-        };
-      }
-    });
-  });
-}
+// // eslint-disable-next-line
+// function likePost(id: number) {
+//   api.posts.likePost({ post_id: id }).then(() => {
+//     posts.value = posts.value.map(post => {
+//       if (post.id !== id) {
+//         return post;
+//       } else {
+//         return {
+//           ...post,
+//           likes_count: post.likes_count + 1,
+//         };
+//       }
+//     });
+//   });
+// }
 
 function addSubscription(data: IAddSubscriptionData) {
   const payload = {

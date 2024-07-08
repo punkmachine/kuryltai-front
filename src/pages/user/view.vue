@@ -21,6 +21,7 @@
           :you-tubes="post.contents.video?.urls.map((item: any) => item.value)"
           :tags="post.tags"
           :likes="post.likes_count"
+          @like="likePost(post.id)"
         />
       </div>
 
@@ -257,6 +258,13 @@ async function subscribe(data: any, type: 'token' | 'cryptogram') {
     // @ts-ignore
     toast.error(error);
   }
+}
+
+// eslint-disable-next-line
+function likePost(id: number) {
+  api.posts.likePost({ post_id: id }).then(() => {
+    usersStore.fetchUserPosts(slug.value, 1);
+  });
 }
 
 onMounted(() => {
