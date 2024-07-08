@@ -35,7 +35,7 @@ export default defineComponent({
             type: 'hidden',
             id: 'termUrl',
             name: 'TermUrl',
-            value: 'http://api-kuryltai.kz/api/v0/payments/complete-3d-secure/',
+            value: 'https://api-kuryltai.kz/api/v0/payments/complete-3d-secure/',
           }),
         ],
       ),
