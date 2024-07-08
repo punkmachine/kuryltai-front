@@ -54,7 +54,6 @@ import SignUp from './components/SignUp.vue';
 import { googleAuthUrl, scopeGoogle } from '@/entities/constants/googleAuth';
 
 import type { IPayloadLogin, IPayloadResetPass, IPayloadSignUp } from '@/entities/types/backend/user/user.payload';
-import type { IResponseLogin } from '@/entities/types/backend/user/user.response';
 import { AuthStepEnum } from './types';
 import type { IResponseStandard } from '@/entities/types/backend/responses';
 

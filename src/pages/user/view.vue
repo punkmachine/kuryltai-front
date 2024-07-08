@@ -122,14 +122,28 @@ async function createCryptogram(cardData: any) {
   return checkout.createPaymentCryptogram(fieldValues);
 }
 
+// eslint-disable-next-line max-lines-per-function
 function createDonateBySavedCard(data: any) {
-  api.payments.makeDonate({
-    card_uuid: data.cardId,
-    amount: data.sum,
-    currency: 'KZT',
-    membership_id: null,
-    profile_uuid: currentUser.value.profile_uuid,
-  });
+  api.payments
+    .makeDonate({
+      card_uuid: data.cardId,
+      amount: data.sum,
+      currency: 'KZT',
+      membership_id: null,
+      profile_uuid: currentUser.value.profile_uuid,
+    })
+    .then(data => {
+      if (!data.success) {
+        toast.error(data.error || 'Произошла ошибка при попытке совершить донат');
+      } else {
+        toast.success('Донат прошёл успешно!');
+      }
+
+      visibleDonateModal.value = false;
+    })
+    .catch(() => {
+      toast.error('Произошла ошибка при попытке совершить донат');
+    });
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -179,6 +193,9 @@ function createDonateByNewCard(data: any, cryptogram: string) {
   api.payments
     .makeDonate(getPayloadForNewCard(data, cryptogram))
     .then(donateByNewCardCallback)
+    .catch(() => {
+      toast.error('Произошла ошибка при попытке совершить донат');
+    })
     .finally(() => {
       visibleDonateModal.value = false;
     });
@@ -250,6 +267,7 @@ async function subscribeByNewCardWrapper(data: any) {
   subscribeByNewCard(data, cryptogram);
 }
 
+// eslint-disable-next-line max-lines-per-function
 async function subscribe(data: any, type: 'token' | 'cryptogram') {
   try {
     if (type === 'cryptogram') {
@@ -259,6 +277,7 @@ async function subscribe(data: any, type: 'token' | 'cryptogram') {
     }
 
     fetchersData();
+    subscribeModalClose();
   } catch (error) {
     // @ts-ignore
     toast.error(error);
