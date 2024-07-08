@@ -264,7 +264,7 @@ async function createCard() {
 
       localStorage.setItem('secureData', JSON.stringify(secureData.value));
       window.open(
-        `${data.AcsUrl}-get?MD=${data.MD}&PaReq=${data.PaReq}&TermUrl=http://kuryltai.kz/api/v0/payments/complete-3d-secure/`,
+        `${data.AcsUrl}-get?MD=${data.MD}&PaReq=${data.PaReq}&TermUrl=https://api-kuryltai.kz/api/v0/payments/complete-3d-secure/`,
         '_self',
       );
     } else if (data.error) {
