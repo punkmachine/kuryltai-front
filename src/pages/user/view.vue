@@ -63,6 +63,7 @@
 </template>
 
 <script lang="ts" setup>
+/* eslint-disable max-lines */
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
