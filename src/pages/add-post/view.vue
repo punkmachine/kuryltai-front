@@ -692,6 +692,7 @@ function postSave() {
   // @ts-ignore
   api.posts.editPostById(payload, route.query.edited).then(() => {
     fetchEditPost();
+    router.push('/');
   });
 }
 
