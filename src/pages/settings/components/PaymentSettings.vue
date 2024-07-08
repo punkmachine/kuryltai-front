@@ -193,11 +193,22 @@ function deleteCardClick(uuid: string) {
   currentCard.value = uuid;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function initPayment() {
   // @ts-ignore
-  checkout = new cp.Checkout({
-    publicId: import.meta.env.VITE_APP_CRYPTO_KEY,
-  });
+  if (window.cp) {
+    // @ts-ignore
+    checkout = new cp.Checkout({
+      publicId: import.meta.env.VITE_APP_CRYPTO_KEY,
+    });
+  } else {
+    setTimeout(() => {
+      // @ts-ignore
+      checkout = new cp.Checkout({
+        publicId: import.meta.env.VITE_APP_CRYPTO_KEY,
+      });
+    }, 1000);
+  }
 }
 
 async function createCryptogram(cardData: any) {
