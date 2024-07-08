@@ -14,6 +14,7 @@
           :heading="post.title"
           :text="post.description"
           :has-access="post.have_access"
+          :access-membership="post.membership[0]"
           :images="post.contents.image?.map((item: any) => item.value)"
           :videos="post.contents.video?.files?.map((item: any) => item.value)"
           :audios="post.contents.audio?.map((item: any) => item.value)"
@@ -22,6 +23,7 @@
           :tags="post.tags"
           :likes="post.likes_count"
           @like="likePost(post.id)"
+          @subscribe="subscribeClick"
         />
       </div>
 
@@ -254,6 +256,8 @@ async function subscribe(data: any, type: 'token' | 'cryptogram') {
     } else {
       subscribeBySavedCard(data);
     }
+
+    fetchersData();
   } catch (error) {
     // @ts-ignore
     toast.error(error);

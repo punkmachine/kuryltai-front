@@ -95,10 +95,11 @@
       </button>
 
       <SubscriptionsCard
-        v-if="!hasAccess"
-        title="Меценат"
+        v-if="!hasAccess && accessMembership"
+        :title="accessMembership.name"
         subtitle="Нужен уровень подписки"
         class="!absolute left-1/2 top-1/2 w-80 -translate-x-1/2 -translate-y-1/2"
+        @subscribe="$emit('subscribe', accessMembership.id)"
       />
     </div>
 
@@ -154,6 +155,7 @@ interface IProps {
   tags?: string[];
   hasAccess?: boolean;
   isMyPost?: boolean;
+  accessMembership?: any;
   likes: number;
 }
 
@@ -161,6 +163,7 @@ interface IEmits {
   (e: 'delete-post'): void;
   (e: 'edit-post'): void;
   (e: 'like'): void;
+  (e: 'subscribe', id: number): void;
 }
 
 defineProps<IProps>();
@@ -194,5 +197,9 @@ const fullContentVisible = ref(false);
 
 .post__content--no-access .post__content-full-btn {
   @apply hidden;
+}
+
+.post__content--no-access {
+  @apply min-h-52;
 }
 </style>
