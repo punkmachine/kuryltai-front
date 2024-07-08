@@ -110,7 +110,7 @@
 
       <template #body>
         <div class="flex flex-col gap-3.5 text-base text-blue-gray-500">
-          <p>Текст по удалению карты</p>
+          <p>Вы точно хотите удалить карту?</p>
         </div>
       </template>
 
