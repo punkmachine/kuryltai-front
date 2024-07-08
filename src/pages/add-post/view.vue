@@ -312,6 +312,10 @@ watch(
   () => currentImage.value,
   () => {
     if (currentImage.value) {
+      if (isEditPost.value) {
+        addedContent.image.image_files.push(currentImage.value);
+      }
+
       content.image.image_files.push(currentImage.value);
     }
 
