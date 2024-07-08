@@ -37,6 +37,11 @@ function requestError(error: AxiosError): Promise<never> {
 }
 
 function successResponse<T>(data: AxiosResponse<T>): T {
+  if (data.request.responseURL?.includes('/like')) {
+    // @ts-ignore
+    return data.status;
+  }
+
   return data.data;
 }
 

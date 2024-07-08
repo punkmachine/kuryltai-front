@@ -260,10 +260,28 @@ async function subscribe(data: any, type: 'token' | 'cryptogram') {
   }
 }
 
-// eslint-disable-next-line
+// eslint-disable-next-line max-lines-per-function
 function likePost(id: number) {
-  api.posts.likePost({ post_id: id }).then(() => {
-    usersStore.fetchUserPosts(slug.value, 1);
+  // eslint-disable-next-line max-lines-per-function
+  api.posts.likePost({ post_id: id }).then(data => {
+    // eslint-disable-next-line max-lines-per-function
+    userPosts.value = userPosts.value.map(post => {
+      if (post.id === id) {
+        if (data === 204) {
+          return {
+            ...post,
+            likes_count: post.likes_count - 1,
+          };
+        } else {
+          return {
+            ...post,
+            likes_count: post.likes_count + 1,
+          };
+        }
+      } else {
+        return post;
+      }
+    });
   });
 }
 

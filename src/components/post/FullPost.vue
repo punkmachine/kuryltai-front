@@ -79,7 +79,7 @@
 
       <div
         v-if="text"
-        class="my-6 text-sm text-gray-900 break-all"
+        class="my-6 break-all text-sm text-gray-900"
       >
         {{ text }}
       </div>
