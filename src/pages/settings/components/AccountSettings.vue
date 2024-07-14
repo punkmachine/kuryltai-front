@@ -53,12 +53,12 @@
         required
       />
 
-      <UIInput
+      <!-- <UIInput
         v-model="profileData.slug"
         label="Ссылка профиля"
         placeholder="Ссылка профиля"
         required
-      />
+      /> -->
 
       <UIInput
         v-model="profileData.headLine"
@@ -66,6 +66,23 @@
         placeholder="head line"
         required
       />
+
+      <UIInput
+        v-model="profileData.slug"
+        label="Скопируйте ссылку для приглашения новых подписчиков"
+        :placeholder="`https://kurylrai.kz/user/${profileData.slug}`"
+        constant-value="https://kurylrai.kz/user/"
+        required
+      >
+        <template #after-inner>
+          <button
+            @click="copySlug"
+            class="button h-9 rounded-md bg-gray-900 px-2 text-white"
+          >
+            КОПИРОВАТЬ
+          </button>
+        </template>
+      </UIInput>
 
       <button
         class="btn btn--primary mt-4 w-max px-10 uppercase"
@@ -80,6 +97,7 @@
 <script lang="ts" setup>
 import { ref, watch, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
 
 import { useMyProfileStore } from '@/store';
 import { api } from '@/api';
@@ -139,6 +157,17 @@ function setInitialProfileData() {
   profileData.value.headLine = profile.value.head_line;
   avatarImage.value = profile.value.avatar_image;
   coverImage.value = profile.value.cover_image;
+}
+
+function copySlug() {
+  navigator.clipboard
+    .writeText(`https://kurylrai.kz/user/${profileData.value.slug}`)
+    .then(() => {
+      toast.success('Ссылка успешно скопирована!');
+    })
+    .catch(() => {
+      toast.error('Произошла ошибка копирования.');
+    });
 }
 
 onMounted(() => {

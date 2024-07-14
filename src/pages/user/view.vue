@@ -108,11 +108,14 @@ const userSlug = computed(() => {
   return route.params.slug;
 });
 
-watch(() => userSlug.value, () => {
-  slug.value = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
-  usersStore.initData();
-  fetchersData();
-});
+watch(
+  () => userSlug.value,
+  () => {
+    slug.value = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
+    usersStore.initData();
+    fetchersData();
+  },
+);
 
 function initPayment() {
   // @ts-ignore
