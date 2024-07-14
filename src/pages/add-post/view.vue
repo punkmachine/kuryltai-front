@@ -14,6 +14,7 @@
         v-model:file="currentFile"
         v-model:audio="currentAudio"
         @click="uploadFilesClick"
+        :loading="loading"
       />
 
       <div
@@ -161,6 +162,7 @@
 
     <UIModal
       :visible="uploadVideoModalVisible"
+      :loading="loading"
       class="w-108"
       @close="closeUploadVideoModal"
     >

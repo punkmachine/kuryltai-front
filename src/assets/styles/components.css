@@ -41,12 +41,16 @@
       0px 2px 4px -2px rgba(38, 50, 56, 0.2);
   }
 
-  .upload > svg {
+  .upload svg {
     @apply h-4 w-4 fill-blue-gray-900;
   }
 
-  .upload:hover > svg {
+  .upload:hover svg {
     @apply fill-white;
+  }
+
+  .upload--loading {
+    @apply pointer-events-none opacity-80 blur-[1px];
   }
 
   /* select */
@@ -135,5 +139,26 @@
   input[type='radio'].radio-group__input:checked::after {
     @apply absolute left-1/2 top-1/2 block h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-gray-900;
     content: '';
+  }
+
+  .loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #000;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }

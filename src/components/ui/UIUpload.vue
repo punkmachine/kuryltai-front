@@ -1,22 +1,35 @@
 <template>
-  <button
-    @click="uploadClick"
-    class="upload"
-  >
-    <svg>
-      <use :xlink:href="`${icons}#${iconUpload}`"></use>
-    </svg>
-    <span>{{ labelUpload }}</span>
-
-    <input
-      v-if="!withClick"
+  <div class="relative">
+    <button
       v-bind="$attrs"
-      class="absolute bottom-0 left-0 right-0 top-0 z-50 opacity-0"
-      type="file"
-      :accept="fileType"
-      @change="handleFileChange"
-    />
-  </button>
+      @click="uploadClick"
+      class="upload"
+      :class="{
+        'upload--loading': loading,
+      }"
+    >
+      <svg>
+        <use :xlink:href="`${icons}#${iconUpload}`"></use>
+      </svg>
+      <span>{{ labelUpload }}</span>
+
+      <input
+        v-if="!withClick"
+        v-bind="$attrs"
+        class="absolute bottom-0 left-0 right-0 top-0 z-50 opacity-0"
+        type="file"
+        :accept="fileType"
+        @change="handleFileChange"
+      />
+    </button>
+
+    <div
+      v-if="loading"
+      class="absolute right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2 z-50 w-6 h-6"
+    >
+      <div class="loader !w-6 !h-6 !border-2"></div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -31,6 +44,7 @@ interface IProps {
   modelValue?: any;
   emitFullFile?: boolean;
   withClick?: boolean;
+  loading?: boolean;
 }
 
 interface IEmits {
