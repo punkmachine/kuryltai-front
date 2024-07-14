@@ -27,10 +27,16 @@ export const useUsersStore = defineStore('users', () => {
     });
   }
 
+  function initData() {
+    userPosts.value = [];
+    currentUserMemberships.value = [];
+  }
+
   return {
     fetchUser,
     fetchMemberships,
     fetchUserPosts,
+    initData,
     currentUser,
     currentUserMemberships,
     userPosts,

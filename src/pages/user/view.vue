@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 /* eslint-disable max-lines */
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
@@ -103,6 +103,16 @@ let checkout: any = null;
 //       usersStore.fetchUser(slug.value);
 //     });
 // }
+
+const userSlug = computed(() => {
+  return route.params.slug;
+});
+
+watch(() => userSlug.value, () => {
+  slug.value = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
+  usersStore.initData();
+  fetchersData();
+});
 
 function initPayment() {
   // @ts-ignore
