@@ -4,7 +4,6 @@
       <p>Все права защищены © {{ currentYear }} Kuryltai</p>
     </div>
     <div class="flex items-center gap-7">
-      <!-- @todo: router link -->
       <RouterLink to="/terms-use">Условия пользования</RouterLink>
       <RouterLink to="/privacy">Политика конфиденциальности</RouterLink>
       <a href="#">Контакты</a>
