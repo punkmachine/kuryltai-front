@@ -6,6 +6,7 @@
     <div class="flex items-center gap-7">
       <RouterLink to="/terms-use">Условия пользования</RouterLink>
       <RouterLink to="/privacy">Политика конфиденциальности</RouterLink>
+      <RouterLink to="/payment-terms">Безопасные платежи</RouterLink>
       <a href="#">Контакты</a>
     </div>
   </footer>
