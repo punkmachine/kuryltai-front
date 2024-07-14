@@ -64,7 +64,11 @@
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
 
-      <div v-if="$slots['after-inner']" data-slot="after-inner" class="absolute right-2 top-1/2 -translate-y-1/2">
+      <div
+        v-if="$slots['after-inner']"
+        data-slot="after-inner"
+        class="absolute right-2 top-1/2 -translate-y-1/2"
+      >
         <slot name="after-inner"></slot>
       </div>
       <slot name="inner-icon-right"></slot>

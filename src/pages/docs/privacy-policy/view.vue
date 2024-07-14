@@ -186,10 +186,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'DeliveryPolicyView',
-};
+<script lang="ts" setup>
 </script>
 
 <style scoped>
