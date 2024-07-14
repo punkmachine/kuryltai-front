@@ -67,11 +67,30 @@ const router = createRouter({
       },
     },
     {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import('@/pages/docs/privacy-policy/view.vue'),
+      meta: {
+        layout: 'empty',
+        requiresAuth: false,
+      },
+    },
+    {
+      path: '/terms-use',
+      name: 'terms-use',
+      component: () => import('@/pages/docs/terms-use/view.vue'),
+      meta: {
+        layout: 'empty',
+        requiresAuth: false,
+      },
+    },
+    {
       path: '/:catchAll(.*)',
       name: 'not-found',
       component: () => import('@/pages/404/view.vue'),
       meta: {
         layout: 'empty',
+        requiresAuth: false,
       },
     },
   ],

@@ -24,7 +24,6 @@
 import MainHeader from '@/components/layout/main/MainHeader.vue';
 import MainSidebar from '@/components/layout/main/MainSidebar.vue';
 import AuthFooter from '@/components/layout/auth/AuthFooter.vue';
-
 </script>
 
 <style scoped>
@@ -56,7 +55,7 @@ main {
 }
 
 .main-footer__wrapper {
-  @apply bg-gray-200 flex justify-center;
+  @apply flex justify-center bg-gray-200;
 }
 
 .main-footer {

@@ -5,8 +5,8 @@
     </div>
     <div class="flex items-center gap-7">
       <!-- @todo: router link -->
-      <a href="#">Условия пользования</a>
-      <a href="#">Политика конфиденциальности</a>
+      <RouterLink to="/terms-use">Условия пользования</RouterLink>
+      <RouterLink to="/privacy">Политика конфиденциальности</RouterLink>
       <a href="#">Контакты</a>
     </div>
   </footer>
@@ -14,6 +14,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const currentYear = ref<number>(new Date().getFullYear());
 </script>
