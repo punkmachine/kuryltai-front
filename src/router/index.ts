@@ -84,7 +84,7 @@ const router = createRouter({
         requiresAuth: false,
       },
     },
-        {
+    {
       path: '/payment-terms',
       name: 'payment-terms',
       component: () => import('@/pages/docs/payment-terms/view.vue'),
