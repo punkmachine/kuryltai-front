@@ -80,7 +80,7 @@ defineEmits<IEmits>();
 }
 
 .modal {
-  @apply fixed flex flex-col left-1/2 top-1/2 z-50  -translate-x-1/2 -translate-y-1/2  rounded-lg bg-white px-5 py-6;
+  @apply fixed left-1/2 top-1/2 z-50 flex -translate-x-1/2  -translate-y-1/2 flex-col  rounded-lg bg-white px-5 py-6;
 }
 
 .modal__content {

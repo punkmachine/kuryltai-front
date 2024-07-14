@@ -13,12 +13,18 @@
         </div>
       </div>
     </main>
+
+    <div class="main-footer__wrapper">
+      <AuthFooter class="main-footer" />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import MainHeader from '@/components/layout/main/MainHeader.vue';
 import MainSidebar from '@/components/layout/main/MainSidebar.vue';
+import AuthFooter from '@/components/layout/auth/AuthFooter.vue';
+
 </script>
 
 <style scoped>
@@ -47,6 +53,14 @@ import MainSidebar from '@/components/layout/main/MainSidebar.vue';
 
 main {
   min-width: 100%;
+}
+
+.main-footer__wrapper {
+  @apply bg-gray-200 flex justify-center;
+}
+
+.main-footer {
+  @apply max-w-6xl;
 }
 
 @media (min-width: 1280px) {
