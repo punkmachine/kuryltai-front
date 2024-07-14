@@ -25,9 +25,9 @@
 
     <div
       v-if="loading"
-      class="absolute right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2 z-50 w-6 h-6"
+      class="absolute right-1/2 top-1/2 z-50 h-6 w-6 -translate-y-1/2 translate-x-1/2"
     >
-      <div class="loader !w-6 !h-6 !border-2"></div>
+      <div class="loader !h-6 !w-6 !border-2"></div>
     </div>
   </div>
 </template>

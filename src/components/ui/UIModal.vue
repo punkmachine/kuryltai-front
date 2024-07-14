@@ -16,13 +16,16 @@
         v-bind="$attrs"
         class="modal"
       >
-        <div v-if="loading" class="absolute right-1/2 top-1/2 translate-x-1/2 -translate-y-1/2 z-50">
+        <div
+          v-if="loading"
+          class="absolute right-1/2 top-1/2 z-50 -translate-y-1/2 translate-x-1/2"
+        >
           <div class="loader"></div>
         </div>
 
         <div
           :class="{
-            'blur-[1px] pointer-events-none': loading,
+            'pointer-events-none blur-[1px]': loading,
           }"
         >
           <div

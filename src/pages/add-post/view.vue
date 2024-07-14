@@ -356,7 +356,7 @@ watch(
 function addDeletedImage(image: string) {
   let imgId = null;
 
-  if (editedPost.value.contents.image.length) {
+  if (editedPost.value.contents?.image?.length) {
     imgId = editedPost.value.contents.image.find((img: any) => img.value === image)?.id;
 
     if (imgId) {
