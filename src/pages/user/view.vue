@@ -323,12 +323,12 @@ function likePost(id: number) {
 }
 
 onMounted(() => {
-  loadScript('https://checkout.cloudpayments.ru/checkout.js');
+  // loadScript('https://checkout.cloudpayments.ru/checkout.js');
   myProfileStore.fetchMyCards();
 
-  setTimeout(() => {
-    initPayment();
-  }, 2000);
+  // setTimeout(() => {
+  //   initPayment();
+  // }, 2000);
 
   slug.value = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
   fetchersData();
