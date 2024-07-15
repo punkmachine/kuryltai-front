@@ -2,4 +2,8 @@
   h1 {
     @apply text-center text-xl font-semibold text-gray-900;
   }
+
+  html {
+    @apply break-all;
+  }
 }
