@@ -70,8 +70,8 @@
       <UIInput
         v-model="profileData.slug"
         label="Скопируйте ссылку для приглашения новых подписчиков"
-        :placeholder="`https://kurylrai.kz/user/${profileData.slug}`"
-        constant-value="https://kurylrai.kz/user/"
+        :placeholder="`https://kuryltai.kz/user/${profileData.slug}`"
+        constant-value="https://kuryltai.kz/user/"
         required
       >
         <template #after-inner>
@@ -161,7 +161,7 @@ function setInitialProfileData() {
 
 function copySlug() {
   navigator.clipboard
-    .writeText(`https://kurylrai.kz/user/${profileData.value.slug}`)
+    .writeText(`https://kuryltai.kz/user/${profileData.value.slug}`)
     .then(() => {
       toast.success('Ссылка успешно скопирована!');
     })

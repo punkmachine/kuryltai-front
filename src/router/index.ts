@@ -85,6 +85,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/payment-terms',
+      name: 'payment-terms',
+      component: () => import('@/pages/docs/payment-terms/view.vue'),
+      meta: {
+        layout: 'empty',
+        requiresAuth: false,
+      },
+    },
+    {
       path: '/:catchAll(.*)',
       name: 'not-found',
       component: () => import('@/pages/404/view.vue'),
