@@ -4,7 +4,7 @@ import type { AxiosInstance } from 'axios';
 export const payments = (client: AxiosInstance) => {
   return {
     getPaymentsCards: (): Promise<any> => {
-      return client.get('/payments/cards');
+      return client.get('/payments/cards/');
     },
     // createPaymentsCard: (payload: any): Promise<any> => {
     //   return client.post('/payments/cards/', payload);

@@ -283,7 +283,7 @@ function deleteCard() {
 }
 
 onMounted(() => {
-  loadScript('https://checkout.cloudpayments.ru/checkout.js');
+  loadScript('https://checkout.cloudpayments.ru/checkout.js', 'checkout');
 
   setTimeout(() => {
     initPayment();
