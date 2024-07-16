@@ -60,7 +60,9 @@
             :src="profileStore.profile?.avatar_image"
           />
 
-          <span class="text-sm font-medium text-gray-600">{{ profile?.username || '' }}</span>
+          <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-gray-600">{{
+            profile?.username || ''
+          }}</span>
 
           <div>
             <svg class="h-5 w-5 fill-blue-gray-500">

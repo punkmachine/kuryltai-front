@@ -27,7 +27,9 @@
         <h1 class="profile__name">{{ profileData?.value?.username }}</h1>
 
         <div class="profile__meta">
-          <span>{{ profileData?.value?.head_line }}</span>
+          <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap">{{
+            profileData?.value?.head_line
+          }}</span>
           •
           <span>{{ profileData?.value?.subscribers_count }} подписчиков</span>
           •
@@ -161,7 +163,7 @@ const profileData = computed(() => {
 }
 
 .profile__name {
-  @apply text-left text-2xl font-semibold text-gray-900;
+  @apply break-all text-left text-2xl font-semibold text-gray-900;
 }
 
 .profile__meta {

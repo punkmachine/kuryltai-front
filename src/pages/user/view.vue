@@ -323,7 +323,7 @@ function likePost(id: number) {
 }
 
 onMounted(() => {
-  loadScript('https://checkout.cloudpayments.ru/checkout.js');
+  loadScript('https://checkout.cloudpayments.ru/checkout.js', 'checkout');
   myProfileStore.fetchMyCards();
 
   setTimeout(() => {

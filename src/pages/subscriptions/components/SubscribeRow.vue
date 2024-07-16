@@ -7,7 +7,7 @@
       />
 
       <div class="flex flex-col">
-        <span class="text-sm font-medium text-gray-900">{{ userName }}</span>
+        <span class="break-all text-sm font-medium text-gray-900">{{ userName }}</span>
         <span class="text-sm text-blue-gray-500">Отслеживание</span>
       </div>
     </div>
