@@ -93,7 +93,7 @@
           <br />
           Адрес: Западно-Казахстанская область, Уральск Г.А., Г.Уральск, Микрорайон 4, Дом 2, КВ. 10
           <br />
-          Электронная почта: <a href="mailto:support@kuryltai.kz">support@kuryltai.kz</a>
+          Электронная почта: <a href="mailto:team@kuryltai.kz">team@kuryltai.kz</a>
         </p>
         <p>Эта Политика конфиденциальности вступает в силу с [дата].</p>
       </div>
