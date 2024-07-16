@@ -65,7 +65,7 @@
           Я согласен(-а) с
           <a
             class="text-gray-900 underline"
-            href="#"
+            href="/terms-use"
             >Условиями использования</a
           >
         </p>
