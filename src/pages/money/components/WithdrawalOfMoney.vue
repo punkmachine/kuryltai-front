@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h2 class="text-center text-xl font-bold text-gray-900">Баланс: {{ balance }} тг</h2>
+
     <UIInput
       v-model="sum"
       label="Введите сумму, тг."
