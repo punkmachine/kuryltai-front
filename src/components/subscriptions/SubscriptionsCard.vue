@@ -38,7 +38,7 @@
     </div>
 
     <p
-      class="text-gray-900"
+      class="text-gray-900 break-all"
       :class="{
         'text-xs font-medium': !isFull,
         'text-sm font-semibold': isFull,

@@ -10,7 +10,7 @@
     />
 
     <div class="mb-4">
-      <h3 class="text-xl font-medium text-gray-900">{{ heading }}</h3>
+      <h3 class="text-xl font-medium text-gray-900 break-all">{{ heading }}</h3>
     </div>
 
     <div

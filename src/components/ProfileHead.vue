@@ -161,7 +161,7 @@ const profileData = computed(() => {
 }
 
 .profile__name {
-  @apply text-left text-2xl font-semibold text-gray-900;
+  @apply text-left text-2xl font-semibold text-gray-900 break-all;
 }
 
 .profile__meta {
