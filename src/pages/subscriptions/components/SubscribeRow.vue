@@ -24,14 +24,14 @@
     </div>
 
     <div class="flex items-center">
-      <p class="text-sm text-blue-gray-500">{{ readableDate }}</p>
+      <p class="text-sm text-blue-gray-500">{{ status === 1 ? readableDate : '-' }}</p>
     </div>
 
     <div class="flex items-center">
       <p class="text-sm text-blue-gray-500">{{ getFormatSum(sum) }}</p>
     </div>
 
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between" v-if="status === 1">
       <button @click="$emit('open-settings')">
         <svg class="h-5 w-5">
           <use xlink:href="@/assets/icons/sprites/btns.svg#settings"></use>

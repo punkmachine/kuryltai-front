@@ -80,7 +80,7 @@
           <RouterLink
             to="/money"
             class="header__dropdown-item"
-            >Денюжки</RouterLink
+            >Баланс</RouterLink
           >
           <button
             class="header__dropdown-item text-left"
