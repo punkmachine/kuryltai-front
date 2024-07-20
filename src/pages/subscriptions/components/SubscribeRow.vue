@@ -31,7 +31,10 @@
       <p class="text-sm text-blue-gray-500">{{ getFormatSum(sum) }}</p>
     </div>
 
-    <div class="flex items-center justify-between" v-if="status === 1">
+    <div
+      class="flex items-center justify-between"
+      v-if="status === 1"
+    >
       <button @click="$emit('open-settings')">
         <svg class="h-5 w-5">
           <use xlink:href="@/assets/icons/sprites/btns.svg#settings"></use>
