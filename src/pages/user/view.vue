@@ -97,13 +97,6 @@ const secureData = ref<any>(JSON.parse(localStorage.getItem('secureData') || '{}
 const slug = ref<string>('');
 let checkout: any = null;
 
-// function subscribeUser() {
-//   api.profile.toggleFollowProfile(slug.value)
-//     .then(data => {
-//       usersStore.fetchUser(slug.value);
-//     });
-// }
-
 const userSlug = computed(() => {
   return route.params.slug;
 });
@@ -111,6 +104,7 @@ const userSlug = computed(() => {
 watch(
   () => userSlug.value,
   () => {
+    console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;userSlug changed:', userSlug.value);
     slug.value = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
     usersStore.initData();
     fetchersData();
