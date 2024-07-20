@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useDebounceFn } from '@vueuse/core';
@@ -142,12 +142,6 @@ function showProfileDropdown() {
 function logout() {
   goToLogin();
 }
-
-onMounted(() => {
-  if (!profileStore.profile) {
-    profileStore.fetchMyProfile();
-  }
-});
 </script>
 
 <style scoped>

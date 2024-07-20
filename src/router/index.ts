@@ -20,6 +20,7 @@ const router = createRouter({
       component: AuthPage,
       meta: {
         layout: 'auth',
+        requiresAuth: false,
       },
     },
     {
@@ -28,6 +29,7 @@ const router = createRouter({
       component: () => import('@/pages/user/view.vue'),
       meta: {
         layout: 'main',
+        requiresAuth: false,
       },
     },
     {
