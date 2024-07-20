@@ -46,12 +46,12 @@
         required
       />
 
-<!--      <UIInput-->
-<!--        v-model="profileData.description"-->
-<!--        label="Описание профиля"-->
-<!--        placeholder="Описание профиля"-->
-<!--        required-->
-<!--      />-->
+      <!--      <UIInput-->
+      <!--        v-model="profileData.description"-->
+      <!--        label="Описание профиля"-->
+      <!--        placeholder="Описание профиля"-->
+      <!--        required-->
+      <!--      />-->
 
       <!-- <UIInput
         v-model="profileData.slug"
