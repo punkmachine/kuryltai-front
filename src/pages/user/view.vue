@@ -104,7 +104,6 @@ const userSlug = computed(() => {
 watch(
   () => userSlug.value,
   () => {
-    console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;userSlug changed:', userSlug.value);
     slug.value = Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug;
     usersStore.initData();
     fetchersData();
