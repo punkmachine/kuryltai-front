@@ -38,7 +38,7 @@
         <UIAudio
           v-for="audio in audios"
           :key="audio"
-          :file-name="audio.split('/').pop()"
+          :file-name="audio?.split('/').pop() ?? ''"
           :src="audio"
         />
       </div>
@@ -72,7 +72,7 @@
         <UIFile
           v-for="file in files"
           :key="file"
-          :name="file.split('/').pop()"
+          :name="file?.split('/').pop() ?? ''"
           :src="file"
         />
       </div>
@@ -158,8 +158,11 @@ interface IProps {
 
 interface IEmits {
   (e: 'delete-post'): void;
+
   (e: 'edit-post'): void;
+
   (e: 'like'): void;
+
   (e: 'subscribe', id: number): void;
 }
 
