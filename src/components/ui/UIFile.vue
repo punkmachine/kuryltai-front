@@ -1,13 +1,22 @@
 <template>
-  <div class="relative flex items-center gap-2 rounded-lg border border-solid border-blue-gray-100 p-3.5" @click="downloadFile">
-    <div>
+  <div class="relative flex items-center gap-2 rounded-lg border border-solid border-blue-gray-100 p-3.5">
+    <div class="flex items-center">
       <svg class="h-9 w-9">
         <use xlink:href="@/assets/icons/sprites/inputs.svg#file"></use>
       </svg>
     </div>
-    <div>
+    <div class="flex-1">
       <p class="text-xs font-medium text-gray-900">{{ name }}</p>
     </div>
+
+    <!-- New download button with img element for the icon -->
+    <button
+      @click.stop="downloadFile"
+      class="absolute right-10 top-1/2 transform -translate-y-1/2 flex items-center justify-center"
+      style="width: 24px; height: 24px;"
+    >
+      <img src="@/assets/images/download.png" alt="Download" class="h-6 w-6" />
+    </button>
 
     <button
       v-if="withDelete"
@@ -45,4 +54,16 @@ const downloadFile = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+button img {
+  display: block;
+  margin: auto;
+}
+</style>
