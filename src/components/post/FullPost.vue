@@ -20,27 +20,67 @@
         'post__content--no-access': !hasAccess,
       }"
     >
-      <div v-if="images?.length" class="mb-6 flex flex-col gap-2">
-        <UIImage v-for="image in images" :key="image" :src="image" />
+      <div
+        v-if="images?.length"
+        class="mb-6 flex flex-col gap-2"
+      >
+        <UIImage
+          v-for="image in images"
+          :key="image"
+          :src="image"
+        />
       </div>
 
-      <div v-if="audios?.length" class="flex flex-col gap-2">
-        <UIAudio v-for="audio in audios" :key="audio" :file-name="audio.split('/').pop()" :src="audio" />
+      <div
+        v-if="audios?.length"
+        class="flex flex-col gap-2"
+      >
+        <UIAudio
+          v-for="audio in audios"
+          :key="audio"
+          :file-name="audio.split('/').pop()"
+          :src="audio"
+        />
       </div>
 
-      <div v-if="videos?.length" class="mt-6 flex flex-col gap-2">
-        <UIVideo v-for="video in videos" :key="video" :src="video" />
+      <div
+        v-if="videos?.length"
+        class="mt-6 flex flex-col gap-2"
+      >
+        <UIVideo
+          v-for="video in videos"
+          :key="video"
+          :src="video"
+        />
       </div>
 
-      <div v-if="youTubes?.length" class="mt-6 flex flex-col gap-2">
-        <UIYouTube v-for="video in youTubes" :key="video" :src="video" />
+      <div
+        v-if="youTubes?.length"
+        class="mt-6 flex flex-col gap-2"
+      >
+        <UIYouTube
+          v-for="video in youTubes"
+          :key="video"
+          :src="video"
+        />
       </div>
 
-      <div v-if="files?.length" class="mt-6 flex flex-col gap-2">
-        <UIFile v-for="file in files" :key="file" :name="file.split('/').pop()" :src="file" />
+      <div
+        v-if="files?.length"
+        class="mt-6 flex flex-col gap-2"
+      >
+        <UIFile
+          v-for="file in files"
+          :key="file"
+          :name="file.split('/').pop()"
+          :src="file"
+        />
       </div>
 
-      <div v-if="text" class="my-6 break-all text-sm text-gray-900">
+      <div
+        v-if="text"
+        class="my-6 break-all text-sm text-gray-900"
+      >
         {{ text }}
       </div>
 
@@ -65,13 +105,19 @@
       v-if="tags?.length"
       class="mt-6 flex flex-wrap items-center gap-2 border-b border-solid border-blue-gray-100 pb-3.5 pl-3"
     >
-      <UITag v-for="tag in tags" :key="tag">
+      <UITag
+        v-for="tag in tags"
+        :key="tag"
+      >
         {{ tag }}
       </UITag>
     </div>
 
     <div class="mt-3 flex items-center gap-6">
-      <button class="flex items-center gap-1" @click="$emit('like')">
+      <button
+        class="flex items-center gap-1"
+        @click="$emit('like')"
+      >
         <svg class="h-5 w-5">
           <use xlink:href="@/assets/icons/sprites/btns.svg#heart"></use>
         </svg>

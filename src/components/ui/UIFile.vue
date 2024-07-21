@@ -9,13 +9,16 @@
       <p class="text-xs font-medium text-gray-900">{{ name }}</p>
     </div>
 
-    <!-- New download button with img element for the icon -->
     <button
       @click.stop="downloadFile"
-      class="absolute right-10 top-1/2 transform -translate-y-1/2 flex items-center justify-center"
-      style="width: 24px; height: 24px;"
+      class="absolute right-10 top-1/2 flex -translate-y-1/2 transform items-center justify-center"
+      style="width: 24px; height: 24px"
     >
-      <img src="@/assets/images/download.png" alt="Download" class="h-6 w-6" />
+      <img
+        src="@/assets/images/download.png"
+        alt="Download"
+        class="h-6 w-6"
+      />
     </button>
 
     <button
