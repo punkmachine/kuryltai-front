@@ -161,7 +161,6 @@ const postsCountText = computed(() => {
 });
 </script>
 
-
 <style scoped>
 .profile__head {
   @apply rounded-lg bg-white shadow-standard;

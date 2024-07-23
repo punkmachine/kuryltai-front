@@ -26,7 +26,7 @@ module.exports = {
       skipComments: true,
     }], // максимальное количество строк в файле
     'max-lines-per-function': ['error', {
-      max: 12,
+      max: 15,
       skipBlankLines: true,
       skipComments: true,
       IIFEs: false,
