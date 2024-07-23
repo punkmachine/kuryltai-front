@@ -95,8 +95,7 @@
             to="/money"
             class="header__dropdown-item"
           >Баланс
-          </RouterLink
-          >
+          </RouterLink>
           <button
             class="header__dropdown-item text-left"
             @click="logout"

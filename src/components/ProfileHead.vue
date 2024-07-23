@@ -1,16 +1,15 @@
 <template>
   <article class="profile__head">
     <div class="profile__cover">
-      <div
-        v-if="!profileData?.value?.cover_image"
-        class="profile__cover-placeholder"
-      >
-        placeholder
-      </div>
+      <img
+        v-if="profileData?.value?.cover_image"
+        :src="profileData?.value?.cover_image"
+        alt="cover image"
+      />
       <img
         v-else
-        :src="profileData?.value?.cover_image"
-        alt=""
+        src="@/assets/images/default-cover.png"
+        alt="default-cover"
       />
     </div>
 
