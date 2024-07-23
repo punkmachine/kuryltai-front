@@ -36,8 +36,15 @@
           >
             <div class="flex items-center gap-4 border-b border-blue-gray-50 py-3.5 last:border-none">
               <UIAvatar
+                v-if="user.avatar_image"
                 :src="user.avatar_image"
                 size="medium"
+              />
+              <img
+                v-else
+                src="@/assets/images/default-avatar.png"
+                alt="Default avatar"
+                class="profile__avatar"
               />
 
               <div class="flex flex-col items-center">
@@ -56,13 +63,20 @@
       >
         <div class="flex items-center gap-1.5">
           <UIAvatar
+            v-if="profileStore.profile?.avatar_image"
             size="medium"
             :src="profileStore.profile?.avatar_image"
           />
+          <img
+            v-else
+            src="@/assets/images/default-avatar.png"
+            alt="Default avatar"
+            class="profile__avatar"
+          />
 
           <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-gray-600">{{
-            profile?.username || ''
-          }}</span>
+              profile?.username || ''
+            }}</span>
 
           <div>
             <svg class="h-5 w-5 fill-blue-gray-500">
@@ -80,7 +94,8 @@
           <RouterLink
             to="/money"
             class="header__dropdown-item"
-            >Баланс</RouterLink
+          >Баланс
+          </RouterLink
           >
           <button
             class="header__dropdown-item text-left"
@@ -165,5 +180,9 @@ function logout() {
 
 .header__dropdown-item {
   @apply rounded-md p-2 px-4 text-sm font-medium text-blue-gray-500 transition-colors hover:bg-blue-gray-50;
+}
+
+.profile__avatar {
+  @apply h-8 w-8 rounded-full object-cover;
 }
 </style>

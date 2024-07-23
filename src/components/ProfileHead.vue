@@ -21,6 +21,12 @@
           :src="profileData?.value?.avatar_image"
           size="big"
         />
+        <img
+          v-else
+          src="@/assets/images/default-avatar.png"
+          alt="Default avatar"
+          class="profile__avatar"
+        />
       </div>
 
       <div class="profile__info-data">
