@@ -75,8 +75,8 @@
           />
 
           <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-gray-600">{{
-              profile?.username || ''
-            }}</span>
+            profile?.username || ''
+          }}</span>
 
           <div>
             <svg class="h-5 w-5 fill-blue-gray-500">
@@ -94,7 +94,7 @@
           <RouterLink
             to="/money"
             class="header__dropdown-item"
-          >Баланс
+            >Баланс
           </RouterLink>
           <button
             class="header__dropdown-item text-left"

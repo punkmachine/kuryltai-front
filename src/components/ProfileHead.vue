@@ -32,10 +32,8 @@
         <h1 class="profile__name">{{ profileData?.username }}</h1>
 
         <div class="profile__meta">
-          <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap">{{
-              profileData?.head_line
-            }}</span>
-          <br>
+          <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap">{{ profileData?.head_line }}</span>
+          <br />
           •
           <span>{{ profileData?.subscribers_count }} подписчиков</span>
           •
@@ -142,8 +140,7 @@ const profileData = computed<ProfileData | null>(() => {
   }
 });
 
-const postsCountText = computed(() => {
-  const count = profileData.value?.posts_total_count || 0;
+const getPostsCountText = (count: number): string => {
   const lastDigit = count % 10;
   const lastTwoDigits = count % 100;
 
@@ -156,8 +153,14 @@ const postsCountText = computed(() => {
   } else {
     return `${count} постов`;
   }
+};
+
+const postsCountText = computed(() => {
+  const count = profileData.value?.posts_total_count || 0;
+  return getPostsCountText(count);
 });
 </script>
+
 
 <style scoped>
 .profile__head {
