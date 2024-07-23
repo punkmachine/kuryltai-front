@@ -64,7 +64,6 @@
         v-model="profileData.headLine"
         label="head line"
         placeholder="head line"
-        required
       />
 
       <UIInput

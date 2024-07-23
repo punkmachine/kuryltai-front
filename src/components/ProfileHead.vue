@@ -2,8 +2,8 @@
   <article class="profile__head">
     <div class="profile__cover">
       <img
-        v-if="profileData?.value?.cover_image"
-        :src="profileData?.value?.cover_image"
+        v-if="profileData?.cover_image"
+        :src="profileData?.cover_image"
         alt="cover image"
       />
       <img
@@ -16,8 +16,8 @@
     <div class="profile__info">
       <div class="profile__avatar-wrapper">
         <UIAvatar
-          v-if="profileData?.value?.avatar_image"
-          :src="profileData?.value?.avatar_image"
+          v-if="profileData?.avatar_image"
+          :src="profileData?.avatar_image"
           size="big"
         />
         <img
@@ -29,16 +29,17 @@
       </div>
 
       <div class="profile__info-data">
-        <h1 class="profile__name">{{ profileData?.value?.username }}</h1>
+        <h1 class="profile__name">{{ profileData?.username }}</h1>
 
         <div class="profile__meta">
           <span class="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap">{{
-            profileData?.value?.head_line
-          }}</span>
+              profileData?.head_line
+            }}</span>
+          <br>
           •
-          <span>{{ profileData?.value?.subscribers_count }} подписчиков</span>
+          <span>{{ profileData?.subscribers_count }} подписчиков</span>
           •
-          <span>{{ profileData?.value?.posts_total_count }} постов</span>
+          <span>{{ postsCountText }}</span>
         </div>
 
         <div
@@ -109,8 +110,19 @@ interface IProps {
 
 interface IEmits {
   (e: 'add-subscription'): void;
+
   (e: 'show-donate'): void;
+
   (e: 'subscribe-user'): void;
+}
+
+interface ProfileData {
+  cover_image?: string;
+  avatar_image?: string;
+  username: string;
+  head_line?: string;
+  subscribers_count: number;
+  posts_total_count: number;
 }
 
 const props = defineProps<IProps>();
@@ -122,11 +134,27 @@ const myProfileStore = useMyProfileStore();
 const { currentUser } = storeToRefs(usersStore);
 const { profile } = storeToRefs(myProfileStore);
 
-const profileData = computed(() => {
+const profileData = computed<ProfileData | null>(() => {
   if (props.myProfile) {
-    return profile;
+    return profile.value as ProfileData;
   } else {
-    return currentUser;
+    return currentUser.value as ProfileData;
+  }
+});
+
+const postsCountText = computed(() => {
+  const count = profileData.value?.posts_total_count || 0;
+  const lastDigit = count % 10;
+  const lastTwoDigits = count % 100;
+
+  if (lastTwoDigits > 10 && lastTwoDigits < 20) {
+    return `${count} постов`;
+  } else if (lastDigit === 1) {
+    return `${count} пост`;
+  } else if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${count} поста`;
+  } else {
+    return `${count} постов`;
   }
 });
 </script>
