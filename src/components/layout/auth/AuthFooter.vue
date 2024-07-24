@@ -7,7 +7,7 @@
       <RouterLink to="/terms-use">Условия пользования</RouterLink>
       <RouterLink to="/privacy">Политика конфиденциальности</RouterLink>
       <RouterLink to="/payment-terms">Безопасные платежи</RouterLink>
-      <a href="#">Контакты</a>
+      <p>Контакты: support@kuryltai.kz</p>
     </div>
   </footer>
 </template>
